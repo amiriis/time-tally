@@ -1,0 +1,18 @@
+module.exports = {
+    apps: [{
+        name: "loan facilities user",
+        script: 'node_modules/next/dist/bin/next', // cluster mode run with node only, not npm
+        args: 'start -p 3001',
+        exec_mode: "cluster", // default fork
+        instances: "10",
+        kill_timeout: 4000,
+        wait_ready: true,
+        autorestart: true,
+        watch: false,
+        max_memory_restart: "1G",
+        log_date_format: "YYYY-MM-DD HH:mm Z",
+        env_prod: {
+            APP_ENV: 'prod' // APP_ENV=prod
+        }
+    }],
+};
