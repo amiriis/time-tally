@@ -14,6 +14,7 @@ import moment from "jalali-moment";
 import { useState } from "react";
 import { useSWRConfig } from "swr";
 import EndToBtn from "./endToBtn";
+import convertDurationToTime from "@/lib/convertDurationToTime";
 
 function EndBtns({ work }) {
   const { mutate } = useSWRConfig();
