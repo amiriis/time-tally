@@ -1,3 +1,4 @@
+import { useAuth } from "@/contexts/auth";
 import { db } from "@/lib/firebase";
 import { Button, Container, Stack, TextField, Typography } from "@mui/material";
 import {
@@ -11,6 +12,7 @@ import React from "react";
 import { useSWRConfig } from "swr";
 
 function EditWorkForm({ work, setOpenDrawer }) {
+  const { user } = useAuth();
   const { mutate } = useSWRConfig();
 
   return (
@@ -27,15 +29,12 @@ function EditWorkForm({ work, setOpenDrawer }) {
       }}
       onSubmit={async (values) => {
         try {
-            const history = Object.entries(work).reduce(
-              (acc, [key, value]) => {
-                if (key !== "change_history") {
-                  acc[key] = value;
-                }
-                return acc;
-              },
-              {}
-            );
+          const history = Object.entries(work).reduce((acc, [key, value]) => {
+            if (key !== "change_history") {
+              acc[key] = value;
+            }
+            return acc;
+          }, {});
           await updateDoc(doc(collection(db, "works"), work.id), {
             name: values.name,
             updated_at: serverTimestamp(),
@@ -43,7 +42,7 @@ function EditWorkForm({ work, setOpenDrawer }) {
               ? [history, ...work.change_history]
               : [history],
           });
-          mutate("list_work");
+          mutate(`list_work_${user.uid}`);
           setOpenDrawer(false);
         } catch (error) {
           console.error(error);

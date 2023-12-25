@@ -11,11 +11,12 @@ const useListWork = (user_id) => {
                 orderBy("created_at", "desc")
             );
             const querySnapshot = await getDocs(q);
-            console.log(querySnapshot);
             return querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
         } catch (error) {
             console.error(error)
         }
+    }, {
+        revalidateOnFocus: false,
     });
 
     return { listWork: data, isLoadingListWork: isLoading }

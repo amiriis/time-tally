@@ -29,7 +29,7 @@ function AddWorkForm({ setOpenDrawer }) {
             updated_at: serverTimestamp(),
             is_time_tracking: false,
           });
-          mutate("list_work");
+          mutate(`list_work_${user.uid}`);
           setOpenDrawer(false);
         } catch (error) {
           console.error(error);

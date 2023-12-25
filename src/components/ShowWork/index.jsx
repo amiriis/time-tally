@@ -1,34 +1,17 @@
 "use client";
 
 import { useAuth } from "@/contexts/auth";
-import { db } from "@/lib/firebase";
+import useWork from "@/hooks/useWork";
 import { Stack, Typography } from "@mui/material";
-import { collection, doc, getDoc, where } from "firebase/firestore";
-import useSWR from "swr";
 import ListTime from "../ListTime";
 import TimeActionsBtn from "../TimeActionsBtn";
 import TimeTracking from "../TimeTracking";
 
 function ShowWork({ work_id }) {
   const { user } = useAuth();
-  const { data: work, isLoading } = useSWR(`get_work_${work_id}`, async () => {
-    try {
-      const documentSnapshot = await getDoc(
-        doc(collection(db, "works"), work_id),
-        where("uid", "==", user.id)
-      );
+  const { work, isLoadingWork } = useWork(work_id, user.uid);
 
-      if (!documentSnapshot.exists()) {
-        return null;
-      }
-
-      return { id: documentSnapshot.id, ...documentSnapshot.data() };
-    } catch (error) {
-      console.error(error);
-    }
-  });
-
-  if (isLoading) {
+  if (isLoadingWork) {
     return <div>Loading...</div>;
   }
 

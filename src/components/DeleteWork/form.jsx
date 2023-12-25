@@ -1,3 +1,4 @@
+import { useAuth } from "@/contexts/auth";
 import { db } from "@/lib/firebase";
 import { Button, Container, Stack, Typography } from "@mui/material";
 import {
@@ -11,6 +12,7 @@ import {
 import { useSWRConfig } from "swr";
 
 function DeleteWorkForm({ work, setOpenDrawer, setDeleting }) {
+  const { user } = useAuth();
   const { mutate } = useSWRConfig();
 
   const deleteHandler = async (id) => {
@@ -31,7 +33,7 @@ function DeleteWorkForm({ work, setOpenDrawer, setDeleting }) {
       console.error(error);
       setDeleting(false);
     }
-    mutate("list_work");
+    mutate(`list_work_${user.uid}`);
     setOpenDrawer(false);
   };
 
