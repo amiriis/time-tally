@@ -1,7 +1,8 @@
 "use client";
+import convertDurationToTime from "@/lib/convertDurationToTime";
 import { Typography } from "@mui/material";
-import { useEffect, useState } from "react";
 import moment from "jalali-moment";
+import { useEffect, useState } from "react";
 
 function TimeInterval({ start_at, stop }) {
   const [timeLoop, setTimeLoop] = useState();
@@ -20,18 +21,16 @@ function TimeInterval({ start_at, stop }) {
     };
   }, [timeLoop, start_at, stop]);
 
-  const duration = moment.duration(timeLoop);
+  const duration = convertDurationToTime(timeLoop);
 
   return (
     <Typography variant="caption">
       {timeLoop >= 0
-        ? `${Math.floor(duration.asHours())
+        ? `${duration.hours.toString().padStart(2, "0")}:${duration
+            .minutes
             .toString()
             .padStart(2, "0")}:${duration
-            .minutes()
-            .toString()
-            .padStart(2, "0")}:${duration
-            .seconds()
+            .seconds
             .toString()
             .padStart(2, "0")}`
         : `00:00:00`}

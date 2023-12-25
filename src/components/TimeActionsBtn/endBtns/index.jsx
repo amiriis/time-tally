@@ -34,13 +34,13 @@ function EndBtns({ work }) {
           const ended_at = moment();
 
           const durationInMilliseconds = ended_at.diff(started_at);
-          const duration = moment.duration(durationInMilliseconds);
+          const duration = convertDurationToTime(durationInMilliseconds);
 
           const total_time = {
             duration: durationInMilliseconds,
-            hours: Math.floor(duration.asHours()),
-            minutes: duration.minutes(),
-            seconds: duration.seconds(),
+            hours: duration.hours,
+            minutes: duration.minutes,
+            seconds: duration.seconds,
           };
 
           transaction.set(doc(collection(db, "times")), {

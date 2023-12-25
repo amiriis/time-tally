@@ -1,15 +1,12 @@
-import OpenInNewIcon from '@mui/icons-material/OpenInNew';
-import {
-  Button,
-  Divider,
-  Stack,
-  Typography
-} from "@mui/material";
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
+import { Button, Divider, Stack, Typography } from "@mui/material";
 
 import { useState } from "react";
 import DeleteWork from "../DeleteWork";
 import EditWork from "../EditWork";
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
+import TotalTimeWork from "../TotalTimeWork";
+import WorkAnalytics from "../WorkAnalytics";
 
 function WorkCard({ work }) {
   const router = useRouter();
@@ -43,16 +40,7 @@ function WorkCard({ work }) {
         </Stack>
       </Stack>
       <Divider />
-      <Stack spacing={1} sx={{ p: 2 }}>
-        <Stack direction={"row"} justifyContent={"space-between"}>
-          <Typography>Total time</Typography>
-          <Typography>35 hours and 53 minutes</Typography>
-        </Stack>
-        <Stack direction={"row"} justifyContent={"space-between"}>
-          <Typography>Number of times</Typography>
-          <Typography>253</Typography>
-        </Stack>
-      </Stack>
+      <WorkAnalytics work_id={work.id} />
       <Button
         size="large"
         color="primary"

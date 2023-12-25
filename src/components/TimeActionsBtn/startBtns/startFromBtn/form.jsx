@@ -82,7 +82,7 @@ function StartFromForm({
                   onChange={(newValue) => {
                     setFieldValue("started_at", newValue);
                   }}
-                  label="Enter DateTime"
+                  label="Enter start"
                 />
               </LocalizationProvider>
             </Stack>

@@ -1,13 +1,13 @@
-import { Form, Formik } from 'formik';
-import React from 'react'
-import { useSWRConfig } from 'swr';
-import * as Yup from "yup";
-import moment from "jalali-moment";
-import { collection, doc, runTransaction, serverTimestamp } from 'firebase/firestore';
+import convertDurationToTime from '@/lib/convertDurationToTime';
 import { db } from '@/lib/firebase';
 import { Button, Container, Stack, Typography } from '@mui/material';
 import { DateTimePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
+import { collection, doc, runTransaction, serverTimestamp } from 'firebase/firestore';
+import { Form, Formik } from 'formik';
+import moment from "jalali-moment";
+import { useSWRConfig } from 'swr';
+import * as Yup from "yup";
 
 function EditTimeForm({time, setOpenDrawer }) {
   const { mutate } = useSWRConfig();
@@ -30,13 +30,13 @@ function EditTimeForm({time, setOpenDrawer }) {
             const ended_at = values.ended_at;
 
             const durationInMilliseconds = ended_at.diff(started_at);
-            const duration = moment.duration(durationInMilliseconds);
+            const duration = convertDurationToTime(durationInMilliseconds);
 
             const total_time = {
               duration: durationInMilliseconds,
-              hours: Math.floor(duration.asHours()),
-              minutes: duration.minutes(),
-              seconds: duration.seconds(),
+              hours: duration.hours,
+              minutes: duration.minutes,
+              seconds: duration.seconds,
             };
 
             transaction.update(documentRef, {
@@ -85,7 +85,7 @@ function EditTimeForm({time, setOpenDrawer }) {
                     setFieldValue("started_at", newValue);
                   }}
                   maxDateTime={values.ended_at}
-                  label="Enter DateTime"
+                  label="Enter start"
                 />
                 <DateTimePicker
                   ampm={false}
@@ -95,7 +95,7 @@ function EditTimeForm({time, setOpenDrawer }) {
                     setFieldValue("ended_at", newValue);
                   }}
                   minDateTime={values.started_at}
-                  label="Enter DateTime"
+                  label="Enter end"
                 />
               </LocalizationProvider>
             </Stack>

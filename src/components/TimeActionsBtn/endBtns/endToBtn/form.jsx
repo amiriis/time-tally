@@ -1,3 +1,4 @@
+import convertDurationToTime from "@/lib/convertDurationToTime";
 import { db } from "@/lib/firebase";
 import { Button, Container, Stack, Typography } from "@mui/material";
 import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
@@ -10,9 +11,9 @@ import {
   serverTimestamp,
 } from "firebase/firestore";
 import { Form, Formik } from "formik";
+import moment from "jalali-moment";
 import { useSWRConfig } from "swr";
 import * as Yup from "yup";
-import moment from "jalali-moment";
 
 function EndToForm({ work, setOpenDrawer, setDisabled }) {
   const { mutate } = useSWRConfig();
@@ -41,13 +42,13 @@ function EndToForm({ work, setOpenDrawer, setDisabled }) {
               const ended_at = values.ended_at;
 
               const durationInMilliseconds = ended_at.diff(started_at);
-              const duration = moment.duration(durationInMilliseconds);
+              const duration = convertDurationToTime(durationInMilliseconds);
 
               const total_time = {
                 duration: durationInMilliseconds,
-                hours: Math.floor(duration.asHours()),
-                minutes: duration.minutes(),
-                seconds: duration.seconds(),
+                hours: duration.hours,
+                minutes: duration.minutes,
+                seconds: duration.seconds,
               };
 
               transaction.set(doc(collection(db, "times")), {
@@ -110,7 +111,7 @@ function EndToForm({ work, setOpenDrawer, setDisabled }) {
                     setFieldValue("ended_at", newValue);
                   }}
                   minDateTime={moment(work.time_tracking_started_at.toDate())}
-                  label="Enter DateTime"
+                  label="Enter end"
                 />
               </LocalizationProvider>
             </Stack>

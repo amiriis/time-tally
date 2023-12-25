@@ -1,6 +1,7 @@
 import useListTime from "@/hooks/useListTime";
-import { Stack } from "@mui/material";
+import { Collapse, Stack } from "@mui/material";
 import TimeCard from "./TimeCard";
+import { TransitionGroup } from "react-transition-group";
 
 function ListTime({ work_id }) {
   const { listTime, isLoadingListTime } = useListTime(work_id);
@@ -10,10 +11,14 @@ function ListTime({ work_id }) {
   }
 
   return (
-    <Stack spacing={2} sx={{ my: 3 }}>
+    <TransitionGroup component={Stack} spacing={2} sx={{ my: 3 }}>
       {listTime &&
-        listTime.map((time) => <TimeCard key={time.id} time={time} />)}
-    </Stack>
+        listTime.map((time) => (
+          <Collapse key={time.id}>
+            <TimeCard time={time} />
+          </Collapse>
+        ))}
+    </TransitionGroup>
   );
 }
 

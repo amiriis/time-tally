@@ -1,8 +1,9 @@
 "use client";
 import { useAuth } from "@/contexts/auth";
 import useListWork from "@/hooks/useListWork";
-import { Stack } from "@mui/material";
+import { Collapse, Stack } from "@mui/material";
 import WorkCard from "./workCard";
+import { TransitionGroup } from "react-transition-group";
 
 function ListWork() {
   const { user } = useAuth();
@@ -13,10 +14,14 @@ function ListWork() {
   }
 
   return (
-    <Stack spacing={2} sx={{ my: 3 }}>
+    <TransitionGroup component={Stack} spacing={2} sx={{ my: 3 }}>
       {listWork &&
-        listWork.map((work) => <WorkCard key={work.id} work={work} />)}
-    </Stack>
+        listWork.map((work) => (
+          <Collapse key={work.id}>
+            <WorkCard work={work} />
+          </Collapse>
+        ))}
+    </TransitionGroup>
   );
 }
 

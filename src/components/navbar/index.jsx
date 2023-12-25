@@ -1,10 +1,10 @@
+import { useAuth } from '@/contexts/auth';
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { Avatar, Button, CircularProgress, Container, IconButton, Menu, MenuItem, Toolbar, Typography } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
-import { useAuth } from '@/contexts/auth';
-import { Avatar, Button, CircularProgress, Container, IconButton, Menu, MenuItem, Toolbar, Tooltip, Typography } from '@mui/material';
-import { useState } from 'react';
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { usePathname, useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 function Navbar() {
     const { user, signInWithGoogle, logOut, initAuth } = useAuth()
