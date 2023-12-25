@@ -1,11 +1,10 @@
 /** @type {import('next').NextConfig} */
-
 const nextConfig = {
-    reactStrictMode: true,
-    i18n: {
-        defaultLocale: 'fa',
-        locales: ['fa'],
-        localeDetection: false,
+    swcMinify: true,
+    modularizeImports: {
+        '@mui/icons-material': {
+            transform: '@mui/icons-material/{{member}}',
+        },
     },
 }
 
