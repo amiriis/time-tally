@@ -1,14 +1,38 @@
-import useListTime from "@/hooks/useListTime";
 import { Collapse, Stack } from "@mui/material";
 import TimeCard from "./TimeCard";
 import { TransitionGroup } from "react-transition-group";
+import { db } from "@/lib/firebase";
+import {
+  collection,
+  getDocs,
+  orderBy,
+  query,
+  where,
+  onSnapshot,
+} from "firebase/firestore";
+import { useEffect, useState } from "react";
 
 function ListTime({ work_id }) {
-  const { listTime, isLoadingListTime } = useListTime(work_id);
+  const [listTime, setListTime] = useState();
 
-  if (isLoadingListTime) {
-    return <div>Loading...</div>;
-  }
+  useEffect(() => {
+    const q = query(
+      collection(db, "times"),
+      where("wid", "==", work_id),
+      orderBy("created_at", "desc")
+    );
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const _times = [];
+      querySnapshot.forEach((doc) => {
+        _times.push({ id: doc.id, ...doc.data() });
+      });
+      setListTime(_times);
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
 
   return (
     <TransitionGroup component={Stack} spacing={2} sx={{ my: 3 }}>

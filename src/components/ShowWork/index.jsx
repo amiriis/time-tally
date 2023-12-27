@@ -1,19 +1,32 @@
 "use client";
 
 import { useAuth } from "@/contexts/auth";
-import useWork from "@/hooks/useWork";
 import { Stack, Typography } from "@mui/material";
 import ListTime from "../ListTime";
 import TimeActionsBtn from "../TimeActionsBtn";
 import TimeTracking from "../TimeTracking";
+import { collection, doc, onSnapshot } from "firebase/firestore";
+import { useEffect, useState } from "react";
+import { db } from "@/lib/firebase";
 
 function ShowWork({ work_id }) {
   const { user } = useAuth();
-  const { work, isLoadingWork } = useWork(work_id, user.uid);
+  const [work, setWork] = useState();
 
-  if (isLoadingWork) {
-    return <div>Loading...</div>;
-  }
+  useEffect(() => {
+    const unsubscribe = onSnapshot(
+      doc(collection(db, "works"), work_id),
+      (doc) => {
+        setWork({ id: doc.id, ...doc.data() });
+      }
+    );
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
+  if (!work) return;
 
   return (
     <>
