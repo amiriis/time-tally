@@ -1,19 +1,14 @@
-import { db } from '@/lib/firebase';
-import { Button, Container, Stack, Typography } from '@mui/material';
-import { deleteDoc, doc } from 'firebase/firestore';
-import React from 'react'
-import { useSWRConfig } from 'swr';
+import { db } from "@/lib/firebase";
+import { Button, Container, Stack, Typography } from "@mui/material";
+import { deleteDoc, doc } from "firebase/firestore";
 
-function DeleteTimeForm({time, setOpenDrawer }) {
-  const { mutate } = useSWRConfig();
-
+function DeleteTimeForm({ time, setOpenDrawer }) {
   const deleteHandler = async (id) => {
     try {
-      await deleteDoc(doc(db, "times", id));
+      deleteDoc(doc(db, "times", id));
     } catch (error) {
       console.error(error);
     }
-    mutate(`list_time_${time.wid}`);
     setOpenDrawer(false);
   };
 
@@ -34,4 +29,4 @@ function DeleteTimeForm({time, setOpenDrawer }) {
   );
 }
 
-export default DeleteTimeForm
+export default DeleteTimeForm;

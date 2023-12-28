@@ -1,74 +1,57 @@
 "use client";
 import TimeInterval from "@/components/TimeInterval";
+import convertDurationToTime from "@/lib/convertDurationToTime";
 import { db } from "@/lib/firebase";
 import StopCircleIcon from "@mui/icons-material/StopCircle";
 import { Button, ButtonGroup, Stack } from "@mui/material";
 import {
+  addDoc,
   collection,
   deleteField,
   doc,
-  runTransaction,
-  serverTimestamp,
+  updateDoc,
 } from "firebase/firestore";
 import moment from "jalali-moment";
 import { useState } from "react";
-import { useSWRConfig } from "swr";
 import EndToBtn from "./endToBtn";
-import convertDurationToTime from "@/lib/convertDurationToTime";
 
 function EndBtns({ work }) {
-  const { mutate } = useSWRConfig();
   const [disabled, setDisabled] = useState();
 
-  const endNowHandler = async (work_id) => {
+  const endNowHandler = async () => {
     setDisabled(true);
-    const documentRef = doc(collection(db, "works"), work_id);
     try {
-      await runTransaction(db, async (transaction) => {
-        const documentSnapshot = await transaction.get(documentRef);
-        if (documentSnapshot.exists()) {
-          const _work = { id: documentSnapshot.id, ...documentSnapshot.data() };
+      const started_at = work.time_tracking_started_at.toDate();
+      const ended_at = moment();
 
-          if (!_work.is_time_tracking) return;
+      const durationInMilliseconds = ended_at.diff(started_at);
+      const duration = convertDurationToTime(durationInMilliseconds);
 
-          const started_at = _work.time_tracking_started_at.toDate();
-          const ended_at = moment();
+      const total_time = {
+        duration: durationInMilliseconds,
+        hours: duration.hours,
+        minutes: duration.minutes,
+        seconds: duration.seconds,
+      };
 
-          const durationInMilliseconds = ended_at.diff(started_at);
-          const duration = convertDurationToTime(durationInMilliseconds);
+      addDoc(collection(db, "times"), {
+        started_at,
+        ended_at: ended_at.toDate(),
+        total_time,
+        wid: work.id,
+        uid: work.uid,
+        created_at: moment().toDate(),
+        updated_at: moment().toDate(),
+      });
 
-          const total_time = {
-            duration: durationInMilliseconds,
-            hours: duration.hours,
-            minutes: duration.minutes,
-            seconds: duration.seconds,
-          };
-
-          transaction.set(doc(collection(db, "times")), {
-            started_at,
-            ended_at: ended_at.toDate(),
-            total_time,
-            wid: _work.id,
-            uid: _work.uid,
-            created_at: serverTimestamp(),
-            updated_at: serverTimestamp(),
-          });
-
-          transaction.update(documentRef, {
-            is_time_tracking: false,
-            time_tracking_started_at: deleteField(),
-          });
-        } else {
-          setDisabled(false);
-          throw new Error("Document not found.");
-        }
+      updateDoc(doc(collection(db, "works"), work.id), {
+        is_time_tracking: false,
+        time_tracking_started_at: deleteField(),
       });
     } catch (error) {
       setDisabled(false);
       console.error(error);
     }
-    mutate(`get_work_${work.id}`);
-    mutate(`list_time_${work.id}`);
   };
 
   return (

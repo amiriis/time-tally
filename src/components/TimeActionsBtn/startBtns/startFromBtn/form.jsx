@@ -2,9 +2,8 @@ import { db } from "@/lib/firebase";
 import { Button, Container, Stack, Typography } from "@mui/material";
 import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
-import { collection, doc, runTransaction } from "firebase/firestore";
+import { collection, doc, updateDoc } from "firebase/firestore";
 import { Form, Formik } from "formik";
-import { useSWRConfig } from "swr";
 import * as Yup from "yup";
 
 function StartFromForm({
@@ -13,8 +12,6 @@ function StartFromForm({
   setDisabled = () => {},
   default_started_at = "",
 }) {
-  const { mutate } = useSWRConfig();
-
   return (
     <Formik
       initialValues={{
@@ -25,28 +22,15 @@ function StartFromForm({
       })}
       onSubmit={async (values) => {
         setDisabled(true);
-        const documentRef = doc(collection(db, "works"), work.id);
         try {
-          await runTransaction(db, async (transaction) => {
-            const documentSnapshot = await transaction.get(documentRef);
-            if (documentSnapshot.exists()) {
-              const _work = documentSnapshot.data();
-
-              transaction.update(documentRef, {
-                is_time_tracking: true,
-                time_tracking_started_at: values.started_at.toDate(),
-              });
-            } else {
-              setDisabled(false);
-              throw new Error("Document not found.");
-            }
+          updateDoc(doc(collection(db, "works"), work.id), {
+            is_time_tracking: true,
+            time_tracking_started_at: values.started_at.toDate(),
           });
         } catch (error) {
           setDisabled(false);
           console.error(error);
         }
-        mutate(`get_work_${work.id}`);
-        mutate(`list_time_${work.id}`);
         setOpenDrawer(false);
       }}
     >

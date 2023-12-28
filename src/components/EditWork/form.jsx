@@ -1,4 +1,3 @@
-import { useAuth } from "@/contexts/auth";
 import { db } from "@/lib/firebase";
 import { Button, Container, Stack, TextField, Typography } from "@mui/material";
 import {
@@ -8,13 +7,9 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { Form, Formik } from "formik";
-import React from "react";
-import { useSWRConfig } from "swr";
+import moment from "jalali-moment";
 
 function EditWorkForm({ work, setOpenDrawer }) {
-  const { user } = useAuth();
-  const { mutate } = useSWRConfig();
-
   return (
     <Formik
       initialValues={{
@@ -35,18 +30,17 @@ function EditWorkForm({ work, setOpenDrawer }) {
             }
             return acc;
           }, {});
-          await updateDoc(doc(collection(db, "works"), work.id), {
-            name: values.name,
-            updated_at: serverTimestamp(),
+          updateDoc(doc(collection(db, "works"), work.id), {
+            name: values.name.toUpperCase(),
+            updated_at: moment().toDate(),
             change_history: work.change_history
               ? [history, ...work.change_history]
               : [history],
           });
-          mutate(`list_work_${user.uid}`);
-          setOpenDrawer(false);
         } catch (error) {
           console.error(error);
         }
+        setOpenDrawer(false);
       }}
     >
       {({ values, handleChange, handleBlur, isSubmitting, isValid, dirty }) => (

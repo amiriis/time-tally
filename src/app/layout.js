@@ -1,16 +1,13 @@
-'use client'
+"use client";
 
-import { AuthProvider } from "@/contexts/auth"
-
+import { AuthProvider } from "@/contexts/auth";
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <AuthProvider>
-            {children}
-        </AuthProvider>
+        <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
-  )
+  );
 }

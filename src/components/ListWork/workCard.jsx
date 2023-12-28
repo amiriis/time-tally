@@ -1,11 +1,10 @@
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
-import { Button, Divider, Stack, Typography } from "@mui/material";
+import { Button, Divider, Stack, Typography, Chip, Zoom } from "@mui/material";
 
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import DeleteWork from "../DeleteWork";
 import EditWork from "../EditWork";
-import { useRouter } from "next/navigation";
-import TotalTimeWork from "../TotalTimeWork";
 import WorkAnalytics from "../WorkAnalytics";
 
 function WorkCard({ work }) {
@@ -25,12 +24,20 @@ function WorkCard({ work }) {
         direction={"row"}
         justifyContent={"space-between"}
         alignItems={"center"}
-        sx={{ py: 2, px: 1 }}
+        sx={{ py: 2, pl: 2 }}
       >
-        <Typography sx={{ px: 2 }} variant="h6">
-          {work.name}
-        </Typography>
-        <Stack direction={"row"} spacing={1}>
+        <Stack direction={"row"} spacing={1} alignItems={"center"}>
+          <Typography variant="h6">{work.name}</Typography>
+          <Zoom in={work.fromCache}>
+            <Chip
+              label={"Local"}
+              size="small"
+              color="warning"
+              variant="outlined"
+            />
+          </Zoom>
+        </Stack>
+        <Stack direction={"row"}>
           <EditWork work={work} deleting={deleting} />
           <DeleteWork
             work={work}

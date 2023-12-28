@@ -1,45 +1,32 @@
 "use client";
 import { db } from "@/lib/firebase";
 import PlayCircleFilledIcon from "@mui/icons-material/PlayCircleFilled";
-import TimerIcon from "@mui/icons-material/Timer";
 import { Button, ButtonGroup, Stack, Typography } from "@mui/material";
 import {
   collection,
   doc,
-  runTransaction,
   serverTimestamp,
+  updateDoc,
 } from "firebase/firestore";
 import { useState } from "react";
-import { useSWRConfig } from "swr";
 import StartFromBtn from "./startFromBtn";
+import moment from "jalali-moment";
 
 function StartBtns({ work }) {
-  const { mutate } = useSWRConfig();
   const [disabled, setDisabled] = useState();
 
-  const startNowHandler = async (work_id) => {
+  console.log("r", work);
+
+  const startNowHandler = (work_id) => {
     setDisabled(true);
-    const documentRef = doc(collection(db, "works"), work_id);
     try {
-      await runTransaction(db, async (transaction) => {
-        const documentSnapshot = await transaction.get(documentRef);
-        if (documentSnapshot.exists()) {
-          const _work = documentSnapshot.data();
-
-          if (_work.is_time_tracking) return;
-
-          transaction.update(documentRef, {
-            is_time_tracking: true,
-            time_tracking_started_at: serverTimestamp(),
-          });
-        } else {
-          throw new Error("Document not found.");
-        }
+      updateDoc(doc(collection(db, "works"), work_id), {
+        is_time_tracking: true,
+        time_tracking_started_at: moment().toDate(),
       });
     } catch (error) {
-      console.error(error);
+      console.error("re", error);
     }
-    mutate(`get_work_${work.id}`);
   };
 
   return (

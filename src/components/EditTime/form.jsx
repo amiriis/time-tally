@@ -1,17 +1,21 @@
-import convertDurationToTime from '@/lib/convertDurationToTime';
-import { db } from '@/lib/firebase';
-import { Button, Container, Stack, Typography } from '@mui/material';
-import { DateTimePicker, LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
-import { collection, doc, runTransaction, serverTimestamp } from 'firebase/firestore';
-import { Form, Formik } from 'formik';
+import convertDurationToTime from "@/lib/convertDurationToTime";
+import { db } from "@/lib/firebase";
+import { Button, Container, Stack, Typography } from "@mui/material";
+import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
+import {
+  collection,
+  doc,
+  runTransaction,
+  serverTimestamp,
+  updateDoc,
+} from "firebase/firestore";
+import { Form, Formik } from "formik";
 import moment from "jalali-moment";
-import { useSWRConfig } from 'swr';
+import { useSWRConfig } from "swr";
 import * as Yup from "yup";
 
-function EditTimeForm({time, setOpenDrawer }) {
-  const { mutate } = useSWRConfig();
-
+function EditTimeForm({ time, setOpenDrawer }) {
   return (
     <Formik
       initialValues={{
@@ -23,33 +27,29 @@ function EditTimeForm({time, setOpenDrawer }) {
         ended_at: Yup.date().required(),
       })}
       onSubmit={async (values) => {
-        const documentRef = doc(collection(db, "times"), time.id);
         try {
-          await runTransaction(db, async (transaction) => {
-            const started_at = values.started_at;
-            const ended_at = values.ended_at;
+          const started_at = values.started_at;
+          const ended_at = values.ended_at;
 
-            const durationInMilliseconds = ended_at.diff(started_at);
-            const duration = convertDurationToTime(durationInMilliseconds);
+          const durationInMilliseconds = ended_at.diff(started_at);
+          const duration = convertDurationToTime(durationInMilliseconds);
 
-            const total_time = {
-              duration: durationInMilliseconds,
-              hours: duration.hours,
-              minutes: duration.minutes,
-              seconds: duration.seconds,
-            };
+          const total_time = {
+            duration: durationInMilliseconds,
+            hours: duration.hours,
+            minutes: duration.minutes,
+            seconds: duration.seconds,
+          };
 
-            transaction.update(documentRef, {
-              started_at: started_at.toDate(),
-              ended_at: ended_at.toDate(),
-              total_time,
-              updated_at: serverTimestamp(),
-            });
+          updateDoc(doc(collection(db, "times"), time.id), {
+            started_at: started_at.toDate(),
+            ended_at: ended_at.toDate(),
+            total_time,
+            updated_at: moment().toDate(),
           });
         } catch (error) {
           console.error(error);
         }
-        mutate(`list_time_${time.wid}`);
         setOpenDrawer(false);
       }}
     >
@@ -106,4 +106,4 @@ function EditTimeForm({time, setOpenDrawer }) {
   );
 }
 
-export default EditTimeForm
+export default EditTimeForm;

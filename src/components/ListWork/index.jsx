@@ -1,18 +1,17 @@
 "use client";
 import { useAuth } from "@/contexts/auth";
-import { Collapse, Stack } from "@mui/material";
-import WorkCard from "./workCard";
-import { TransitionGroup } from "react-transition-group";
-import { useEffect, useState } from "react";
 import { db } from "@/lib/firebase";
+import { Collapse, Stack } from "@mui/material";
 import {
   collection,
-  getDocs,
+  onSnapshot,
   orderBy,
   query,
   where,
-  onSnapshot,
 } from "firebase/firestore";
+import { useEffect, useState } from "react";
+import { TransitionGroup } from "react-transition-group";
+import WorkCard from "./workCard";
 
 function ListWork() {
   const { user } = useAuth();
@@ -24,13 +23,21 @@ function ListWork() {
       where("uid", "==", user.uid),
       orderBy("created_at", "desc")
     );
-    const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      const _works = [];
-      querySnapshot.forEach((doc) => {
-        _works.push({ id: doc.id, ...doc.data() });
-      });
-      setListWork(_works);
-    });
+    const unsubscribe = onSnapshot(
+      q,
+      { includeMetadataChanges: true },
+      (querySnapshot) => {
+        const _works = [];
+        querySnapshot.forEach((doc) => {
+          _works.push({
+            id: doc.id,
+            ...doc.data(),
+            fromCache: querySnapshot.metadata.fromCache,
+          });
+        });
+        setListWork(_works);
+      }
+    );
 
     return () => {
       unsubscribe();

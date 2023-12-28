@@ -4,20 +4,17 @@ import { Button, Container, Stack, Typography } from "@mui/material";
 import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import {
+  addDoc,
   collection,
   deleteField,
   doc,
-  runTransaction,
-  serverTimestamp,
+  updateDoc,
 } from "firebase/firestore";
 import { Form, Formik } from "formik";
 import moment from "jalali-moment";
-import { useSWRConfig } from "swr";
 import * as Yup from "yup";
 
 function EndToForm({ work, setOpenDrawer, setDisabled }) {
-  const { mutate } = useSWRConfig();
-
   return (
     <Formik
       initialValues={{
@@ -28,54 +25,38 @@ function EndToForm({ work, setOpenDrawer, setDisabled }) {
       })}
       onSubmit={async (values) => {
         setDisabled(true);
-        const documentRef = doc(collection(db, "works"), work.id);
         try {
-          await runTransaction(db, async (transaction) => {
-            const documentSnapshot = await transaction.get(documentRef);
-            if (documentSnapshot.exists()) {
-              const _work = {
-                id: documentSnapshot.id,
-                ...documentSnapshot.data(),
-              };
+          const started_at = work.time_tracking_started_at.toDate();
+          const ended_at = values.ended_at;
 
-              const started_at = _work.time_tracking_started_at.toDate();
-              const ended_at = values.ended_at;
+          const durationInMilliseconds = ended_at.diff(started_at);
+          const duration = convertDurationToTime(durationInMilliseconds);
 
-              const durationInMilliseconds = ended_at.diff(started_at);
-              const duration = convertDurationToTime(durationInMilliseconds);
+          const total_time = {
+            duration: durationInMilliseconds,
+            hours: duration.hours,
+            minutes: duration.minutes,
+            seconds: duration.seconds,
+          };
 
-              const total_time = {
-                duration: durationInMilliseconds,
-                hours: duration.hours,
-                minutes: duration.minutes,
-                seconds: duration.seconds,
-              };
+          addDoc(collection(db, "times"), {
+            started_at,
+            ended_at: ended_at.toDate(),
+            total_time,
+            wid: work.id,
+            uid: work.uid,
+            created_at: moment().toDate(),
+            updated_at: moment().toDate(),
+          });
 
-              transaction.set(doc(collection(db, "times")), {
-                started_at,
-                ended_at: ended_at.toDate(),
-                total_time,
-                wid: _work.id,
-                uid: _work.uid,
-                created_at: serverTimestamp(),
-                updated_at: serverTimestamp(),
-              });
-
-              transaction.update(documentRef, {
-                is_time_tracking: false,
-                time_tracking_started_at: deleteField(),
-              });
-            } else {
-              setDisabled(false);
-              throw new Error("Document not found.");
-            }
+          updateDoc(doc(collection(db, "works"), work.id), {
+            is_time_tracking: false,
+            time_tracking_started_at: deleteField(),
           });
         } catch (error) {
           setDisabled(false);
           console.error(error);
         }
-        mutate(`get_work_${work.id}`);
-        mutate(`list_time_${work.id}`);
         setOpenDrawer(false);
       }}
     >

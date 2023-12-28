@@ -1,23 +1,26 @@
 "use client";
 
-import { useAuth } from "@/contexts/auth";
-import { Stack, Typography } from "@mui/material";
+import { db } from "@/lib/firebase";
+import { Stack, Typography, Chip, Zoom } from "@mui/material";
+import { collection, doc, onSnapshot } from "firebase/firestore";
+import { useEffect, useState } from "react";
 import ListTime from "../ListTime";
 import TimeActionsBtn from "../TimeActionsBtn";
 import TimeTracking from "../TimeTracking";
-import { collection, doc, onSnapshot } from "firebase/firestore";
-import { useEffect, useState } from "react";
-import { db } from "@/lib/firebase";
 
 function ShowWork({ work_id }) {
-  const { user } = useAuth();
   const [work, setWork] = useState();
 
   useEffect(() => {
     const unsubscribe = onSnapshot(
       doc(collection(db, "works"), work_id),
+      { includeMetadataChanges: true },
       (doc) => {
-        setWork({ id: doc.id, ...doc.data() });
+        setWork({
+          id: doc.id,
+          ...doc.data(),
+          fromCache: doc.metadata.fromCache,
+        });
       }
     );
 
@@ -31,8 +34,16 @@ function ShowWork({ work_id }) {
   return (
     <>
       <Stack direction={"row"} justifyContent={"space-between"}>
-        <Stack direction={"row"} alignItems={"center"}>
+        <Stack direction={"row"} spacing={1} alignItems={"center"}>
           <Typography variant="h5">{work.name}</Typography>
+          <Zoom in={work.fromCache}>
+            <Chip
+              label={"Local"}
+              size="small"
+              color="warning"
+              variant="outlined"
+            />
+          </Zoom>
         </Stack>
       </Stack>
       <Stack

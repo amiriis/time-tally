@@ -3,10 +3,10 @@ import { db } from "@/lib/firebase";
 import { Button, Container, Stack, TextField, Typography } from "@mui/material";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { Form, Formik } from "formik";
+import moment from "jalali-moment";
 import { useSWRConfig } from "swr";
 function AddWorkForm({ setOpenDrawer }) {
   const { user } = useAuth();
-  const { mutate } = useSWRConfig();
 
   return (
     <Formik
@@ -22,18 +22,17 @@ function AddWorkForm({ setOpenDrawer }) {
       }}
       onSubmit={async (values) => {
         try {
-          await addDoc(collection(db, "works"), {
+          addDoc(collection(db, "works"), {
             uid: user.uid,
-            name: values.name,
-            created_at: serverTimestamp(),
-            updated_at: serverTimestamp(),
+            name: values.name.toUpperCase(),
+            created_at: moment().toDate(),
+            updated_at: moment().toDate(),
             is_time_tracking: false,
           });
-          mutate(`list_work_${user.uid}`);
-          setOpenDrawer(false);
         } catch (error) {
           console.error(error);
         }
+        setOpenDrawer(false);
       }}
     >
       {({ values, handleChange, handleBlur, isSubmitting, isValid, dirty }) => (
