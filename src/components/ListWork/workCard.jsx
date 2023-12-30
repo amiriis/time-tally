@@ -6,18 +6,16 @@ import { useState } from "react";
 import DeleteWork from "../DeleteWork";
 import EditWork from "../EditWork";
 import WorkAnalytics from "../WorkAnalytics";
+import SettingsWork from "../SettingsWork";
 
 function WorkCard({ work }) {
   const router = useRouter();
-  const [deleting, setDeleting] = useState(false);
-
   return (
     <Stack
       sx={{
         border: 1,
         borderRadius: 1,
         borderColor: "divider",
-        opacity: deleting ? ".3" : "1",
       }}
     >
       <Stack
@@ -30,12 +28,9 @@ function WorkCard({ work }) {
           <Typography variant="h6">{work.name}</Typography>
         </Stack>
         <Stack direction={"row"}>
-          <EditWork work={work} deleting={deleting} />
-          <DeleteWork
-            work={work}
-            deleting={deleting}
-            setDeleting={setDeleting}
-          />
+          <SettingsWork work={work} />
+          <EditWork work={work} />
+          <DeleteWork work={work} />
         </Stack>
       </Stack>
       <Divider />

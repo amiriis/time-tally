@@ -1,33 +1,25 @@
-import { useAuth } from "@/contexts/auth";
 import { db } from "@/lib/firebase";
 import {
   Button,
   Container,
-  Stack,
-  TextField,
-  Typography,
   FormControl,
   InputLabel,
-  Select,
   MenuItem,
+  Select,
+  Stack,
+  Typography,
 } from "@mui/material";
-import { addDoc, collection } from "firebase/firestore";
+import { collection, doc, updateDoc } from "firebase/firestore";
 import { Form, Formik } from "formik";
-import moment from "jalali-moment";
-function AddWorkForm({ setOpenDrawer }) {
-  const { user } = useAuth();
 
+function SettingsWorkForm({ work, setOpenDrawer }) {
   return (
     <Formik
       initialValues={{
-        name: "",
-        calendar: "gregorian",
+        calendar: work.settings.calendar,
       }}
       validate={(values) => {
         const errors = {};
-        if (!values.name) {
-          errors.name = "Required";
-        }
         if (!values.calendar) {
           errors.calendar = "Required";
         }
@@ -35,15 +27,10 @@ function AddWorkForm({ setOpenDrawer }) {
       }}
       onSubmit={async (values) => {
         try {
-          addDoc(collection(db, "works"), {
-            uid: user.uid,
-            name: values.name.toUpperCase(),
+          updateDoc(doc(collection(db, "works"), work.id), {
             settings: {
               calendar: values.calendar,
             },
-            created_at: moment().toDate(),
-            updated_at: moment().toDate(),
-            is_time_tracking: false,
           });
         } catch (error) {
           console.error(error);
@@ -56,12 +43,12 @@ function AddWorkForm({ setOpenDrawer }) {
           <Container maxWidth={"xs"} sx={{ py: 5 }}>
             <Stack spacing={3}>
               <Stack direction={"row"} justifyContent={"space-between"}>
-                <Typography variant="h5">New work</Typography>
+                <Typography variant="h5">Settings work</Typography>
                 <Button
                   type="submit"
                   disabled={isSubmitting || !isValid || !dirty}
                 >
-                  Create
+                  Change
                 </Button>
               </Stack>
               <FormControl fullWidth>
@@ -78,16 +65,6 @@ function AddWorkForm({ setOpenDrawer }) {
                   <MenuItem value={"jalali"}>Jalali</MenuItem>
                 </Select>
               </FormControl>
-              <TextField
-                name="name"
-                disabled={isSubmitting}
-                value={values.name}
-                onBlur={handleBlur}
-                onChange={handleChange}
-                autoComplete="off"
-                variant="outlined"
-                label={"Enter name"}
-              />
             </Stack>
           </Container>
         </Form>
@@ -96,4 +73,4 @@ function AddWorkForm({ setOpenDrawer }) {
   );
 }
 
-export default AddWorkForm;
+export default SettingsWorkForm;

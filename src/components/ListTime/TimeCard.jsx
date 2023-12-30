@@ -1,18 +1,13 @@
 import ArrowRightAltIcon from "@mui/icons-material/ArrowRightAlt";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import {
-  Box,
-  IconButton,
-  Menu,
-  Stack,
-  Typography
-} from "@mui/material";
+import { Box, IconButton, Menu, Stack, Typography } from "@mui/material";
 import moment from "jalali-moment";
 import { useMemo, useState } from "react";
 import DeleteTime from "../DeleteTime";
 import EditTime from "../EditTime";
+import { convertLocaleMomentWithCalendar } from "@/lib/convertLocaleMomentWithCalendar";
 
-function TimeCard({ time }) {
+function TimeCard({ work, time }) {
   const [anchorElEdit, setAnchorElEdit] = useState(null);
   const started_at = useMemo(() => {
     return moment(time.started_at.toDate());
@@ -45,7 +40,9 @@ function TimeCard({ time }) {
       >
         <Stack alignItems={"center"}>
           <Typography variant="caption">
-            {started_at.format("YYYY/MM/DD")}
+            {started_at
+              .locale(convertLocaleMomentWithCalendar(work.settings.calendar))
+              .format("YYYY/MM/DD")}
           </Typography>
           <Typography variant="caption">
             {started_at.format("HH:mm")}
@@ -54,7 +51,9 @@ function TimeCard({ time }) {
         <ArrowRightAltIcon color="primary" />
         <Stack alignItems={"center"}>
           <Typography variant="caption">
-            {ended_at.format("YYYY/MM/DD")}
+            {ended_at
+              .locale(convertLocaleMomentWithCalendar(work.settings.calendar))
+              .format("YYYY/MM/DD")}
           </Typography>
           <Typography variant="caption">{ended_at.format("HH:mm")}</Typography>
         </Stack>
@@ -88,7 +87,11 @@ function TimeCard({ time }) {
           open={Boolean(anchorElEdit)}
           onClose={handleCloseEditMenu}
         >
-          <EditTime time={time} handleCloseEditMenu={handleCloseEditMenu} />
+          <EditTime
+            work={work}
+            time={time}
+            handleCloseEditMenu={handleCloseEditMenu}
+          />
           <DeleteTime time={time} handleCloseEditMenu={handleCloseEditMenu} />
         </Menu>
       </Box>

@@ -12,13 +12,13 @@ import {
 } from "firebase/firestore";
 import { useEffect, useState } from "react";
 
-function ListTime({ work_id }) {
+function ListTime({ work }) {
   const [listTime, setListTime] = useState();
 
   useEffect(() => {
     const q = query(
       collection(db, "times"),
-      where("wid", "==", work_id),
+      where("wid", "==", work.id),
       orderBy("created_at", "desc")
     );
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
@@ -32,14 +32,14 @@ function ListTime({ work_id }) {
     return () => {
       unsubscribe();
     };
-  }, [work_id]);
+  }, [work]);
 
   return (
     <TransitionGroup component={Stack} spacing={2} sx={{ my: 3 }}>
       {listTime &&
         listTime.map((time) => (
           <Collapse key={time.id}>
-            <TimeCard time={time} />
+            <TimeCard work={work} time={time} />
           </Collapse>
         ))}
     </TransitionGroup>

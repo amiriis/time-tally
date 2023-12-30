@@ -1,3 +1,4 @@
+import { convertAdapterWithCalendar } from "@/lib/convertAdapterWithCalendar";
 import convertDurationToTime from "@/lib/convertDurationToTime";
 import { db } from "@/lib/firebase";
 import { Button, Container, Stack, Typography } from "@mui/material";
@@ -15,7 +16,7 @@ import moment from "jalali-moment";
 import { useSWRConfig } from "swr";
 import * as Yup from "yup";
 
-function EditTimeForm({ time, setOpenDrawer }) {
+function EditTimeForm({ work, time, setOpenDrawer }) {
   return (
     <Formik
       initialValues={{
@@ -76,7 +77,9 @@ function EditTimeForm({ time, setOpenDrawer }) {
                   send
                 </Button>
               </Stack>
-              <LocalizationProvider dateAdapter={AdapterMoment}>
+              <LocalizationProvider
+                dateAdapter={convertAdapterWithCalendar(work.settings.calendar)}
+              >
                 <DateTimePicker
                   ampm={false}
                   disabled={isSubmitting}

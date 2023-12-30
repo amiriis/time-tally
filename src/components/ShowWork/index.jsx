@@ -48,7 +48,7 @@ function ShowWork({ work_id }) {
         <TimeTracking work={work} />
         <TimeActionsBtn work={work} />
       </Stack>
-      <ListTime work_id={work.id} />
+      <ListTime work={work} />
     </>
   );
 }

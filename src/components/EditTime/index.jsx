@@ -3,7 +3,7 @@ import { Drawer, MenuItem, Typography } from "@mui/material";
 import { useState } from "react";
 import EditTimeForm from "./form";
 
-function EditTime({ time, handleCloseEditMenu }) {
+function EditTime({ work, time, handleCloseEditMenu }) {
   const [openDrawer, setOpenDrawer] = useState();
   return (
     <>
@@ -23,7 +23,7 @@ function EditTime({ time, handleCloseEditMenu }) {
         open={openDrawer}
         onClose={() => setOpenDrawer(false)}
       >
-        <EditTimeForm time={time} setOpenDrawer={setOpenDrawer} />
+        <EditTimeForm work={work} time={time} setOpenDrawer={setOpenDrawer} />
       </Drawer>
     </>
   );
