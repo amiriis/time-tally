@@ -28,14 +28,6 @@ function WorkCard({ work }) {
       >
         <Stack direction={"row"} spacing={1} alignItems={"center"}>
           <Typography variant="h6">{work.name}</Typography>
-          <Zoom in={work.fromCache}>
-            <Chip
-              label={"Local"}
-              size="small"
-              color="warning"
-              variant="outlined"
-            />
-          </Zoom>
         </Stack>
         <Stack direction={"row"}>
           <EditWork work={work} deleting={deleting} />

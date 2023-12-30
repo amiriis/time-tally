@@ -12,8 +12,10 @@ import {
 import { useEffect, useState } from "react";
 import { TransitionGroup } from "react-transition-group";
 import WorkCard from "./workCard";
+import { useApp } from "@/contexts/app";
 
 function ListWork() {
+  const { setLocalDb } = useApp();
   const { user } = useAuth();
   const [listWork, setListWork] = useState();
 
@@ -32,10 +34,10 @@ function ListWork() {
           _works.push({
             id: doc.id,
             ...doc.data(),
-            fromCache: querySnapshot.metadata.fromCache,
           });
         });
         setListWork(_works);
+        setLocalDb(querySnapshot.metadata.fromCache);
       }
     );
 

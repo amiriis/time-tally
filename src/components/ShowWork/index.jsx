@@ -7,8 +7,10 @@ import { useEffect, useState } from "react";
 import ListTime from "../ListTime";
 import TimeActionsBtn from "../TimeActionsBtn";
 import TimeTracking from "../TimeTracking";
+import { useApp } from "@/contexts/app";
 
 function ShowWork({ work_id }) {
+  const { setLocalDb } = useApp();
   const [work, setWork] = useState();
 
   useEffect(() => {
@@ -19,8 +21,8 @@ function ShowWork({ work_id }) {
         setWork({
           id: doc.id,
           ...doc.data(),
-          fromCache: doc.metadata.fromCache,
         });
+        setLocalDb(doc.metadata.fromCache);
       }
     );
 
@@ -36,14 +38,6 @@ function ShowWork({ work_id }) {
       <Stack direction={"row"} justifyContent={"space-between"}>
         <Stack direction={"row"} spacing={1} alignItems={"center"}>
           <Typography variant="h5">{work.name}</Typography>
-          <Zoom in={work.fromCache}>
-            <Chip
-              label={"Local"}
-              size="small"
-              color="warning"
-              variant="outlined"
-            />
-          </Zoom>
         </Stack>
       </Stack>
       <Stack
