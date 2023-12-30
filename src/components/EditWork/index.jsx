@@ -3,12 +3,12 @@ import EditIcon from "@mui/icons-material/Edit";
 import { useState } from "react";
 import EditWorkForm from "./form";
 
-function EditWork({ work, deleting }) {
+function EditWork({ work }) {
   const [openDrawer, setOpenDrawer] = useState();
   return (
     <>
       <Tooltip title={"Edit"} arrow>
-        <IconButton onClick={() => setOpenDrawer(true)} disabled={deleting}>
+        <IconButton onClick={() => setOpenDrawer(true)}>
           <EditIcon fontSize="inherit" />
         </IconButton>
       </Tooltip>

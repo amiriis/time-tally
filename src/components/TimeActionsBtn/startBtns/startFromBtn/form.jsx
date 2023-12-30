@@ -1,17 +1,12 @@
+import { convertAdapterWithCalendar } from "@/lib/convertAdapterWithCalendar";
 import { db } from "@/lib/firebase";
 import { Button, Container, Stack, Typography } from "@mui/material";
 import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { collection, doc, updateDoc } from "firebase/firestore";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
 
-function StartFromForm({
-  work,
-  setOpenDrawer,
-  setDisabled = () => {},
-  default_started_at = "",
-}) {
+function StartFromForm({ work, setOpenDrawer, default_started_at = "" }) {
   return (
     <Formik
       initialValues={{
@@ -21,14 +16,12 @@ function StartFromForm({
         started_at: Yup.date().required(),
       })}
       onSubmit={async (values) => {
-        setDisabled(true);
         try {
           updateDoc(doc(collection(db, "works"), work.id), {
             is_time_tracking: true,
             time_tracking_started_at: values.started_at.toDate(),
           });
         } catch (error) {
-          setDisabled(false);
           console.error(error);
         }
         setOpenDrawer(false);
@@ -57,7 +50,9 @@ function StartFromForm({
                   send
                 </Button>
               </Stack>
-              <LocalizationProvider dateAdapter={AdapterMoment}>
+              <LocalizationProvider
+                dateAdapter={convertAdapterWithCalendar(work.settings.calendar)}
+              >
                 <DateTimePicker
                   ampm={false}
                   disabled={isSubmitting}

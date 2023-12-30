@@ -19,15 +19,13 @@ const deleteTimes = async (id) => {
   });
 };
 
-function DeleteWorkForm({ work, setOpenDrawer, setDeleting }) {
+function DeleteWorkForm({ work, setOpenDrawer }) {
   const deleteHandler = async (id) => {
-    setDeleting(true);
     try {
       deleteTimes(id);
       deleteDoc(doc(db, "works", id));
     } catch (error) {
       console.error(error);
-      setDeleting(false);
     }
     setOpenDrawer(false);
   };

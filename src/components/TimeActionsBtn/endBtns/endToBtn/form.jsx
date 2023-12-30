@@ -1,8 +1,8 @@
+import { convertAdapterWithCalendar } from "@/lib/convertAdapterWithCalendar";
 import convertDurationToTime from "@/lib/convertDurationToTime";
 import { db } from "@/lib/firebase";
 import { Button, Container, Stack, Typography } from "@mui/material";
 import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import {
   addDoc,
   collection,
@@ -14,7 +14,7 @@ import { Form, Formik } from "formik";
 import moment from "jalali-moment";
 import * as Yup from "yup";
 
-function EndToForm({ work, setOpenDrawer, setDisabled }) {
+function EndToForm({ work, setOpenDrawer }) {
   return (
     <Formik
       initialValues={{
@@ -24,7 +24,6 @@ function EndToForm({ work, setOpenDrawer, setDisabled }) {
         ended_at: Yup.date().required(),
       })}
       onSubmit={async (values) => {
-        setDisabled(true);
         try {
           const started_at = work.time_tracking_started_at.toDate();
           const ended_at = values.ended_at;
@@ -54,7 +53,6 @@ function EndToForm({ work, setOpenDrawer, setDisabled }) {
             time_tracking_started_at: deleteField(),
           });
         } catch (error) {
-          setDisabled(false);
           console.error(error);
         }
         setOpenDrawer(false);
@@ -83,7 +81,9 @@ function EndToForm({ work, setOpenDrawer, setDisabled }) {
                   send
                 </Button>
               </Stack>
-              <LocalizationProvider dateAdapter={AdapterMoment}>
+              <LocalizationProvider
+                dateAdapter={convertAdapterWithCalendar(work.settings.calendar)}
+              >
                 <DateTimePicker
                   ampm={false}
                   disabled={isSubmitting}

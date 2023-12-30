@@ -13,10 +13,7 @@ import StartFromBtn from "./startFromBtn";
 import moment from "jalali-moment";
 
 function StartBtns({ work }) {
-  const [disabled, setDisabled] = useState();
-
   const startNowHandler = (work_id) => {
-    setDisabled(true);
     try {
       updateDoc(doc(collection(db, "works"), work_id), {
         is_time_tracking: true,
@@ -29,14 +26,14 @@ function StartBtns({ work }) {
 
   return (
     <Stack alignItems={"center"} spacing={0.5}>
-      <ButtonGroup size="small" disabled={disabled} variant="outlined">
+      <ButtonGroup size="small" variant="outlined">
         <Button
           onClick={() => startNowHandler(work.id)}
           endIcon={<PlayCircleFilledIcon />}
         >
           start now
         </Button>
-        <StartFromBtn setDisabled={setDisabled} work={work} />
+        <StartFromBtn work={work} />
       </ButtonGroup>
       <Typography variant="caption">{`Let's go!`}</Typography>
     </Stack>

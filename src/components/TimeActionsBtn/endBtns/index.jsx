@@ -16,10 +16,7 @@ import { useState } from "react";
 import EndToBtn from "./endToBtn";
 
 function EndBtns({ work }) {
-  const [disabled, setDisabled] = useState();
-
   const endNowHandler = async () => {
-    setDisabled(true);
     try {
       const started_at = work.time_tracking_started_at.toDate();
       const ended_at = moment();
@@ -49,31 +46,22 @@ function EndBtns({ work }) {
         time_tracking_started_at: deleteField(),
       });
     } catch (error) {
-      setDisabled(false);
       console.error(error);
     }
   };
 
   return (
     <Stack alignItems={"center"} spacing={0.5}>
-      <ButtonGroup
-        color="error"
-        size="small"
-        disabled={disabled}
-        variant="outlined"
-      >
+      <ButtonGroup color="error" size="small" variant="outlined">
         <Button
           onClick={() => endNowHandler(work.id)}
           endIcon={<StopCircleIcon />}
         >
           end now
         </Button>
-        <EndToBtn setDisabled={setDisabled} work={work} />
+        <EndToBtn work={work} />
       </ButtonGroup>
-      <TimeInterval
-        stop={disabled}
-        start_at={moment(work.time_tracking_started_at.toDate())}
-      />
+      <TimeInterval start_at={moment(work.time_tracking_started_at.toDate())} />
     </Stack>
   );
 }

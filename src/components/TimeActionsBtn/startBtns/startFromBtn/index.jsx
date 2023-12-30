@@ -4,7 +4,7 @@ import TimerIcon from "@mui/icons-material/Timer";
 import EndToForm from "./form";
 import StartFromForm from "./form";
 
-function StartFromBtn({ work, setDisabled }) {
+function StartFromBtn({ work }) {
   const [openDrawer, setOpenDrawer] = useState();
   return (
     <>
@@ -16,11 +16,7 @@ function StartFromBtn({ work, setDisabled }) {
         open={openDrawer}
         onClose={() => setOpenDrawer(false)}
       >
-        <StartFromForm
-          setDisabled={setDisabled}
-          work={work}
-          setOpenDrawer={setOpenDrawer}
-        />
+        <StartFromForm work={work} setOpenDrawer={setOpenDrawer} />
       </Drawer>
     </>
   );

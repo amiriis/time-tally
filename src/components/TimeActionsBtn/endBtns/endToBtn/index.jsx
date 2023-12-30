@@ -3,7 +3,7 @@ import { useState } from "react";
 import TimerIcon from "@mui/icons-material/Timer";
 import EndToForm from "./form";
 
-function EndToBtn({ work, setDisabled }) {
+function EndToBtn({ work }) {
   const [openDrawer, setOpenDrawer] = useState();
   return (
     <>
@@ -15,14 +15,10 @@ function EndToBtn({ work, setDisabled }) {
         open={openDrawer}
         onClose={() => setOpenDrawer(false)}
       >
-        <EndToForm
-          setDisabled={setDisabled}
-          work={work}
-          setOpenDrawer={setOpenDrawer}
-        />
+        <EndToForm work={work} setOpenDrawer={setOpenDrawer} />
       </Drawer>
     </>
   );
 }
 
-export default EndToBtn
+export default EndToBtn;
