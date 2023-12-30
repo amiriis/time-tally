@@ -15,8 +15,6 @@ import moment from "jalali-moment";
 function StartBtns({ work }) {
   const [disabled, setDisabled] = useState();
 
-  console.log("r", work);
-
   const startNowHandler = (work_id) => {
     setDisabled(true);
     try {

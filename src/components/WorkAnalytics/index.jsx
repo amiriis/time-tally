@@ -19,7 +19,7 @@ function WorkAnalytics({ work_id }) {
     return () => {
       unsubscribe();
     };
-  }, []);
+  }, [work_id]);
 
   return (
     <Stack spacing={1} sx={{ p: 2 }}>

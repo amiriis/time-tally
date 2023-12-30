@@ -44,7 +44,7 @@ function ListWork() {
     return () => {
       unsubscribe();
     };
-  }, []);
+  }, [user.uid, setLocalDb]);
 
   return (
     <TransitionGroup component={Stack} spacing={2} sx={{ my: 3 }}>

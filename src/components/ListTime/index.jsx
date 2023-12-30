@@ -32,7 +32,7 @@ function ListTime({ work_id }) {
     return () => {
       unsubscribe();
     };
-  }, []);
+  }, [work_id]);
 
   return (
     <TransitionGroup component={Stack} spacing={2} sx={{ my: 3 }}>
