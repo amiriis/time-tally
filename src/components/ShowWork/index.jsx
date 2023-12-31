@@ -1,13 +1,15 @@
 "use client";
 
+import { useApp } from "@/contexts/app";
+import { convertAdapterWithCalendar } from "@/lib/convertAdapterWithCalendar";
 import { db } from "@/lib/firebase";
-import { Stack, Typography, Chip, Zoom } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
+import { LocalizationProvider } from "@mui/x-date-pickers";
 import { collection, doc, onSnapshot } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import ListTime from "../ListTime";
 import TimeActionsBtn from "../TimeActionsBtn";
 import TimeTracking from "../TimeTracking";
-import { useApp } from "@/contexts/app";
 
 function ShowWork({ work_id }) {
   const { setLocalDb } = useApp();
@@ -35,20 +37,24 @@ function ShowWork({ work_id }) {
 
   return (
     <>
-      <Stack direction={"row"} justifyContent={"space-between"}>
-        <Stack direction={"row"} spacing={1} alignItems={"center"}>
-          <Typography variant="h5">{work.name}</Typography>
-        </Stack>
-      </Stack>
-      <Stack
-        direction={"row"}
-        alignItems={"flex-start"}
-        justifyContent={"space-between"}
+      <LocalizationProvider
+        dateAdapter={convertAdapterWithCalendar(work.settings.calendar)}
       >
-        <TimeTracking work={work} />
-        <TimeActionsBtn work={work} />
-      </Stack>
-      <ListTime work={work} />
+        <Stack direction={"row"} justifyContent={"space-between"}>
+          <Stack direction={"row"} spacing={1} alignItems={"center"}>
+            <Typography variant="h5">{work.name}</Typography>
+          </Stack>
+        </Stack>
+        <Stack
+          direction={"row"}
+          alignItems={"flex-start"}
+          justifyContent={"space-between"}
+        >
+          <TimeTracking work={work} />
+          <TimeActionsBtn work={work} />
+        </Stack>
+        <ListTime work={work} />
+      </LocalizationProvider>
     </>
   );
 }

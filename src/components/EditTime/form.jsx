@@ -1,19 +1,10 @@
-import { convertAdapterWithCalendar } from "@/lib/convertAdapterWithCalendar";
 import convertDurationToTime from "@/lib/convertDurationToTime";
 import { db } from "@/lib/firebase";
 import { Button, Container, Stack, Typography } from "@mui/material";
-import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
-import {
-  collection,
-  doc,
-  runTransaction,
-  serverTimestamp,
-  updateDoc,
-} from "firebase/firestore";
+import { DateTimePicker } from "@mui/x-date-pickers";
+import { collection, doc, updateDoc } from "firebase/firestore";
 import { Form, Formik } from "formik";
 import moment from "jalali-moment";
-import { useSWRConfig } from "swr";
 import * as Yup from "yup";
 
 function EditTimeForm({ work, time, setOpenDrawer }) {
@@ -77,30 +68,28 @@ function EditTimeForm({ work, time, setOpenDrawer }) {
                   send
                 </Button>
               </Stack>
-              <LocalizationProvider
-                dateAdapter={convertAdapterWithCalendar(work.settings.calendar)}
-              >
-                <DateTimePicker
-                  ampm={false}
-                  disabled={isSubmitting}
-                  value={values.started_at !== "" ? values.started_at : null}
-                  onChange={(newValue) => {
-                    setFieldValue("started_at", newValue);
-                  }}
-                  maxDateTime={values.ended_at}
-                  label="Enter start"
-                />
-                <DateTimePicker
-                  ampm={false}
-                  disabled={isSubmitting}
-                  value={values.ended_at !== "" ? values.ended_at : null}
-                  onChange={(newValue) => {
-                    setFieldValue("ended_at", newValue);
-                  }}
-                  minDateTime={values.started_at}
-                  label="Enter end"
-                />
-              </LocalizationProvider>
+              <DateTimePicker
+                ampm={false}
+                disabled={isSubmitting}
+                value={
+                  values.started_at !== "" ? values.started_at.toDate() : null
+                }
+                onChange={(newValue) => {
+                  setFieldValue("started_at", moment(newValue));
+                }}
+                maxDateTime={values.ended_at.toDate()}
+                label="Enter start"
+              />
+              <DateTimePicker
+                ampm={false}
+                disabled={isSubmitting}
+                value={values.ended_at !== "" ? values.ended_at.toDate() : null}
+                onChange={(newValue) => {
+                  setFieldValue("ended_at", moment(newValue));
+                }}
+                minDateTime={values.started_at.toDate()}
+                label="Enter end"
+              />
             </Stack>
           </Container>
         </Form>

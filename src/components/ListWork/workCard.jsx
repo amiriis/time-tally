@@ -1,12 +1,11 @@
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
-import { Button, Divider, Stack, Typography, Chip, Zoom } from "@mui/material";
+import { Button, Divider, Stack, Typography } from "@mui/material";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 import DeleteWork from "../DeleteWork";
 import EditWork from "../EditWork";
-import WorkAnalytics from "../WorkAnalytics";
 import SettingsWork from "../SettingsWork";
+import WorkAnalytics from "../WorkAnalytics";
 
 function WorkCard({ work }) {
   const router = useRouter();
@@ -34,7 +33,7 @@ function WorkCard({ work }) {
         </Stack>
       </Stack>
       <Divider />
-      <WorkAnalytics work_id={work.id} />
+      <WorkAnalytics work={work} />
       <Button
         size="large"
         color="primary"

@@ -1,8 +1,7 @@
-import { convertAdapterWithCalendar } from "@/lib/convertAdapterWithCalendar";
 import convertDurationToTime from "@/lib/convertDurationToTime";
 import { db } from "@/lib/firebase";
 import { Button, Container, Stack, Typography } from "@mui/material";
-import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { DateTimePicker } from "@mui/x-date-pickers";
 import {
   addDoc,
   collection,
@@ -81,20 +80,16 @@ function EndToForm({ work, setOpenDrawer }) {
                   send
                 </Button>
               </Stack>
-              <LocalizationProvider
-                dateAdapter={convertAdapterWithCalendar(work.settings.calendar)}
-              >
-                <DateTimePicker
-                  ampm={false}
-                  disabled={isSubmitting}
-                  value={values.ended_at !== "" ? values.ended_at : null}
-                  onChange={(newValue) => {
-                    setFieldValue("ended_at", newValue);
-                  }}
-                  minDateTime={moment(work.time_tracking_started_at.toDate())}
-                  label="Enter end"
-                />
-              </LocalizationProvider>
+              <DateTimePicker
+                ampm={false}
+                disabled={isSubmitting}
+                value={values.ended_at !== "" ? values.ended_at.toDate() : null}
+                onChange={(newValue) => {
+                  setFieldValue("ended_at", moment(newValue));
+                }}
+                minDateTime={work.time_tracking_started_at.toDate()}
+                label="Enter end"
+              />
             </Stack>
           </Container>
         </Form>

@@ -1,11 +1,10 @@
-import { convertAdapterWithCalendar } from "@/lib/convertAdapterWithCalendar";
 import { db } from "@/lib/firebase";
 import { Button, Container, Stack, Typography } from "@mui/material";
-import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { DateTimePicker } from "@mui/x-date-pickers";
 import { collection, doc, updateDoc } from "firebase/firestore";
 import { Form, Formik } from "formik";
+import moment from "jalali-moment";
 import * as Yup from "yup";
-
 function StartFromForm({ work, setOpenDrawer, default_started_at = "" }) {
   return (
     <Formik
@@ -50,20 +49,18 @@ function StartFromForm({ work, setOpenDrawer, default_started_at = "" }) {
                   send
                 </Button>
               </Stack>
-              <LocalizationProvider
-                dateAdapter={convertAdapterWithCalendar(work.settings.calendar)}
-              >
-                <DateTimePicker
-                  ampm={false}
-                  disabled={isSubmitting}
-                  disableFuture
-                  value={values.started_at !== "" ? values.started_at : null}
-                  onChange={(newValue) => {
-                    setFieldValue("started_at", newValue);
-                  }}
-                  label="Enter start"
-                />
-              </LocalizationProvider>
+              <DateTimePicker
+                ampm={false}
+                disabled={isSubmitting}
+                disableFuture
+                value={
+                  values.started_at !== "" ? values.started_at.toDate() : null
+                }
+                onChange={(newValue) => {
+                  setFieldValue("started_at", moment(newValue));
+                }}
+                label="Enter start"
+              />
             </Stack>
           </Container>
         </Form>
