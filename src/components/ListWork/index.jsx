@@ -47,7 +47,7 @@ function ListWork() {
   }, [user.uid, setLocalDb]);
 
   return (
-    <TransitionGroup component={Stack} spacing={2} sx={{ my: 3 }}>
+    <TransitionGroup component={Stack} sx={{ my: 3 }}>
       {listWork &&
         listWork.map((work) => (
           <Collapse key={work.id}>

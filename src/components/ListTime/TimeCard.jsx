@@ -28,7 +28,7 @@ function TimeCard({ work, time }) {
 
   return (
     <Stack
-      sx={{ border: 1, borderRadius: 1, borderColor: "divider" }}
+      sx={{ my: 1, border: 1, borderRadius: 1, borderColor: "divider" }}
       direction={"row"}
       alignItems={"center"}
     >

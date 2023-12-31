@@ -35,7 +35,7 @@ function ListTime({ work }) {
   }, [work]);
 
   return (
-    <TransitionGroup component={Stack} spacing={2} sx={{ my: 3 }}>
+    <TransitionGroup component={Stack} sx={{ my: 3 }}>
       {listTime &&
         listTime.map((time) => (
           <Collapse key={time.id}>

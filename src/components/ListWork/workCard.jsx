@@ -12,6 +12,7 @@ function WorkCard({ work }) {
   return (
     <Stack
       sx={{
+        my: 1,
         border: 1,
         borderRadius: 1,
         borderColor: "divider",
