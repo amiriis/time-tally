@@ -18,11 +18,12 @@ function TotalTimeWork({ times }) {
 
   return (
     <Stack direction={"row"} justifyContent={"space-between"}>
-      <Typography>Total time</Typography>
+      <Typography fontWeight={"bold"}>Total time</Typography>
       {times ? (
-        <Typography color={"primary.main"}>{`${duration.hours
-          .toString()
-          .padStart(2, "0")}:${duration.minutes
+        <Typography
+          fontWeight={"bold"}
+          color={"primary.main"}
+        >{`${duration.hours.toString().padStart(2, "0")}:${duration.minutes
           .toString()
           .padStart(2, "0")}`}</Typography>
       ) : (

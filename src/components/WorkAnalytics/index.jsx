@@ -3,11 +3,13 @@ import { Stack } from "@mui/material";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import TotalTimeWork from "../TotalTimeWork";
+import TotalTimeWorkLastMonth from "../TotalTimeWorkLastMonth";
+import TotalTimeWorkThisMonth from "../TotalTimeWorkThisMonth";
 
-function WorkAnalytics({ work_id }) {
+function WorkAnalytics({ work }) {
   const [times, setTime] = useState();
   useEffect(() => {
-    const q = query(collection(db, "times"), where("wid", "==", work_id));
+    const q = query(collection(db, "times"), where("wid", "==", work.id));
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const _times = [];
       querySnapshot.forEach((doc) => {
@@ -19,10 +21,12 @@ function WorkAnalytics({ work_id }) {
     return () => {
       unsubscribe();
     };
-  }, [work_id]);
+  }, [work]);
 
   return (
     <Stack spacing={1} sx={{ p: 2 }}>
+      <TotalTimeWorkThisMonth work={work} times={times} />
+      <TotalTimeWorkLastMonth work={work} times={times} />
       <TotalTimeWork times={times} />
     </Stack>
   );
