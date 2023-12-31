@@ -19,18 +19,9 @@ function EditWorkForm({ work, setOpenDrawer }) {
       }}
       onSubmit={async (values) => {
         try {
-          const history = Object.entries(work).reduce((acc, [key, value]) => {
-            if (key !== "change_history") {
-              acc[key] = value;
-            }
-            return acc;
-          }, {});
           updateDoc(doc(collection(db, "works"), work.id), {
             name: values.name.toUpperCase(),
             updated_at: moment().toDate(),
-            change_history: work.change_history
-              ? [history, ...work.change_history]
-              : [history],
           });
         } catch (error) {
           console.error(error);
