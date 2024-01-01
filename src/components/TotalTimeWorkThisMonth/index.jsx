@@ -1,6 +1,7 @@
 import convertDurationToTime from "@/lib/convertDurationToTime";
 import { convertFormatMomentWithCalendar } from "@/lib/convertFormatMomentWithCalendar";
 import { convertLocaleMomentWithCalendar } from "@/lib/convertLocaleMomentWithCalendar";
+import { getDurationInMillisecondsWIthFilter } from "@/lib/getDurationInMillisecondsWIthFilter";
 import { CircularProgress, Stack, Typography } from "@mui/material";
 import moment from "jalali-moment";
 import { useEffect, useState } from "react";
@@ -10,7 +11,6 @@ function TotalTimeWorkThisMonth({ work, times }) {
 
   useEffect(() => {
     if (!times) return;
-    const filteredData = [];
 
     const format = convertFormatMomentWithCalendar(
       "YYYY",
@@ -34,19 +34,12 @@ function TotalTimeWorkThisMonth({ work, times }) {
       `${format} hh:mm:ss`
     ).subtract(1, "day");
 
-    for (const item of times) {
-      const itemMoment = moment(item.started_at.toDate()).locale(
-        convertLocaleMomentWithCalendar(work.settings.calendar)
-      );
-      if (itemMoment.isSameOrAfter(start) && itemMoment.isBefore(end)) {
-        filteredData.push(item);
-      }
-    }
-
-    let total_duration = 0;
-    filteredData.forEach((time) => {
-      total_duration += time.total_time.duration;
-    });
+    const total_duration = getDurationInMillisecondsWIthFilter(
+      work.settings.calendar,
+      times,
+      start,
+      end
+    );
     setDurationInMilliseconds(total_duration);
   }, [times, work.settings.calendar]);
 

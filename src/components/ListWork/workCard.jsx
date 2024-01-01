@@ -1,6 +1,6 @@
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { Button, Divider, Stack, Typography } from "@mui/material";
-
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import DeleteWork from "../DeleteWork";
 import EditWork from "../EditWork";
@@ -36,12 +36,14 @@ function WorkCard({ work }) {
       <Divider />
       <WorkAnalytics work={work} />
       <Button
+        component={Link}
+        href={`/work/${work.id}`}
+        passHref
         size="large"
         color="primary"
         variant="contained"
         sx={{ borderTopLeftRadius: 0, borderTopRightRadius: 0 }}
         startIcon={<OpenInNewIcon />}
-        onClick={() => router.push(`/work/${work.id}`)}
       >
         {`Let's make time in ${work.name}`}
       </Button>
