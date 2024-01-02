@@ -36,7 +36,7 @@ function Navbar() {
       <AppBar position="static" elevation={0}>
         <Container maxWidth="xs">
           <Toolbar disableGutters>
-            {pathname === "/" ? (
+            {pathname === "/u" ? (
               <Box>
                 <Typography
                   variant="h6"

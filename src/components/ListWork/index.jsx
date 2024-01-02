@@ -47,8 +47,6 @@ function ListWork() {
     };
   }, [user.uid, setLocalDb]);
 
-  console.log(listWork);
-
   return (
     <>
       {listWork && (

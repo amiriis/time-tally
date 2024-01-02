@@ -37,7 +37,7 @@ function WorkCard({ work }) {
       <WorkAnalytics work={work} />
       <Button
         component={Link}
-        href={`/work/${work.id}`}
+        href={`/u/work/${work.id}`}
         passHref
         size="large"
         color="primary"
