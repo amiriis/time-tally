@@ -1,6 +1,18 @@
-import React from "react";
-import { Container, Stack, Typography, Button } from "@mui/material";
-import Link from "next/link";
+import { Container, Stack, Typography, keyframes, styled } from "@mui/material";
+
+const blinkAnimation = keyframes`
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: .5;
+  }
+`;
+
+const BlinkingText = styled(Typography)`
+  animation: ${blinkAnimation} 1.5s infinite;
+`;
+
 function LoadingPage() {
   return (
     <Container sx={{ height: "100vh" }} maxWidth="xs">
@@ -11,9 +23,9 @@ function LoadingPage() {
         spacing={5}
       >
         <Stack alignItems={"center"} justifyContent={"center"}>
-          <Typography variant="h2" fontWeight={"900"} color={"primary.main"}>
+          <BlinkingText variant="h2" fontWeight={"900"} color={"primary.main"}>
             Time Tally
-          </Typography>
+          </BlinkingText>
         </Stack>
       </Stack>
     </Container>
