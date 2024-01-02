@@ -1,10 +1,11 @@
 
 import Image from 'next/image'
+import svgNoData from '../../public/images/no-data.svg'
 
 function NoData({ width, height }) {
     return (
         <>
-            <Image priority src={'/images/no-data.svg'} alt='no data' width={width} height={height} />
+            <Image priority src={svgNoData} alt='no data' width={width} height={height} />
         </>
     );
 }

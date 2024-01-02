@@ -62,7 +62,7 @@ function ListWork() {
                 ))}
             </TransitionGroup>
           ) : (
-            <NotFoundData width={200} height={200} />
+            <NotFoundData width={150} height={150} />
           )}
         </>
       )}
