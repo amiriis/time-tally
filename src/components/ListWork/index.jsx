@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import { TransitionGroup } from "react-transition-group";
 import WorkCard from "./workCard";
 import { useApp } from "@/contexts/app";
+import NotFoundData from "../NotFoundData";
 
 function ListWork() {
   const { setLocalDb } = useApp();
@@ -46,15 +47,26 @@ function ListWork() {
     };
   }, [user.uid, setLocalDb]);
 
+  console.log(listWork);
+
   return (
-    <TransitionGroup component={Stack} sx={{ my: 3 }}>
-      {listWork &&
-        listWork.map((work) => (
-          <Collapse key={work.id}>
-            <WorkCard work={work} />
-          </Collapse>
-        ))}
-    </TransitionGroup>
+    <>
+      {listWork && (
+        <>
+          {listWork.length ? (
+            <TransitionGroup component={Stack} sx={{ my: 3 }}>
+                {listWork.map((work) => (
+                  <Collapse key={work.id}>
+                    <WorkCard work={work} />
+                  </Collapse>
+                ))}
+            </TransitionGroup>
+          ) : (
+            <NotFoundData width={200} height={200} />
+          )}
+        </>
+      )}
+    </>
   );
 }
 

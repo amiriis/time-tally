@@ -11,6 +11,7 @@ import {
   onSnapshot,
 } from "firebase/firestore";
 import { useEffect, useState } from "react";
+import NotFoundData from "../NotFoundData";
 
 function ListTime({ work }) {
   const [listTime, setListTime] = useState();
@@ -35,14 +36,23 @@ function ListTime({ work }) {
   }, [work]);
 
   return (
-    <TransitionGroup component={Stack} sx={{ my: 3 }}>
-      {listTime &&
-        listTime.map((time) => (
-          <Collapse key={time.id}>
-            <TimeCard work={work} time={time} />
-          </Collapse>
-        ))}
-    </TransitionGroup>
+    <>
+      {listTime && (
+        <>
+          {listTime.length ? (
+            <TransitionGroup component={Stack} sx={{ my: 3 }}>
+              {listTime.map((time) => (
+                <Collapse key={time.id}>
+                  <TimeCard work={work} time={time} />
+                </Collapse>
+              ))}
+            </TransitionGroup>
+          ) : (
+            <NotFoundData width={200} height={200} />
+          )}
+        </>
+      )}
+    </>
   );
 }
 
