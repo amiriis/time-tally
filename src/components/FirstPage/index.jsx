@@ -13,7 +13,7 @@ function FirstPage() {
         sx={{ height: "100%" }}
         alignItems={"center"}
         justifyContent={"center"}
-        spacing={5}
+        spacing={10}
       >
         <Stack alignItems={"center"} justifyContent={"center"}>
           <Box
@@ -33,6 +33,8 @@ function FirstPage() {
           component={Link}
           href={`/get-started`}
           passHref
+          size="large"
+          fullWidth
           color="primary"
           variant="outlined"
         >
