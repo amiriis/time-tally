@@ -6,7 +6,7 @@ import { useAuth } from "@/contexts/auth";
 import LoadingPage from "../Loading";
 
 function LoginPage() {
-  const { initAuth, user, signInWithGoogle } = useAuth();
+  const { initAuth, user, loginWithGoogle } = useAuth();
 
   if (!initAuth) return <LoadingPage />;
   return (
@@ -28,9 +28,9 @@ function LoginPage() {
         </Stack>
         <Button
           sx={{ px: 4 }}
-          onClick={signInWithGoogle}
+          onClick={loginWithGoogle}
           variant="contained"
-          size={'large'}
+          size={"large"}
           color="error"
           startIcon={<GoogleIcon />}
         >

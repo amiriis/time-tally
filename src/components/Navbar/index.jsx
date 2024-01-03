@@ -17,7 +17,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 
 function Navbar() {
-  const { user, signInWithGoogle, logOut, initAuth } = useAuth();
+  const { user, loginWithGoogle, logOut, initAuth } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
 
@@ -64,7 +64,7 @@ function Navbar() {
               {!initAuth ? (
                 <CircularProgress />
               ) : !user ? (
-                <Button color="inherit" onClick={signInWithGoogle}>
+                <Button color="inherit" onClick={loginWithGoogle}>
                   Login
                 </Button>
               ) : (
