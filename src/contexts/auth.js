@@ -2,8 +2,8 @@ import { auth } from "@/lib/firebase";
 import {
   GoogleAuthProvider,
   onAuthStateChanged,
-  signInWithRedirect,
-  signOut,
+  signInWithPopup,
+  signOut
 } from "firebase/auth";
 
 const { createContext, useContext, useState, useEffect } = require("react");
@@ -17,7 +17,7 @@ export const AuthProvider = ({ children }) => {
   const signInWithGoogle = async () => {
     try {
       const provider = new GoogleAuthProvider();
-      await signInWithRedirect(auth, provider);
+      signInWithPopup(auth, provider);
     } catch (error) {
       console.log(error);
     }
