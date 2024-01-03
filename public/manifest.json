@@ -1,0 +1,33 @@
+{
+    "name": "Time Tally",
+    "short_name": "Time Tally",
+    "icons": [
+        {
+            "src": "/icons/timtally-logo-maskable.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "/icons/timtally-logo192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/icons/timtally-logo384x384.png",
+            "sizes": "384x384",
+            "type": "image/png"
+        },
+        {
+            "src": "/icons/timtally-logo512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ],
+    "theme_color": "#0fa3b1",
+    "background_color": "#FFFFFF",
+    "start_url": "/",
+    "scope": ".",
+    "display": "standalone",
+    "orientation": "portrait"
+}

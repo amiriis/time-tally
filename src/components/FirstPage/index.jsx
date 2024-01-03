@@ -3,7 +3,7 @@ import React from "react";
 import { Container, Stack, Typography, Button } from "@mui/material";
 import Link from "next/link";
 import Image from "next/image";
-import logo from "../../../public/images/timtally-logo.png";
+import logo from "../../../public/icons/timtally-logo.png";
 import Box from "@mui/material/Box";
 
 function FirstPage() {
