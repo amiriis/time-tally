@@ -2,15 +2,17 @@ import { Container, Stack, Typography, keyframes, styled } from "@mui/material";
 
 const blinkAnimation = keyframes`
   0%, 100% {
-    opacity: 1;
+    transform: scale(1);
+    letter-spacing: 8px;
   }
   50% {
-    opacity: .5;
+    transform: scale(0.6);
+    letter-spacing: 0px;
   }
 `;
 
 const BlinkingText = styled(Typography)`
-  animation: ${blinkAnimation} 1.5s infinite;
+  animation: ${blinkAnimation} 2s infinite;
 `;
 
 function LoadingPage() {

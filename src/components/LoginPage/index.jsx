@@ -30,6 +30,7 @@ function LoginPage() {
           sx={{ px: 4 }}
           onClick={signInWithGoogle}
           variant="contained"
+          size={'large'}
           color="error"
           startIcon={<GoogleIcon />}
         >
