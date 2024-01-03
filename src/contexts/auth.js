@@ -35,7 +35,7 @@ export const AuthProvider = ({ children }) => {
 
   const logOut = () => {
     try {
-      signOut(auth);
+      auth.signOut();
     } catch (error) {
       console.log(error);
     }
