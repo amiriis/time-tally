@@ -2,7 +2,7 @@ import { useAuth } from "@/contexts/auth";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import {
   Avatar,
-  Button,
+  Stack,
   CircularProgress,
   Container,
   IconButton,
@@ -37,12 +37,11 @@ function Navbar() {
         <Container maxWidth="xs">
           <Toolbar disableGutters>
             {pathname === "/u" ? (
-              <Box>
+              <Stack direction={'row'} alignItems={'flex-end'}>
                 <Typography
                   variant="h6"
                   noWrap
                   sx={{
-                    mr: 2,
                     display: "flex",
                     fontFamily: "monospace",
                     fontWeight: 500,
@@ -53,7 +52,20 @@ function Navbar() {
                 >
                   Time Tally
                 </Typography>
-              </Box>
+                <Typography
+                  variant="caption"
+                  noWrap
+                  sx={{
+                    mr: 2,
+                    display: "flex",
+                    fontFamily: "monospace",
+                    color: "inherit",
+                    textDecoration: "none",
+                  }}
+                >
+                  {process.env.NEXT_PUBLIC_VERSION}
+                </Typography>
+              </Stack>
             ) : (
               <IconButton color="inherit" onClick={() => router.back()}>
                 <ArrowBackIcon />
@@ -63,11 +75,7 @@ function Navbar() {
             <Box>
               {!initAuth ? (
                 <CircularProgress />
-              ) : !user ? (
-                <Button color="inherit" onClick={loginWithGoogle}>
-                  Login
-                </Button>
-              ) : (
+              ) : user && (
                 <>
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                     <Avatar

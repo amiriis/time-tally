@@ -1,12 +1,12 @@
 "use client";
 import React from "react";
-import { Container, Stack, Button, Typography, Divider } from "@mui/material";
+import { Container, Stack, Button, Typography, Divider,CircularProgress } from "@mui/material";
 import GoogleIcon from "@mui/icons-material/Google";
 import { useAuth } from "@/contexts/auth";
 import LoadingPage from "../Loading";
 
 function LoginPage() {
-  const { initAuth, user, loginWithGoogle } = useAuth();
+  const { initAuth, user, loginWithGoogle,loginIsLoading } = useAuth();
 
   if (!initAuth) return <LoadingPage />;
   return (
@@ -31,8 +31,15 @@ function LoginPage() {
           onClick={loginWithGoogle}
           variant="contained"
           size={"large"}
+          disabled={loginIsLoading}
           color="error"
-          startIcon={<GoogleIcon />}
+          startIcon={
+            !loginIsLoading ? (
+              <GoogleIcon />
+            ) : (
+              <CircularProgress color="inherit" size={16} />
+            )
+          }
         >
           sign in With Google
         </Button>

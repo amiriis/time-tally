@@ -22,13 +22,14 @@ const signInWithGoogle = async () => {
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [loginIsLoading, setLoginIsLoading] = useState(null);
   const [initAuth, setInitAuth] = useState(false)
 
   const loginWithGoogle = async () => {
+    setLoginIsLoading(true)
     const result = await signInWithGoogle()
-
-    if(!result?.user)return
-
+    setLoginIsLoading(false)
+    if (!result?.user) return
     setUser(result?.user)
   }
 
@@ -50,7 +51,7 @@ export const AuthProvider = ({ children }) => {
   }, [user]);
 
   return (
-    <AuthContext.Provider value={{ user, loginWithGoogle, logOut, initAuth }}>
+    <AuthContext.Provider value={{ user, loginWithGoogle, logOut, initAuth, loginIsLoading }}>
       {children}
     </AuthContext.Provider>
   );
