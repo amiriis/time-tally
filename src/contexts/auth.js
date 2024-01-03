@@ -10,26 +10,26 @@ const { createContext, useContext, useState, useEffect } = require("react");
 
 const AuthContext = createContext();
 
+const signInWithGoogle = async () => {
+  try {
+    const provider = new GoogleAuthProvider();
+    await signInWithPopup(auth, provider);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const logOut = () => {
+  try {
+    signOut(auth);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [initAuth, setInitAuth] = useState(false)
-
-  const signInWithGoogle = async () => {
-    try {
-      const provider = new GoogleAuthProvider();
-      signInWithPopup(auth, provider);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const logOut = () => {
-    try {
-      signOut(auth);
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
