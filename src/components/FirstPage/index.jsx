@@ -24,7 +24,7 @@ function FirstPage() {
             width={80}
             height={80}
           />
-          <Typography variant="h2" fontWeight={"900"} color={"primary.main"}>
+          <Typography component={'h1'} variant="h3" fontWeight={"900"} color={"primary.main"}>
             Time Tally
           </Typography>
           <Typography variant="subtitle1">Make your time</Typography>
