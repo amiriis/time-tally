@@ -44,3 +44,5 @@ sw*.*
 sw.js.map
 workbox-*.js
 workbox-*.js.map
+fallback-*.js
+fallback-*.js.map
