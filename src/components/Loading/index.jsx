@@ -25,7 +25,7 @@ function LoadingPage() {
         spacing={5}
       >
         <Stack alignItems={"center"} justifyContent={"center"}>
-          <BlinkingText variant="h2" fontWeight={"900"} color={"primary.main"}>
+          <BlinkingText variant="h4" fontWeight={"900"} color={"primary.main"}>
             Time Tally
           </BlinkingText>
         </Stack>

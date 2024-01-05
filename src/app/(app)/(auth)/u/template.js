@@ -10,6 +10,7 @@ import { TransitionGroup } from "react-transition-group";
 export default function Template({ children }) {
   const { isLocalDb } = useApp();
   const { user, initAuth } = useAuth();
+
   return (
     <>
       <Navbar />
