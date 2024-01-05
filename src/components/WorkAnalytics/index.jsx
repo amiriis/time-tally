@@ -27,7 +27,7 @@ function WorkAnalytics({ work }) {
     <Stack spacing={1} sx={{ p: 2 }}>
       <TotalTimeWorkThisMonth work={work} times={times} />
       <TotalTimeWorkLastMonth work={work} times={times} />
-      <TotalTimeWork times={times} />
+      <TotalTimeWork work={work} times={times} />
     </Stack>
   );
 }

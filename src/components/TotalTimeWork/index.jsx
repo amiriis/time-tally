@@ -2,7 +2,7 @@ import convertDurationToTime from "@/lib/convertDurationToTime";
 import { CircularProgress, Stack, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 
-function TotalTimeWork({ times }) {
+function TotalTimeWork({ work, times }) {
   const [durationInMilliseconds, setDurationInMilliseconds] = useState(0);
 
   useEffect(() => {
@@ -22,7 +22,7 @@ function TotalTimeWork({ times }) {
       {times ? (
         <Typography
           fontWeight={"bold"}
-          color={"primary.main"}
+          color={work.is_time_tracking ? "warning.main" : "primary.main"}
         >{`${duration.hours.toString().padStart(2, "0")}:${duration.minutes
           .toString()
           .padStart(2, "0")}`}</Typography>

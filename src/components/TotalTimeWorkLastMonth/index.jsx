@@ -49,9 +49,9 @@ function TotalTimeWorkLastMonth({ work, times }) {
     <Stack direction={"row"} justifyContent={"space-between"}>
       <Typography>Last month</Typography>
       {times ? (
-        <Typography color={"primary.main"}>{`${duration.hours
-          .toString()
-          .padStart(2, "0")}:${duration.minutes
+        <Typography
+          color={work.is_time_tracking ? "warning.main" : "primary.main"}
+        >{`${duration.hours.toString().padStart(2, "0")}:${duration.minutes
           .toString()
           .padStart(2, "0")}`}</Typography>
       ) : (
