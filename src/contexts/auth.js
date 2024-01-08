@@ -1,11 +1,12 @@
-import { auth } from "@/lib/firebase";
+import { auth, db } from "@/lib/firebase";
 import {
   GithubAuthProvider,
   GoogleAuthProvider,
-  linkWithPopup,
   onAuthStateChanged,
   signInWithPopup
 } from "firebase/auth";
+import { addDoc, collection } from "firebase/firestore";
+import moment from "jalali-moment";
 
 const { createContext, useContext, useState, useEffect } = require("react");
 
@@ -14,21 +15,10 @@ const AuthContext = createContext();
 const providerGoogle = new GoogleAuthProvider();
 const providerGithub = new GithubAuthProvider();
 
-const signInWithGoogle = async () => {
-  try {
-    return await signInWithPopup(auth, providerGoogle);
-  } catch (error) {
-    console.error(error);
-  }
-};
+const signInWithGoogle = () => signInWithPopup(auth, providerGoogle);
 
-const signInWithGithub = async () => {
-  try {
-    return await signInWithPopup(auth, providerGithub);
-  } catch (error) {
-    console.error(error);
-  }
-}
+const signInWithGithub = () => signInWithPopup(auth, providerGithub);
+
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loginIsLoading, setLoginIsLoading] = useState(null);
@@ -38,10 +28,21 @@ export const AuthProvider = ({ children }) => {
     setLoginIsLoading(true)
     setTimeout(() => {
       signInWithGoogle().then(res => {
-        console.log(res);
         setLoginIsLoading(false)
         if (!res?.user) return
         setUser(res?.user)
+      }).catch(error => {
+        const errorData = {
+          code: error.code,
+          message: error.message,
+          stack: error.stack,
+        };
+        setLoginIsLoading(false)
+        addDoc(collection(db, "logs"), {
+          action: "sign in with google",
+          error: errorData,
+          created_at: moment().toDate(),
+        });
       })
     }, 1000);
   }
@@ -49,11 +50,22 @@ export const AuthProvider = ({ children }) => {
   const loginWithGithub = () => {
     setLoginIsLoading(true)
     setTimeout(() => {
-      signInWithGithub().then(async (res) => {
-        console.log(res);
+      signInWithGithub().then((res) => {
         setLoginIsLoading(false)
         if (!res?.user) return
         setUser(res?.user)
+      }).catch(error => {
+        const errorData = {
+          code: error.code,
+          message: error.message,
+          stack: error.stack,
+        };
+        setLoginIsLoading(false)
+        addDoc(collection(db, "logs"), {
+          action: "sign in with github",
+          error: errorData,
+          created_at: moment().toDate(),
+        });
       })
     }, 1000);
   }
@@ -62,7 +74,16 @@ export const AuthProvider = ({ children }) => {
     try {
       auth.signOut();
     } catch (error) {
-      console.log(error);
+      const errorData = {
+        code: error.code,
+        message: error.message,
+        stack: error.stack,
+      };
+      addDoc(collection(db, "logs"), {
+        action: "sign out",
+        error: errorData,
+        created_at: moment().toDate(),
+      });
     }
   };
 

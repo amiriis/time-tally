@@ -1,11 +1,13 @@
+import { useAuth } from "@/contexts/auth";
 import { db } from "@/lib/firebase";
 import { Button, Container, Stack, Typography } from "@mui/material";
 import { DateTimePicker } from "@mui/x-date-pickers";
-import { collection, doc, updateDoc } from "firebase/firestore";
+import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
 import { Form, Formik } from "formik";
 import moment from "jalali-moment";
 import * as Yup from "yup";
 function StartFromForm({ work, setOpenDrawer, default_started_at = "" }) {
+  const { user } = useAuth();
   return (
     <Formik
       initialValues={{
@@ -15,13 +17,25 @@ function StartFromForm({ work, setOpenDrawer, default_started_at = "" }) {
         started_at: Yup.date().required(),
       })}
       onSubmit={async (values) => {
+        const _data = {
+          is_time_tracking: true,
+          time_tracking_started_at: values.started_at.toDate(),
+        };
         try {
-          updateDoc(doc(collection(db, "works"), work.id), {
-            is_time_tracking: true,
-            time_tracking_started_at: values.started_at.toDate(),
-          });
+          updateDoc(doc(collection(db, "works"), work.id), _data);
         } catch (error) {
-          console.error(error);
+          const errorData = {
+            code: error.code,
+            message: error.message,
+            stack: error.stack,
+          };
+          addDoc(collection(db, "logs"), {
+            action: "edit work (start now)",
+            params: { old: work, now: _data },
+            user: user,
+            error: errorData,
+            created_at: moment().toDate(),
+          });
         }
         setOpenDrawer(false);
       }}

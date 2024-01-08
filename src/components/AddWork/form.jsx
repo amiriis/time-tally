@@ -3,13 +3,13 @@ import { db } from "@/lib/firebase";
 import {
   Button,
   Container,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
   Stack,
   TextField,
   Typography,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
 } from "@mui/material";
 import { addDoc, collection } from "firebase/firestore";
 import { Form, Formik } from "formik";
@@ -34,19 +34,32 @@ function AddWorkForm({ setOpenDrawer }) {
         return errors;
       }}
       onSubmit={async (values) => {
+        const _data = {
+          uid: user.uid,
+          name: values.name.toUpperCase(),
+          settings: {
+            calendar: values.calendar,
+          },
+          created_at: moment().toDate(),
+          updated_at: moment().toDate(),
+          is_time_tracking: false,
+        };
+
         try {
-          addDoc(collection(db, "works"), {
-            uid: user.uid,
-            name: values.name.toUpperCase(),
-            settings: {
-              calendar: values.calendar,
-            },
-            created_at: moment().toDate(),
-            updated_at: moment().toDate(),
-            is_time_tracking: false,
-          });
+          addDoc(collection(db, "works"), _data);
         } catch (error) {
-          console.error(error);
+          const errorData = {
+            code: error.code,
+            message: error.message,
+            stack: error.stack,
+          };
+          addDoc(collection(db, "logs"), {
+            action: "add work",
+            params: _data,
+            user: user,
+            error: errorData,
+            created_at: moment().toDate(),
+          });
         }
         setOpenDrawer(false);
       }}

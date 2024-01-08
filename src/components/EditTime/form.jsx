@@ -1,13 +1,16 @@
+import { useAuth } from "@/contexts/auth";
 import convertDurationToTime from "@/lib/convertDurationToTime";
 import { db } from "@/lib/firebase";
 import { Button, Container, Stack, Typography } from "@mui/material";
 import { DateTimePicker } from "@mui/x-date-pickers";
-import { collection, doc, updateDoc } from "firebase/firestore";
+import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
 import { Form, Formik } from "formik";
 import moment from "jalali-moment";
 import * as Yup from "yup";
 
 function EditTimeForm({ work, time, setOpenDrawer }) {
+  const { user } = useAuth();
+  
   return (
     <Formik
       initialValues={{
@@ -19,28 +22,40 @@ function EditTimeForm({ work, time, setOpenDrawer }) {
         ended_at: Yup.date().required(),
       })}
       onSubmit={async (values) => {
+        const started_at = values.started_at;
+        const ended_at = values.ended_at;
+
+        const durationInMilliseconds = ended_at.diff(started_at);
+        const duration = convertDurationToTime(durationInMilliseconds);
+
+        const total_time = {
+          duration: durationInMilliseconds,
+          hours: duration.hours,
+          minutes: duration.minutes,
+          seconds: duration.seconds,
+        };
+
+        const _data = {
+          started_at: started_at.toDate(),
+          ended_at: ended_at.toDate(),
+          total_time,
+          updated_at: moment().toDate(),
+        };
         try {
-          const started_at = values.started_at;
-          const ended_at = values.ended_at;
-
-          const durationInMilliseconds = ended_at.diff(started_at);
-          const duration = convertDurationToTime(durationInMilliseconds);
-
-          const total_time = {
-            duration: durationInMilliseconds,
-            hours: duration.hours,
-            minutes: duration.minutes,
-            seconds: duration.seconds,
-          };
-
-          updateDoc(doc(collection(db, "times"), time.id), {
-            started_at: started_at.toDate(),
-            ended_at: ended_at.toDate(),
-            total_time,
-            updated_at: moment().toDate(),
-          });
+          updateDoc(doc(collection(db, "times"), time.id), _data);
         } catch (error) {
-          console.error(error);
+          const errorData = {
+            code: error.code,
+            message: error.message,
+            stack: error.stack,
+          };
+          addDoc(collection(db, "logs"), {
+            action: "edit time",
+            params: { old: time, now: _data },
+            user: user,
+            error: errorData,
+            created_at: moment().toDate(),
+          });
         }
         setOpenDrawer(false);
       }}

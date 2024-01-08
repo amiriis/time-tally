@@ -1,10 +1,13 @@
+import { useAuth } from "@/contexts/auth";
 import { db } from "@/lib/firebase";
 import { Button, Container, Stack, TextField, Typography } from "@mui/material";
-import { collection, doc, updateDoc } from "firebase/firestore";
+import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
 import { Form, Formik } from "formik";
 import moment from "jalali-moment";
 
 function EditWorkForm({ work, setOpenDrawer }) {
+  const { user } = useAuth();
+
   return (
     <Formik
       initialValues={{
@@ -18,13 +21,25 @@ function EditWorkForm({ work, setOpenDrawer }) {
         return errors;
       }}
       onSubmit={async (values) => {
+        const _data = {
+          name: values.name.toUpperCase(),
+          updated_at: moment().toDate(),
+        };
         try {
-          updateDoc(doc(collection(db, "works"), work.id), {
-            name: values.name.toUpperCase(),
-            updated_at: moment().toDate(),
-          });
+          updateDoc(doc(collection(db, "works"), work.id), _data);
         } catch (error) {
-          console.error(error);
+          const errorData = {
+            code: error.code,
+            message: error.message,
+            stack: error.stack,
+          };
+          addDoc(collection(db, "logs"), {
+            action: "edit work",
+            params: { old: work, now: _data },
+            user: user,
+            error: errorData,
+            created_at: moment().toDate(),
+          });
         }
         setOpenDrawer(false);
       }}
