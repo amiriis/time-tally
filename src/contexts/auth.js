@@ -36,22 +36,26 @@ export const AuthProvider = ({ children }) => {
 
   const loginWithGoogle = () => {
     setLoginIsLoading(true)
-    signInWithGoogle().then(res => {
-      console.log(res);
-      setLoginIsLoading(false)
-      if (!res?.user) return
-      setUser(res?.user)
-    })
+    setTimeout(() => {
+      signInWithGoogle().then(res => {
+        console.log(res);
+        setLoginIsLoading(false)
+        if (!res?.user) return
+        setUser(res?.user)
+      })
+    }, 1000);
   }
 
   const loginWithGithub = () => {
     setLoginIsLoading(true)
-    signInWithGithub().then(async (res) => {
-      console.log(res);
-      setLoginIsLoading(false)
-      if (!res?.user) return
-      setUser(res?.user)
-    })
+    setTimeout(() => {
+      signInWithGithub().then(async (res) => {
+        console.log(res);
+        setLoginIsLoading(false)
+        if (!res?.user) return
+        setUser(res?.user)
+      })
+    }, 1000);
   }
 
   const logOut = () => {
