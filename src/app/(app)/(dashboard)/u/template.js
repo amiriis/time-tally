@@ -3,13 +3,11 @@
 import LocalNavbar from "@/components/LocalNavbar";
 import Navbar from "@/components/Navbar";
 import { useApp } from "@/contexts/app";
-import { useAuth } from "@/contexts/auth";
-import { Collapse, Container, Typography } from "@mui/material";
+import { Collapse, Container } from "@mui/material";
 import { TransitionGroup } from "react-transition-group";
 
 export default function Template({ children }) {
   const { isLocalDb } = useApp();
-  const { user, initAuth } = useAuth();
 
   return (
     <>
