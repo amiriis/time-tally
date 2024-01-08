@@ -1,14 +1,18 @@
 "use client";
-import React from "react";
-import { Container, Stack, Button, Typography, Divider,CircularProgress } from "@mui/material";
-import GoogleIcon from "@mui/icons-material/Google";
 import { useAuth } from "@/contexts/auth";
-import LoadingPage from "../Loading";
+import { GitHub } from "@mui/icons-material";
+import GoogleIcon from "@mui/icons-material/Google";
+import {
+  Button,
+  CircularProgress,
+  Container,
+  Stack,
+  Typography,
+} from "@mui/material";
 
 function LoginPage() {
-  const { initAuth, user, loginWithGoogle,loginIsLoading } = useAuth();
+  const { loginWithGoogle, loginWithGithub, loginIsLoading } = useAuth();
 
-  if (!initAuth) return <LoadingPage />;
   return (
     <Container sx={{ height: "100vh" }} maxWidth="xs">
       <Stack
@@ -26,23 +30,43 @@ function LoginPage() {
             you must first
           </Typography>
         </Stack>
-        <Button
-          sx={{ px: 4 }}
-          onClick={loginWithGoogle}
-          variant="contained"
-          size={"large"}
-          disabled={loginIsLoading}
-          color="error"
-          startIcon={
-            !loginIsLoading ? (
-              <GoogleIcon />
-            ) : (
-              <CircularProgress color="inherit" size={16} />
-            )
-          }
-        >
-          sign in With Google
-        </Button>
+        <Stack alignItems={"center"} justifyContent={"center"} spacing={2}>
+          <Button
+            sx={{ px: 4 }}
+            onClick={loginWithGoogle}
+            variant="contained"
+            size={"large"}
+            disabled={loginIsLoading}
+            color="error"
+            startIcon={
+              !loginIsLoading ? (
+                <GoogleIcon />
+              ) : (
+                <CircularProgress color="inherit" size={16} />
+              )
+            }
+          >
+            sign in With Google
+          </Button>
+          <Typography>or</Typography>
+          <Button
+            sx={{ px: 4 }}
+            onClick={loginWithGithub}
+            variant="contained"
+            size={"large"}
+            disabled={loginIsLoading}
+            color="black"
+            startIcon={
+              !loginIsLoading ? (
+                <GitHub />
+              ) : (
+                <CircularProgress color="inherit" size={16} />
+              )
+            }
+          >
+            sign in With Github
+          </Button>
+        </Stack>
       </Stack>
     </Container>
   );

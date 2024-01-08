@@ -16,6 +16,10 @@ const theme = createTheme({
     secondary: {
       main: "#eddea4",
     },
+    black:{
+      main: "#0d1117",
+      contrastText: '#ffffff',
+    }
   },
   typography: {
     fontFamily: roboto.style.fontFamily,

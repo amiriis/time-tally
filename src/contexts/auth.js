@@ -1,36 +1,57 @@
 import { auth } from "@/lib/firebase";
 import {
+  GithubAuthProvider,
   GoogleAuthProvider,
+  linkWithPopup,
   onAuthStateChanged,
-  signInWithPopup,
-  signOut
+  signInWithPopup
 } from "firebase/auth";
 
 const { createContext, useContext, useState, useEffect } = require("react");
 
 const AuthContext = createContext();
 
-const provider = new GoogleAuthProvider();
+const providerGoogle = new GoogleAuthProvider();
+const providerGithub = new GithubAuthProvider();
 
 const signInWithGoogle = async () => {
   try {
-    return await signInWithPopup(auth, provider);
+    return await signInWithPopup(auth, providerGoogle);
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
+const signInWithGithub = async () => {
+  try {
+    return await signInWithPopup(auth, providerGithub);
+  } catch (error) {
+    console.error(error);
+  }
+}
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loginIsLoading, setLoginIsLoading] = useState(null);
   const [initAuth, setInitAuth] = useState(false)
 
-  const loginWithGoogle = async () => {
+  const loginWithGoogle = () => {
     setLoginIsLoading(true)
-    const result = await signInWithGoogle()
-    setLoginIsLoading(false)
-    if (!result?.user) return
-    setUser(result?.user)
+    signInWithGoogle().then(res => {
+      console.log(res);
+      setLoginIsLoading(false)
+      if (!res?.user) return
+      setUser(res?.user)
+    })
+  }
+
+  const loginWithGithub = () => {
+    setLoginIsLoading(true)
+    signInWithGithub().then(async (res) => {
+      console.log(res);
+      setLoginIsLoading(false)
+      if (!res?.user) return
+      setUser(res?.user)
+    })
   }
 
   const logOut = () => {
@@ -51,7 +72,7 @@ export const AuthProvider = ({ children }) => {
   }, [user]);
 
   return (
-    <AuthContext.Provider value={{ user, loginWithGoogle, logOut, initAuth, loginIsLoading }}>
+    <AuthContext.Provider value={{ user, loginWithGoogle, loginWithGithub, logOut, initAuth, loginIsLoading }}>
       {children}
     </AuthContext.Provider>
   );
