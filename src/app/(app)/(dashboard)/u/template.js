@@ -22,11 +22,7 @@ export default function Template({ children }) {
         )}
         <Collapse>
           <Container sx={{ mt: 3 }} maxWidth="xs">
-            {!initAuth ? null : !user ? (
-              <Typography>Please Login...</Typography>
-            ) : (
-              <>{children}</>
-            )}
+            <>{children}</>
           </Container>
         </Collapse>
       </TransitionGroup>

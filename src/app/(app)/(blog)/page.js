@@ -2,7 +2,7 @@ import FirstPage from '@/components/FirstPage'
 import React from 'react'
 
 export const metadata = {
-  title: "Time Tally",
+  title: "Welcome",
 };
 
 function Page() {

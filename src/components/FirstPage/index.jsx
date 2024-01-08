@@ -31,7 +31,7 @@ function FirstPage() {
         </Stack>
         <Button
           component={Link}
-          href={`/get-started`}
+          href={`/login`}
           passHref
           size="large"
           fullWidth
