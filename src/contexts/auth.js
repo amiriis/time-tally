@@ -5,7 +5,7 @@ import {
   onAuthStateChanged,
   signInWithPopup
 } from "firebase/auth";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, setDoc } from "firebase/firestore";
 import moment from "jalali-moment";
 
 const { createContext, useContext, useState, useEffect } = require("react");
@@ -19,6 +19,30 @@ const signInWithGoogle = () => signInWithPopup(auth, providerGoogle);
 
 const signInWithGithub = () => signInWithPopup(auth, providerGithub);
 
+const updateUserInDb = async (user) => {
+  try {
+    const userDocRef = doc(collection(db, "users"), user.uid)
+    const userDoc = await getDoc(userDocRef)
+
+    let userData = {}
+    if (!userDoc.exists()) {
+      userData = {
+        uid: user.uid,
+        displayName: user.displayName,
+        photoURL: user.photoURL,
+        role: 'user',
+      };
+      await setDoc(userDocRef, userData);
+    } else {
+      userData = userDoc.data()
+    }
+
+    return userData
+  } catch (error) {
+    console.error(error.message);
+  }
+}
+
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loginIsLoading, setLoginIsLoading] = useState(null);
@@ -27,10 +51,12 @@ export const AuthProvider = ({ children }) => {
   const loginWithGoogle = () => {
     setLoginIsLoading(true)
     setTimeout(() => {
-      signInWithGoogle().then(res => {
+      signInWithGoogle().then(async ({ user }) => {
+        if (user) {
+          const _user = await updateUserInDb(user)
+          setUser(_user)
+        }
         setLoginIsLoading(false)
-        if (!res?.user) return
-        setUser(res?.user)
       }).catch(error => {
         const errorData = {
           code: error.code,
@@ -50,10 +76,12 @@ export const AuthProvider = ({ children }) => {
   const loginWithGithub = () => {
     setLoginIsLoading(true)
     setTimeout(() => {
-      signInWithGithub().then((res) => {
+      signInWithGithub().then(async ({ user }) => {
+        if (user) {
+          const _user = await updateUserInDb(user)
+          setUser(_user)
+        }
         setLoginIsLoading(false)
-        if (!res?.user) return
-        setUser(res?.user)
       }).catch(error => {
         const errorData = {
           code: error.code,
@@ -88,14 +116,18 @@ export const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      let _user = currentUser
+      if (currentUser) {
+        _user = await updateUserInDb(currentUser)
+      }
+      setUser(_user);
       setInitAuth(true)
     });
 
     return () => unsubscribe();
-  }, [user]);
-
+  }, []);
+  
   return (
     <AuthContext.Provider value={{ user, loginWithGoogle, loginWithGithub, logOut, initAuth, loginIsLoading }}>
       {children}
