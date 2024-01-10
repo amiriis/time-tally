@@ -16,8 +16,10 @@ import Box from "@mui/material/Box";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 
+const mainPageList = ["/u", "/headquarter"];
+
 function Navbar() {
-  const { user, loginWithGoogle, logOut, initAuth } = useAuth();
+  const { user, logOut, initAuth } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
 
@@ -36,8 +38,8 @@ function Navbar() {
       <AppBar position="static" elevation={0}>
         <Container maxWidth="xs">
           <Toolbar disableGutters>
-            {pathname === "/u" ? (
-              <Stack direction={'row'} alignItems={'flex-end'}>
+            {mainPageList.includes(pathname) ? (
+              <Stack direction={"row"} alignItems={"flex-end"}>
                 <Typography
                   variant="h6"
                   noWrap
@@ -75,41 +77,70 @@ function Navbar() {
             <Box>
               {!initAuth ? (
                 <CircularProgress />
-              ) : user && (
-                <>
-                  <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                    <Avatar
-                      imgProps={{ referrerPolicy: "no-referrer" }}
-                      alt={user.displayName}
-                      src={user.photoURL}
-                    />
-                  </IconButton>
-                  <Menu
-                    sx={{ mt: "45px" }}
-                    id="menu-appbar"
-                    anchorEl={anchorElUser}
-                    anchorOrigin={{
-                      vertical: "top",
-                      horizontal: "right",
-                    }}
-                    keepMounted
-                    transformOrigin={{
-                      vertical: "top",
-                      horizontal: "right",
-                    }}
-                    open={Boolean(anchorElUser)}
-                    onClose={handleCloseUserMenu}
-                  >
-                    <MenuItem
-                      onClick={() => {
-                        handleCloseUserMenu();
-                        logOut();
+              ) : (
+                user && (
+                  <>
+                    <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                      <Avatar
+                        imgProps={{ referrerPolicy: "no-referrer" }}
+                        alt={user.displayName}
+                        src={user.photoURL}
+                      />
+                    </IconButton>
+                    <Menu
+                      sx={{ mt: "45px" }}
+                      id="menu-appbar"
+                      anchorEl={anchorElUser}
+                      anchorOrigin={{
+                        vertical: "top",
+                        horizontal: "right",
                       }}
+                      keepMounted
+                      transformOrigin={{
+                        vertical: "top",
+                        horizontal: "right",
+                      }}
+                      open={Boolean(anchorElUser)}
+                      onClose={handleCloseUserMenu}
                     >
-                      <Typography textAlign="center">Logout</Typography>
-                    </MenuItem>
-                  </Menu>
-                </>
+                      {user.role === "admin" ? (
+                        pathname.startsWith("/headquarter") ? (
+                          user.role === "admin" && (
+                            <MenuItem
+                              onClick={() => {
+                                handleCloseUserMenu();
+                                router.replace("/u");
+                              }}
+                            >
+                              <Typography textAlign="center">
+                                Go to user panel
+                              </Typography>
+                            </MenuItem>
+                          )
+                        ) : (
+                          <MenuItem
+                            onClick={() => {
+                              handleCloseUserMenu();
+                              router.replace("/headquarter");
+                            }}
+                          >
+                            <Typography textAlign="center">
+                              Go to headquarter
+                            </Typography>
+                          </MenuItem>
+                        )
+                      ) : null}
+                      <MenuItem
+                        onClick={() => {
+                          handleCloseUserMenu();
+                          logOut();
+                        }}
+                      >
+                        <Typography textAlign="center">Logout</Typography>
+                      </MenuItem>
+                    </Menu>
+                  </>
+                )
               )}
             </Box>
           </Toolbar>

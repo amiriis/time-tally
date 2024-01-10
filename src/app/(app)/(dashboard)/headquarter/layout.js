@@ -5,29 +5,31 @@ import { useAuth } from "@/contexts/auth";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
-export default function Layout({ children }) {
+function HeadquarterLayout({ children }) {
     const { initAuth, user } = useAuth()
     const router = useRouter()
 
     useEffect(() => {
         if (!initAuth) return
-        if (!user) return
-        switch (user.role) {
-            case 'user':
-                router.replace('/u')
-                break;
-            case 'admin':
-                router.replace('/headquarter')
-                break;
+        if (!user) {
+            router.replace('/login')
+            return
+        }
+        if (user.role !== 'admin') {
+            router.replace('/u')
+            return
         }
     }, [initAuth, user])
 
     if (!initAuth) return (<LoadingPage />)
-    if (user) return (<LoadingPage />)
+    if (!user) return (<LoadingPage />)
+    if (user.role !== 'admin') return (<LoadingPage />)
 
     return (
         <>
-            {!user && children}
+            {user && children}
         </>
     );
 }
+
+export default HeadquarterLayout
