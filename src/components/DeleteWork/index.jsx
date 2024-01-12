@@ -1,3 +1,4 @@
+'use client'
 import { Drawer, IconButton, Tooltip } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import DeleteWorkForm from "./form";

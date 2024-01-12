@@ -1,3 +1,4 @@
+'use client'
 import { Drawer, IconButton, Tooltip } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import { useState } from "react";

@@ -1,9 +1,11 @@
 import { useAuth } from "@/contexts/auth";
 import { db } from "@/lib/firebase";
+import { ArrowBack } from "@mui/icons-material";
 import {
   Button,
   Container,
   FormControl,
+  IconButton,
   InputLabel,
   MenuItem,
   Select,
@@ -13,15 +15,18 @@ import {
 import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
 import { Form, Formik } from "formik";
 import moment from "jalali-moment";
+import { useRouter } from "next/navigation";
 
-function SettingsWorkForm({ work, setOpenDrawer }) {
+function SettingsWorkForm({ work }) {
   const { user } = useAuth();
+  const router = useRouter();
 
   return (
     <Formik
       initialValues={{
-        calendar: work.settings.calendar,
+        calendar: work?.settings.calendar || "",
       }}
+      enableReinitialize
       validate={(values) => {
         const errors = {};
         if (!values.calendar) {
@@ -51,15 +56,20 @@ function SettingsWorkForm({ work, setOpenDrawer }) {
             created_at: moment().toDate(),
           });
         }
-        setOpenDrawer(false);
+        router.back();
       }}
     >
       {({ values, handleChange, handleBlur, isSubmitting, isValid, dirty }) => (
         <Form>
-          <Container maxWidth={"xs"} sx={{ py: 5 }}>
-            <Stack spacing={3}>
+          <Container maxWidth={"xs"} sx={{ my: 1 }}>
+            <Typography variant="subtitle2" color={"primary.main"}>
+              Settings / Change calendar
+            </Typography>
+            <Stack spacing={2} sx={{ py: 1 }}>
               <Stack direction={"row"} justifyContent={"space-between"}>
-                <Typography variant="h5">Settings work</Typography>
+                <IconButton onClick={() => router.back()}>
+                  <ArrowBack fontSize="inherit" />
+                </IconButton>
                 <Button
                   type="submit"
                   disabled={isSubmitting || !isValid || !dirty}

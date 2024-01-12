@@ -1,18 +1,22 @@
 import { useAuth } from "@/contexts/auth";
 import { db } from "@/lib/firebase";
-import { Button, Container, Stack, TextField, Typography } from "@mui/material";
+import { ArrowBack } from "@mui/icons-material";
+import { Button, Container, IconButton, Stack, TextField, Typography } from "@mui/material";
 import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
 import { Form, Formik } from "formik";
 import moment from "jalali-moment";
+import { useRouter } from "next/navigation";
 
-function EditWorkForm({ work, setOpenDrawer }) {
+function EditWorkForm({ work }) {
   const { user } = useAuth();
+  const router = useRouter();
 
   return (
     <Formik
       initialValues={{
-        name: work.name,
+        name: work?.name || "",
       }}
+      enableReinitialize
       validate={(values) => {
         const errors = {};
         if (!values.name) {
@@ -41,15 +45,20 @@ function EditWorkForm({ work, setOpenDrawer }) {
             created_at: moment().toDate(),
           });
         }
-        setOpenDrawer(false);
+        router.back();
       }}
     >
       {({ values, handleChange, handleBlur, isSubmitting, isValid, dirty }) => (
         <Form>
-          <Container maxWidth={"xs"} sx={{ py: 5 }}>
-            <Stack spacing={3}>
+          <Container maxWidth={"xs"} sx={{ my: 1 }}>
+            <Typography variant="subtitle2" color={"primary.main"}>
+              Settings / Edit name
+            </Typography>
+            <Stack spacing={2} sx={{ py: 1 }}>
               <Stack direction={"row"} justifyContent={"space-between"}>
-                <Typography variant="h5">Edit work</Typography>
+                <IconButton onClick={() => router.back()}>
+                  <ArrowBack fontSize="inherit" />
+                </IconButton>
                 <Button
                   type="submit"
                   disabled={isSubmitting || !isValid || !dirty}

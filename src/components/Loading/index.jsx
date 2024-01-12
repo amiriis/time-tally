@@ -1,3 +1,4 @@
+'use client'
 import { Container, Stack, Typography, keyframes, styled } from "@mui/material";
 
 const blinkAnimation = keyframes`

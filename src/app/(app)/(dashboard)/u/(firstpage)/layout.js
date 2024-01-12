@@ -1,9 +1,15 @@
+'use client'
+import { Drawer } from "@mui/material";
+import { useSelectedLayoutSegment } from "next/navigation";
 
-function ULeyout({ addWork, listWork }) {
+function ULeyout({ settings, children }) {
+    const settingsSegment = useSelectedLayoutSegment('settings')
     return (
         <>
-            {addWork}
-            {listWork}
+            {children}
+            <Drawer open={settingsSegment === 'children'} anchor="bottom">
+                {settings}
+            </Drawer>
         </>
     )
 }
