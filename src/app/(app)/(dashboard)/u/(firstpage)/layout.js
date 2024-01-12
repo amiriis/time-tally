@@ -1,13 +1,14 @@
 'use client'
 import { Drawer } from "@mui/material";
-import { useSelectedLayoutSegment } from "next/navigation";
+import { useRouter, useSelectedLayoutSegment } from "next/navigation";
 
 function ULeyout({ settings, children }) {
+    const router = useRouter()
     const settingsSegment = useSelectedLayoutSegment('settings')
     return (
         <>
             {children}
-            <Drawer open={settingsSegment === 'children'} anchor="bottom">
+            <Drawer PaperProps={{ sx: { minHeight: 170 } }} onClose={() => { router.back() }} open={settingsSegment === 'children'} anchor="bottom">
                 {settings}
             </Drawer>
         </>

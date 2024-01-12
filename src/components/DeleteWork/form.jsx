@@ -58,25 +58,22 @@ function DeleteWorkForm({ work }) {
   return (
     <Container maxWidth={"xs"} sx={{ my: 1 }}>
       <Typography variant="subtitle2" color={"primary.main"}>
-        Settings / Change calendar
+        Settings / Delete Work
       </Typography>
       <Stack
         spacing={2}
-        direction={"row"}
-        alignItems={"center"}
-        justifyContent={"space-between"}
       >
-        <Stack direction={"row"} alignItems={"center"}>
+        <Stack direction={"row"} justifyContent={'space-between'} alignItems={"center"}>
           <IconButton onClick={() => router.back()}>
             <ArrowBack fontSize="inherit" />
           </IconButton>
-          <Typography>
-            Do you want to delete <strong>{work?.name}</strong>?
-          </Typography>
+          <Button onClick={() => deleteHandler(work?.id)} color="error">
+            Yes, do it
+          </Button>
         </Stack>
-        <Button onClick={() => deleteHandler(work?.id)} color="error">
-          Yes, do it
-        </Button>
+        <Typography>
+          Do you want to delete <strong>{work?.name}</strong>?
+        </Typography>
       </Stack>
     </Container>
   );
