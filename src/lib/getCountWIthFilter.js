@@ -1,7 +1,7 @@
 import moment from "jalali-moment";
 import { convertLocaleMomentWithCalendar } from "./convertLocaleMomentWithCalendar";
 
-export const getDurationInMillisecondsWIthFilter = (calendar,times,start,end) => {
+export const getCountWithFilter = (calendar,times,start,end) => {
     const filteredData = [];
 
     for (const item of times) {
@@ -17,10 +17,5 @@ export const getDurationInMillisecondsWIthFilter = (calendar,times,start,end) =>
         }
     }
 
-    let total_duration = 0;
-    filteredData.forEach((time) => {
-        total_duration += time.total_time.duration;
-    });
-
-    return total_duration
+    return filteredData.length
 }

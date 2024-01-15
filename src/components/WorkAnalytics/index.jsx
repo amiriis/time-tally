@@ -1,10 +1,13 @@
 import { db } from "@/lib/firebase";
-import { Stack } from "@mui/material";
+import { Divider, Stack } from "@mui/material";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import TotalTimeWork from "../TotalTimeWork";
 import TotalTimeWorkLastMonth from "../TotalTimeWorkLastMonth";
 import TotalTimeWorkThisMonth from "../TotalTimeWorkThisMonth";
+import TotalCountThisMonth from "../TotalCountThisMonth";
+import TotalCountLastMonth from "../TotalCountLastMonth";
+import TotalCount from "../TotalCount";
 
 function WorkAnalytics({ work }) {
   const [times, setTime] = useState();
@@ -25,9 +28,14 @@ function WorkAnalytics({ work }) {
 
   return (
     <Stack spacing={1} sx={{ p: 2 }}>
+      <Divider>Time</Divider>
       <TotalTimeWorkThisMonth work={work} times={times} />
       <TotalTimeWorkLastMonth work={work} times={times} />
       <TotalTimeWork work={work} times={times} />
+      <Divider>Count</Divider>
+      <TotalCountThisMonth work={work} times={times} />
+      <TotalCountLastMonth work={work} times={times} />
+      <TotalCount work={work} times={times} />
     </Stack>
   );
 }
