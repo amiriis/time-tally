@@ -10,11 +10,14 @@ import {
   MenuItem,
   Toolbar,
   Typography,
+  Button,
 } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
+import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
+import Link from "next/link";
 
 const mainPageList = ["/u", "/headquarter"];
 
@@ -74,12 +77,23 @@ function Navbar() {
               </IconButton>
             )}
             <Box sx={{ flexGrow: 1 }}></Box>
-            <Box>
+            <Stack direction={"row"} spacing={1.5}>
               {!initAuth ? (
                 <CircularProgress />
               ) : (
                 user && (
                   <>
+                    <Button
+                      component={Link}
+                      href={"https://reymit.ir/timetally"}
+                      target="_blank"
+                      passHref
+                      variant="outlined"
+                      size="small"
+                      color="inherit"
+                    >
+                      Donate !
+                    </Button>
                     <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                       <Avatar
                         imgProps={{ referrerPolicy: "no-referrer" }}
@@ -142,7 +156,7 @@ function Navbar() {
                   </>
                 )
               )}
-            </Box>
+            </Stack>
           </Toolbar>
         </Container>
       </AppBar>
