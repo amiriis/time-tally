@@ -1,9 +1,8 @@
-'use client'
+"use client";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { Button, IconButton, Stack, Typography } from "@mui/material";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import WorkAnalytics from "../WorkAnalytics";
 
 function WorkCard({ work }) {
@@ -22,12 +21,13 @@ function WorkCard({ work }) {
         alignItems={"center"}
         sx={{
           p: 2,
-          borderBottom: 1,
-          borderColor: work.is_time_tracking ? "warning.main" : "divider",
         }}
       >
-        <Stack direction={"row"} spacing={1} alignItems={"center"}>
+        <Stack>
           <Typography variant="h6">{work.name}</Typography>
+          <Typography variant="caption">
+            Calendar: {work.settings.calendar}
+          </Typography>
         </Stack>
         <Stack direction={"row"}>
           <IconButton component={Link} href={`/u/settings-work/${work.id}`}>

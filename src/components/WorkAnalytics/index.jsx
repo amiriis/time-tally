@@ -1,16 +1,22 @@
 import { db } from "@/lib/firebase";
-import { Divider, Stack } from "@mui/material";
+import { Box, Stack, Tab, Tabs, useTheme } from "@mui/material";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import TotalTimeWork from "../TotalTimeWork";
-import TotalTimeWorkLastMonth from "../TotalTimeWorkLastMonth";
-import TotalTimeWorkThisMonth from "../TotalTimeWorkThisMonth";
-import TotalCountThisMonth from "../TotalCountThisMonth";
-import TotalCountLastMonth from "../TotalCountLastMonth";
-import TotalCount from "../TotalCount";
+import WebAnalyticsLastMonth from "../WebAnalyticsLastMonth";
+import WebAnalyticsThisMonth from "../WebAnalyticsThisMonth";
+import WebAnalyticsTotal from "../WebAnalyticsTotal";
+import CustomTabPanel from "../CustomTabPanel";
 
 function WorkAnalytics({ work }) {
   const [times, setTime] = useState();
+  const [value, setValue] = useState(0);
+  const theme = useTheme()
+  console.log(theme.palette.warning.main);
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
   useEffect(() => {
     const q = query(collection(db, "times"), where("wid", "==", work.id));
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
@@ -27,16 +33,50 @@ function WorkAnalytics({ work }) {
   }, [work]);
 
   return (
-    <Stack spacing={1} sx={{ p: 2 }}>
-      <Divider>Time</Divider>
-      <TotalTimeWorkThisMonth work={work} times={times} />
-      <TotalTimeWorkLastMonth work={work} times={times} />
-      <TotalTimeWork work={work} times={times} />
-      <Divider>Count</Divider>
-      <TotalCountThisMonth work={work} times={times} />
-      <TotalCountLastMonth work={work} times={times} />
-      <TotalCount work={work} times={times} />
-    </Stack>
+    <>
+      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+        <Tabs
+          value={value}
+          onChange={handleChange}
+          centered
+        >
+          <Tab
+            id={`web-analytics-tab-0`}
+            aria-controls={`web-analytics-tabpanel-0`}
+            label="All"
+          />
+          <Tab
+            id={`web-analytics-tab-1`}
+            aria-controls={`web-analytics-tabpanel-1`}
+            label="This month"
+          />
+          <Tab
+            id={`web-analytics-tab-2`}
+            aria-controls={`web-analytics-tabpanel-2`}
+            label="Last month"
+          />
+        </Tabs>
+      </Box>
+      <CustomTabPanel value={value} index={0}>
+        <WebAnalyticsTotal work={work} times={times} value={value} index={0} />
+      </CustomTabPanel>
+      <CustomTabPanel value={value} index={1}>
+        <WebAnalyticsThisMonth
+          work={work}
+          times={times}
+          value={value}
+          index={1}
+        />
+      </CustomTabPanel>
+      <CustomTabPanel value={value} index={2}>
+        <WebAnalyticsLastMonth
+          work={work}
+          times={times}
+          value={value}
+          index={2}
+        />
+      </CustomTabPanel>
+    </>
   );
 }
 
