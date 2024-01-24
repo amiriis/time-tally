@@ -19,13 +19,12 @@ import { useState } from "react";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import Link from "next/link";
 
-const mainPageList = ["/u", "/headquarter"];
+const mainPageList = ["/u", "/u/settings-work", "/headquarter"];
 
 function Navbar() {
   const { user, logOut, initAuth } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
-
   const [anchorElUser, setAnchorElUser] = useState(null);
 
   const handleOpenUserMenu = (event) => {
@@ -41,7 +40,8 @@ function Navbar() {
       <AppBar position="static" elevation={0}>
         <Container maxWidth="xs">
           <Toolbar disableGutters>
-            {mainPageList.includes(pathname) ? (
+            {mainPageList.includes(pathname) ||
+            pathname.startsWith("/u/settings-work") ? (
               <Stack direction={"row"} alignItems={"flex-end"}>
                 <Typography
                   variant="h6"

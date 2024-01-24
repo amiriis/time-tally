@@ -1,17 +1,15 @@
 import { db } from "@/lib/firebase";
-import { Box, Stack, Tab, Tabs, useTheme } from "@mui/material";
+import { Box, Tab, Tabs } from "@mui/material";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { useEffect, useState } from "react";
+import CustomTabPanel from "../CustomTabPanel";
 import WebAnalyticsLastMonth from "../WebAnalyticsLastMonth";
 import WebAnalyticsThisMonth from "../WebAnalyticsThisMonth";
 import WebAnalyticsTotal from "../WebAnalyticsTotal";
-import CustomTabPanel from "../CustomTabPanel";
 
 function WorkAnalytics({ work }) {
   const [times, setTime] = useState();
   const [value, setValue] = useState(0);
-  const theme = useTheme()
-  console.log(theme.palette.warning.main);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
