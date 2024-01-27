@@ -5,6 +5,7 @@ import moment from "jalali-moment";
 import { useEffect, useState } from "react";
 import TotalCount from "../TotalCount";
 import TotalTimeWork from "../TotalTimeWork";
+import IncomeWork from "../IcomeWork";
 
 function WebAnalyticsLastMonth({ work, times, value, index }) {
   const [count, setCount] = useState(0);
@@ -71,6 +72,13 @@ function WebAnalyticsLastMonth({ work, times, value, index }) {
           work={work}
         />
         <TotalCount count={count} work={work} times={times} />
+        {work.settings?.income_calculation && (
+          <IncomeWork
+            durationInMilliseconds={durationInMilliseconds}
+            work={work}
+            times={times}
+          />
+        )}
       </Stack>
     </Fade>
   );

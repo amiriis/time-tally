@@ -37,6 +37,7 @@ function SettingsWorkForm({ work }) {
       onSubmit={async (values) => {
         const _data = {
           settings: {
+            ...work.settings,
             calendar: values.calendar,
           },
         };
@@ -49,7 +50,7 @@ function SettingsWorkForm({ work }) {
             stack: error.stack,
           };
           addDoc(collection(db, "logs"), {
-            action: "edit work (settings)",
+            action: "edit work (settings calendar)",
             params: { old: work, now: _data },
             user: user,
             error: errorData,
