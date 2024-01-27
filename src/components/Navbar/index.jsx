@@ -44,7 +44,7 @@ function Navbar() {
             pathname.startsWith("/u/settings-work") ? (
               <Stack direction={"row"} alignItems={"flex-end"}>
                 <Typography
-                  variant="h6"
+                  variant="body"
                   noWrap
                   sx={{
                     display: "flex",
@@ -62,6 +62,7 @@ function Navbar() {
                   noWrap
                   sx={{
                     mr: 2,
+                    fontSize: "0.5rem",
                     display: "flex",
                     fontFamily: "monospace",
                     color: "inherit",
