@@ -33,11 +33,7 @@ function WorkAnalytics({ work }) {
   return (
     <>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-        <Tabs
-          value={value}
-          onChange={handleChange}
-          centered
-        >
+        <Tabs value={value} onChange={handleChange} centered>
           <Tab
             id={`web-analytics-tab-0`}
             aria-controls={`web-analytics-tabpanel-0`}
