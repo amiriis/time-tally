@@ -13,7 +13,7 @@ function IncomeWork({ durationInMilliseconds, times, work }) {
         <Stack direction={"row"} spacing={1} alignItems={"center"}>
           <Typography
             onClick={() => setShow((sh) => !sh)}
-            sx={{ cursor: "pointer" }}
+            sx={{ cursor: "pointer", userSelect: "none" }}
             color="primary.main"
           >
             {show ? Math.round(income).toLocaleString("en") : "*******"}
