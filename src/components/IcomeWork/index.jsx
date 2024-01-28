@@ -1,8 +1,8 @@
 import { CircularProgress, Stack, Typography } from "@mui/material";
-import React from "react";
-import PointOfSaleIcon from "@mui/icons-material/PointOfSale";
+import { useState } from "react";
 
 function IncomeWork({ durationInMilliseconds, times, work }) {
+  const [show, setShow] = useState(false);
   const total_hours = Math.round(durationInMilliseconds / 1000 / 60) / 60;
   const income = total_hours * work.settings.income_coefficient;
 
@@ -11,9 +11,12 @@ function IncomeWork({ durationInMilliseconds, times, work }) {
       <Typography>Income</Typography>
       {times ? (
         <Stack direction={"row"} spacing={1} alignItems={"center"}>
-          <PointOfSaleIcon fontSize="small" sx={{ color: "primary.main" }} />
-          <Typography color="primary.main">
-            {Math.round(income).toLocaleString("en")}
+          <Typography
+            onClick={() => setShow((sh) => !sh)}
+            sx={{ cursor: "pointer" }}
+            color="primary.main"
+          >
+            {show ? Math.round(income).toLocaleString("en") : "*******"}
           </Typography>
         </Stack>
       ) : (
