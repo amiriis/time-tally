@@ -1,25 +1,19 @@
 "use client";
 import {
-  Button,
-  Drawer
+  Button
 } from "@mui/material";
-import { useState } from "react";
-import AddWorkForm from "./form";
+import Link from "next/link";
 
 function AddWork() {
-  const [openDrawer, setOpenDrawer] = useState();
   return (
     <>
-      <Button onClick={() => setOpenDrawer(true)} variant="outlined">
+      <Button
+        component={Link}
+        href={`/u/add-work`}
+        variant="outlined"
+      >
         Add
       </Button>
-      <Drawer
-        anchor="bottom"
-        open={openDrawer}
-        onClose={() => setOpenDrawer(false)}
-      >
-        <AddWorkForm setOpenDrawer={setOpenDrawer} />
-      </Drawer>
     </>
   );
 }

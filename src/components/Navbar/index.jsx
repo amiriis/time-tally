@@ -2,24 +2,23 @@ import { useAuth } from "@/contexts/auth";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import {
   Avatar,
-  Stack,
+  Button,
   CircularProgress,
   Container,
   IconButton,
   Menu,
   MenuItem,
+  Stack,
   Toolbar,
   Typography,
-  Button,
 } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
+import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
-import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
-import Link from "next/link";
 
-const mainPageList = ["/u", "/u/settings-work", "/headquarter"];
+const mainPageList = ["/u", "/u/settings-work", "/u/add-work", "/headquarter"];
 
 function Navbar() {
   const { user, logOut, initAuth } = useAuth();

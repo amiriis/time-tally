@@ -14,8 +14,10 @@ import {
 import { addDoc, collection } from "firebase/firestore";
 import { Form, Formik } from "formik";
 import moment from "jalali-moment";
-function AddWorkForm({ setOpenDrawer }) {
+import { useRouter } from "next/navigation";
+function AddWorkForm() {
   const { user } = useAuth();
+  const router = useRouter();
 
   return (
     <Formik
@@ -61,7 +63,7 @@ function AddWorkForm({ setOpenDrawer }) {
             created_at: moment().toDate(),
           });
         }
-        setOpenDrawer(false);
+        router.back();
       }}
     >
       {({ values, handleChange, handleBlur, isSubmitting, isValid, dirty }) => (
