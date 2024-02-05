@@ -23,7 +23,7 @@ export const FCMNotificationProvider = ({ children }) => {
                     const fcmMessaging = messaging()
                     // Check if permission is granted before retrieving the token
                     if (permission === 'granted') {
-                        const currentToken = await getToken(messaging, {
+                        const currentToken = await getToken(fcmMessaging, {
                             vapidKey: process.env.NEXT_PUBLIC_VAPIDKEY,
                         });
                         if (currentToken) {
