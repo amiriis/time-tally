@@ -2,7 +2,9 @@ import { auth, db } from "@/lib/firebase";
 import {
   GithubAuthProvider,
   GoogleAuthProvider,
+  getRedirectResult,
   onAuthStateChanged,
+  signInWithCredential,
   signInWithRedirect
 } from "firebase/auth";
 import { addDoc, collection, doc, getDoc, setDoc } from "firebase/firestore";
@@ -14,6 +16,8 @@ const AuthContext = createContext();
 
 const providerGoogle = new GoogleAuthProvider();
 const providerGithub = new GithubAuthProvider();
+
+const providerMap = { "google.com": GoogleAuthProvider, "github.com": GithubAuthProvider }
 
 const signInWithGoogle = () => signInWithRedirect(auth, providerGoogle);
 
@@ -61,56 +65,46 @@ export const AuthProvider = ({ children }) => {
   const loginWithGoogle = () => {
     setLoginIsLoading(true)
     setTimeout(() => {
-      signInWithGoogle().then(async ({ user }) => {
-        if (user) {
-          const _user = await updateUserInDb(user)
-          setUser(_user)
-        }
-        setLoginIsLoading(false)
-      }).catch(error => {
-        const errorData = {
-          code: error.code,
-          message: error.message,
-          stack: error.stack,
-        };
-        setLoginIsLoading(false)
-        addDoc(collection(db, "logs"), {
-          action: "sign in with google",
-          error: errorData,
-          created_at: moment().toDate(),
-        });
-      })
+      signInWithGoogle().then(() => { })
+        .catch(error => {
+          const errorData = {
+            code: error.code,
+            message: error.message,
+            stack: error.stack,
+          };
+          setLoginIsLoading(false)
+          addDoc(collection(db, "logs"), {
+            action: "sign in with google",
+            error: errorData,
+            created_at: moment().toDate(),
+          });
+        })
     }, 1000);
   }
 
   const loginWithGithub = () => {
     setLoginIsLoading(true)
     setTimeout(() => {
-      signInWithGithub().then(async ({ user }) => {
-        if (user) {
-          const _user = await updateUserInDb(user)
-          setUser(_user)
-        }
-        setLoginIsLoading(false)
-      }).catch(error => {
-        const errorData = {
-          code: error.code,
-          message: error.message,
-          stack: error.stack,
-        };
-        setLoginIsLoading(false)
-        addDoc(collection(db, "logs"), {
-          action: "sign in with github",
-          error: errorData,
-          created_at: moment().toDate(),
-        });
-      })
+      signInWithGithub().then(() => { })
+        .catch(error => {
+          const errorData = {
+            code: error.code,
+            message: error.message,
+            stack: error.stack,
+          };
+          setLoginIsLoading(false)
+          addDoc(collection(db, "logs"), {
+            action: "sign in with github",
+            error: errorData,
+            created_at: moment().toDate(),
+          });
+        })
     }, 1000);
   }
 
   const logOut = () => {
     try {
-      auth.signOut();
+      auth.signOut()
     } catch (error) {
       const errorData = {
         code: error.code,
@@ -126,6 +120,18 @@ export const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
+    const getRedirect = async () => {
+      const result = await getRedirectResult(auth)
+      if (result) {
+        const credential = providerMap[result.providerId].credentialFromResult(result);
+        await signInWithCredential(auth, credential);
+      }
+    };
+
+    getRedirect()
+  }, []);
+
+  useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       let _user = currentUser
       if (currentUser) {
@@ -133,11 +139,12 @@ export const AuthProvider = ({ children }) => {
       }
       setUser(_user);
       setInitAuth(true)
-    });
+      setLoginIsLoading(false)
+    })
 
     return () => unsubscribe();
-  }, []);
-  
+  }, [])
+
   return (
     <AuthContext.Provider value={{ user, loginWithGoogle, loginWithGithub, logOut, initAuth, loginIsLoading }}>
       {children}
