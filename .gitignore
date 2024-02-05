@@ -43,6 +43,7 @@ ecosystem.config.js
 sw*.*
 sw.js.map
 workbox-*.js
+firebase-*.js
 workbox-*.js.map
 fallback-*.js
 fallback-*.js.map

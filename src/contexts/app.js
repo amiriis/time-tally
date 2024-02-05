@@ -4,6 +4,7 @@ const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
   const [isLocalDb, setLocalDb] = useState(false);
+  
   return (
     <AppContext.Provider value={{ isLocalDb, setLocalDb }}>
       {children}
