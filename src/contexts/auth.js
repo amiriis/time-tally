@@ -3,7 +3,6 @@ import {
   GithubAuthProvider,
   GoogleAuthProvider,
   onAuthStateChanged,
-  signInWithPopup,
   signInWithRedirect
 } from "firebase/auth";
 import { addDoc, collection, doc, getDoc, setDoc } from "firebase/firestore";
@@ -41,6 +40,16 @@ const updateUserInDb = async (user) => {
     return userData
   } catch (error) {
     console.error(error.message);
+    const errorData = {
+      code: error.code,
+      message: error.message,
+      stack: error.stack,
+    };
+    addDoc(collection(db, "logs"), {
+      action: "update user after sign in",
+      error: errorData,
+      created_at: moment().toDate(),
+    });
   }
 }
 
