@@ -1,5 +1,5 @@
 import { db, messaging } from "@/lib/firebase";
-import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, updateDoc } from "firebase/firestore";
 import { getToken } from "firebase/messaging";
 import { useAuth } from "./auth";
 import moment from "jalali-moment";
@@ -28,12 +28,21 @@ export const FCMNotificationProvider = ({ children }) => {
                         });
                         if (currentToken) {
                             setToken(currentToken);
+                            const userDocRef = doc(collection(db, "users"), user.uid)
+                            const userDoc = await getDoc(userDocRef)
+                            const _user = userDoc.data()
+                            if (_user.fcmTokens) {
+                                if (_user.fcmTokens.includes(currentToken))
+                                    _user.fcmTokens.push(currentToken)
+                            } else {
+                                _user.fcmTokens = [currentToken]
+                            }
                             const _data = {
-                                fcmToken: currentToken,
+                                fcmTokens: _user['fcmTokens'],
                             };
 
                             try {
-                                updateDoc(doc(collection(db, "users"), user.uid), _data);
+                                updateDoc(userDocRef, _data);
                             } catch (error) {
                                 const errorData = {
                                     code: error.code,
