@@ -29,4 +29,4 @@ initializeFirestore(app, {
   }),
 });
 export const db = getFirestore(app);
-export const messaging =  getMessaging(app);
+export const messaging = () => getMessaging(app);

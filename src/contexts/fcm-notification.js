@@ -20,7 +20,7 @@ export const FCMNotificationProvider = ({ children }) => {
                     // Retrieve the notification permission status
                     const permission = await Notification.requestPermission();
                     setNotificationPermissionStatus(permission);
-
+                    const fcmMessaging = messaging()
                     // Check if permission is granted before retrieving the token
                     if (permission === 'granted') {
                         const currentToken = await getToken(messaging, {
