@@ -32,7 +32,7 @@ export const FCMNotificationProvider = ({ children }) => {
                             const userDoc = await getDoc(userDocRef)
                             const _user = userDoc.data()
                             if (_user.fcmTokens) {
-                                if (_user.fcmTokens.includes(currentToken))
+                                if (!_user.fcmTokens.includes(currentToken))
                                     _user.fcmTokens.push(currentToken)
                             } else {
                                 _user.fcmTokens = [currentToken]
