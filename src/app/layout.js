@@ -1,3 +1,5 @@
+import { SpeedInsights } from '@vercel/speed-insights/next';
+
 const APP_NAME = "Time Tally";
 const APP_DEFAULT_TITLE = "Time Tally";
 const APP_TITLE_TEMPLATE = "%s - Time Tally";
@@ -34,6 +36,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body>
         {children}
+        <SpeedInsights />
       </body>
     </html>
   );
