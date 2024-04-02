@@ -10,6 +10,7 @@ import WebAnalyticsTotal from "../WebAnalyticsTotal";
 function WorkAnalytics({ work }) {
   const [times, setTime] = useState();
   const [value, setValue] = useState(0);
+  const [showIncome, setShowIncome] = useState(false);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -52,7 +53,14 @@ function WorkAnalytics({ work }) {
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
-        <WebAnalyticsTotal work={work} times={times} value={value} index={0} />
+        <WebAnalyticsTotal
+          work={work}
+          times={times}
+          value={value}
+          index={0}
+          showIncome={showIncome}
+          setShowIncome={setShowIncome}
+        />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
         <WebAnalyticsThisMonth
@@ -60,6 +68,8 @@ function WorkAnalytics({ work }) {
           times={times}
           value={value}
           index={1}
+          showIncome={showIncome}
+          setShowIncome={setShowIncome}
         />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={2}>
@@ -68,6 +78,8 @@ function WorkAnalytics({ work }) {
           times={times}
           value={value}
           index={2}
+          showIncome={showIncome}
+          setShowIncome={setShowIncome}
         />
       </CustomTabPanel>
     </>

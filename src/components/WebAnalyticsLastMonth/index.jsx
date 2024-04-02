@@ -7,7 +7,14 @@ import TotalCount from "../TotalCount";
 import TotalTimeWork from "../TotalTimeWork";
 import IncomeWork from "../IcomeWork";
 
-function WebAnalyticsLastMonth({ work, times, value, index }) {
+function WebAnalyticsLastMonth({
+  work,
+  times,
+  value,
+  index,
+  showIncome,
+  setShowIncome,
+}) {
   const [count, setCount] = useState(0);
   const [durationInMilliseconds, setDurationInMilliseconds] = useState(0);
 
@@ -77,6 +84,8 @@ function WebAnalyticsLastMonth({ work, times, value, index }) {
             durationInMilliseconds={durationInMilliseconds}
             work={work}
             times={times}
+            show={showIncome}
+            setShow={setShowIncome}
           />
         )}
       </Stack>

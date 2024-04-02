@@ -5,7 +5,14 @@ import TotalTimeWork from "../TotalTimeWork";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import IncomeWork from "../IcomeWork";
 
-function WebAnalyticsTotal({ work, times, value, index }) {
+function WebAnalyticsTotal({
+  work,
+  times,
+  value,
+  index,
+  showIncome,
+  setShowIncome,
+}) {
   const [count, setCount] = useState(0);
   const [durationInMilliseconds, setDurationInMilliseconds] = useState(0);
 
@@ -38,6 +45,8 @@ function WebAnalyticsTotal({ work, times, value, index }) {
             durationInMilliseconds={durationInMilliseconds}
             work={work}
             times={times}
+            show={showIncome}
+            setShow={setShowIncome}
           />
         )}
       </Stack>

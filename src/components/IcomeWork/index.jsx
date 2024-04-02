@@ -1,8 +1,7 @@
 import { CircularProgress, Stack, Typography } from "@mui/material";
 import { useState } from "react";
 
-function IncomeWork({ durationInMilliseconds, times, work }) {
-  const [show, setShow] = useState(false);
+function IncomeWork({ durationInMilliseconds, times, work, show, setShow }) {
   const total_hours = Math.round(durationInMilliseconds / 1000 / 60) / 60;
   const income = total_hours * work.settings.income_coefficient;
 
