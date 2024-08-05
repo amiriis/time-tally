@@ -5,7 +5,7 @@ import {
   getRedirectResult,
   onAuthStateChanged,
   signInWithCredential,
-  signInWithRedirect
+  signInWithPopup
 } from "firebase/auth";
 import { addDoc, collection, doc, getDoc, setDoc } from "firebase/firestore";
 import moment from "jalali-moment";
@@ -19,9 +19,9 @@ const providerGithub = new GithubAuthProvider();
 
 const providerMap = { "google.com": GoogleAuthProvider, "github.com": GithubAuthProvider }
 
-const signInWithGoogle = () => signInWithRedirect(auth, providerGoogle);
+const signInWithGoogle = () => signInWithPopup(auth, providerGoogle);
 
-const signInWithGithub = () => signInWithRedirect(auth, providerGithub);
+const signInWithGithub = () => signInWithPopup(auth, providerGithub);
 
 const updateUserInDb = async (user) => {
   try {
