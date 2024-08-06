@@ -10,10 +10,10 @@ function ULeyout(props) {
     return (
         <>
             {children}
-            <Drawer PaperProps={{ sx: { minHeight: 170 } }} onClose={() => { router.back() }} open={settingsSegment === 'children'} anchor="bottom">
+            <Drawer PaperProps={{ sx: { minHeight: 170 } }} onClose={() => { router.back() }} open={settingsSegment} anchor="bottom">
                 {settings}
             </Drawer>
-            <Drawer PaperProps={{ sx: { minHeight: 170 } }} onClose={() => { router.back() }} open={addWorkSegment === 'children'} anchor="bottom">
+            <Drawer PaperProps={{ sx: { minHeight: 170 } }} onClose={() => { router.back() }} open={addWorkSegment} anchor="bottom">
                 {addWork}
             </Drawer>
         </>
