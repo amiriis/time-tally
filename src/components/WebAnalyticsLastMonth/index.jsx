@@ -1,19 +1,16 @@
 import { convertFormatMomentWithCalendar } from "@/lib/convertFormatMomentWithCalendar";
 import { convertLocaleMomentWithCalendar } from "@/lib/convertLocaleMomentWithCalendar";
-import { Divider, Fade, Stack } from "@mui/material";
+import { Fade, Stack } from "@mui/material";
 import moment from "jalali-moment";
 import { useEffect, useState } from "react";
 import TotalCount from "../TotalCount";
 import TotalTimeWork from "../TotalTimeWork";
-import IncomeWork from "../IcomeWork";
 
 function WebAnalyticsLastMonth({
   work,
   times,
   value,
   index,
-  showIncome,
-  setShowIncome,
 }) {
   const [count, setCount] = useState(0);
   const [durationInMilliseconds, setDurationInMilliseconds] = useState(0);
@@ -79,15 +76,6 @@ function WebAnalyticsLastMonth({
           work={work}
         />
         <TotalCount count={count} work={work} times={times} />
-        {work.settings?.income_calculation && (
-          <IncomeWork
-            durationInMilliseconds={durationInMilliseconds}
-            work={work}
-            times={times}
-            show={showIncome}
-            setShow={setShowIncome}
-          />
-        )}
       </Stack>
     </Fade>
   );

@@ -1,7 +1,6 @@
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import PointOfSaleIcon from "@mui/icons-material/PointOfSale";
 import {
   Container,
   Divider,
@@ -57,25 +56,6 @@ function MainSetting({ work }) {
                 <CalendarMonthIcon />
               </ListItemIcon>
               <ListItemText primary="Change calendar" />
-            </ListItemButton>
-          </ListItem>
-          <Divider variant="inset" component="li" />
-          <ListItem
-            disablePadding
-            secondaryAction={
-              <Typography color={"primary.main"} variant="caption">
-                {work?.settings?.income_calculation? 'on' : 'off'}
-              </Typography>
-            }
-          >
-            <ListItemButton
-              component={Link}
-              href={`/u/settings-work/${work?.id || ""}/income-calculation`}
-            >
-              <ListItemIcon>
-                <PointOfSaleIcon />
-              </ListItemIcon>
-              <ListItemText primary="Income calculation" />
             </ListItemButton>
           </ListItem>
           <Divider variant="inset" component="li" />
