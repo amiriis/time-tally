@@ -11,7 +11,7 @@ import TimeInterval from "../TimeInterval";
 import WorkAnalytics from "../WorkAnalytics";
 
 function WorkCard({ work }) {
-  const [showWorkAnalytics, setShowWorkAnalytics] = useState(work.is_time_tracking)
+  const [showWorkAnalytics, setShowWorkAnalytics] = useState(false)
   return (
     <TransitionGroup
       component={Stack}
