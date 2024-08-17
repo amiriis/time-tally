@@ -62,7 +62,7 @@ function WorkCard({ work }) {
           color={work.is_time_tracking ? "warning" : "primary"}
           variant="contained"
           sx={{
-            borderTopLeftRadius: 0, borderTopRightRadius: 0, '& .mui-z4rqyd-MuiButton-endIcon>*:nth-of-type(1)': {
+            borderTopLeftRadius: 0, borderTopRightRadius: 0, '& .MuiButton-endIcon>*:nth-of-type(1)': {
               fontSize: '0.9375rem'
             }
           }}
