@@ -18,7 +18,7 @@ module.exports = (phase) => {
     if (phase === PHASE_DEVELOPMENT_SERVER || phase === PHASE_PRODUCTION_BUILD) {
         const withPWA = require("@ducanh2912/next-pwa").default({
             dest: "public",
-            customWorkerSrc:'firebase-messaging-sw.js'
+            disable: phase === PHASE_DEVELOPMENT_SERVER,
         });
         return withPWA(nextConfig);
     }

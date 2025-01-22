@@ -53,11 +53,11 @@ function ListWork() {
         <>
           {listWork.length ? (
             <TransitionGroup component={Stack} sx={{ my: 3 }}>
-                {listWork.map((work) => (
-                  <Collapse key={work.id}>
-                    <WorkCard work={work} />
-                  </Collapse>
-                ))}
+              {listWork.map((work) => (
+                <Collapse key={work.id}>
+                  <WorkCard work={work} />
+                </Collapse>
+              ))}
             </TransitionGroup>
           ) : (
             <NotFoundData width={150} height={150} />

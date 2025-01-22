@@ -3,7 +3,7 @@
 import { useApp } from "@/contexts/app";
 import { convertAdapterWithCalendar } from "@/lib/convertAdapterWithCalendar";
 import { db } from "@/lib/firebase";
-import { Stack, Typography } from "@mui/material";
+import { Divider, Stack, Typography } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { collection, doc, onSnapshot } from "firebase/firestore";
 import { useEffect, useState } from "react";
@@ -53,6 +53,7 @@ function ShowWork({ work_id }) {
           <TimeTracking work={work} />
           <TimeActionsBtn work={work} />
         </Stack>
+        <Divider />
         <ListTime work={work} />
       </LocalizationProvider>
     </>
