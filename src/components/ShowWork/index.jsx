@@ -53,7 +53,7 @@ function ShowWork({ work_id }) {
           <TimeTracking work={work} />
           <TimeActionsBtn work={work} />
         </Stack>
-        <Divider />
+        <Divider sx={{ my: 2 }} />
         <ListTime work={work} />
       </LocalizationProvider>
     </>
