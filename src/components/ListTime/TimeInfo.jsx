@@ -7,7 +7,7 @@ import { useMemo, useState } from "react";
 import DeleteTime from "../DeleteTime";
 import EditTime from "../EditTime";
 
-const TimeInfo = ({ work, time }) => {
+const TimeInfo = ({ calendar, time }) => {
     const [anchorElEdit, setAnchorElEdit] = useState(null);
 
     const startedAt = useMemo(() => moment(time.started_at.toDate()), [time.started_at]);
@@ -23,14 +23,14 @@ const TimeInfo = ({ work, time }) => {
             <Stack direction="row" sx={{ p: 1, flexGrow: 1 }} alignItems="center" justifyContent="space-between">
                 <Stack alignItems="center">
                     <Typography variant="caption">
-                        {startedAt.locale(convertLocaleMomentWithCalendar(work.settings.calendar)).format("YYYY/MM/DD")}
+                        {startedAt.locale(convertLocaleMomentWithCalendar(calendar)).format("YYYY/MM/DD")}
                     </Typography>
                     <Typography variant="caption">{startedAt.format("HH:mm")}</Typography>
                 </Stack>
                 <ArrowRightAltIcon color="primary" />
                 <Stack alignItems="center">
                     <Typography variant="caption">
-                        {endedAt.locale(convertLocaleMomentWithCalendar(work.settings.calendar)).format("YYYY/MM/DD")}
+                        {endedAt.locale(convertLocaleMomentWithCalendar(calendar)).format("YYYY/MM/DD")}
                     </Typography>
                     <Typography variant="caption">{endedAt.format("HH:mm")}</Typography>
                 </Stack>
@@ -54,7 +54,7 @@ const TimeInfo = ({ work, time }) => {
                     open={Boolean(anchorElEdit)}
                     onClose={handleCloseEditMenu}
                 >
-                    <EditTime work={work} time={time} handleCloseEditMenu={handleCloseEditMenu} />
+                    <EditTime time={time} handleCloseEditMenu={handleCloseEditMenu} />
                     <DeleteTime time={time} handleCloseEditMenu={handleCloseEditMenu} />
                 </Menu>
             </Box>

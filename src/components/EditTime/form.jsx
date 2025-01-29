@@ -8,7 +8,7 @@ import { Form, Formik } from "formik";
 import moment from "jalali-moment";
 import * as Yup from "yup";
 
-function EditTimeForm({ work, time, setOpenDrawer }) {
+function EditTimeForm({ time, setOpenDrawer }) {
     const { user } = useAuth();
 
     return (

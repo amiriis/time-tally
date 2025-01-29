@@ -53,7 +53,7 @@ function TimeInterval({ start_at, stop, hasWorkingHours = false }) {
         };
 
         getWorkingHours();
-    }, [start_at, hasWorkingHours]);
+    }, [hasWorkingHours]);
 
     const duration = useMemo(() => convertDurationToTime(timeLoop), [timeLoop]);
 
