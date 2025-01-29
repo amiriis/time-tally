@@ -7,94 +7,96 @@ import moment from "jalali-moment";
 import { useEffect, useMemo, useState } from "react";
 
 function TimeInterval({ start_at, stop, hasWorkingHours = false }) {
-  const [timeLoop, setTimeLoop] = useState(0);
-  const [workingHours, setWorkingHours] = useState(null);
-  const [workingHoursLoading, setWorkingHoursLoading] = useState(true);
+    const [timeLoop, setTimeLoop] = useState(0);
+    const [workingHours, setWorkingHours] = useState(null);
+    const [workingHoursLoading, setWorkingHoursLoading] = useState(true);
 
-  useEffect(() => {
-    if (stop) return;
+    useEffect(() => {
+        if (stop) return;
 
-    const timer = setInterval(() => {
-      const started_at = start_at.toDate();
-      const durationInMilliseconds = moment().diff(started_at);
-      setTimeLoop(durationInMilliseconds);
-    }, 500);
+        const timer = setInterval(() => {
+            const started_at = start_at.toDate();
+            const durationInMilliseconds = moment().diff(started_at);
+            setTimeLoop(durationInMilliseconds);
+        }, 500);
 
-    return () => clearInterval(timer);
-  }, [start_at, stop]);
+        return () => clearInterval(timer);
+    }, [start_at, stop]);
 
-  useEffect(() => {
-    if (!hasWorkingHours) return;
+    useEffect(() => {
+        if (!hasWorkingHours) return;
 
-    const getWorkingHours = async () => {
-      setWorkingHoursLoading(true);
-      try {
-        const now = moment(start_at);
-        const year = now.jYear();
-        const monthNumber = now.jMonth() + 1;
+        const getWorkingHours = async () => {
+            setWorkingHoursLoading(true);
+            try {
+                const now = moment(start_at);
+                const year = now.jYear();
+                const monthNumber = now.jMonth() + 1;
 
-        const q = query(
-          collection(db, "working_hours"),
-          where("year", "==", year),
-          where("month", "==", monthNumber)
-        );
+                const q = query(
+                    collection(db, "working_hours"),
+                    where("year", "==", year),
+                    where("month", "==", monthNumber)
+                );
 
-        const querySnapshot = await getDocs(q);
+                const querySnapshot = await getDocs(q);
 
-        if (!querySnapshot.empty) {
-          const doc = querySnapshot.docs[0];
-          setWorkingHours(doc.data());
-        }
-      } catch (e) {
-        console.log(e);
-      } finally {
-        setWorkingHoursLoading(false);
-      }
-    };
+                if (!querySnapshot.empty) {
+                    const doc = querySnapshot.docs[0];
+                    setWorkingHours(doc.data());
+                }
+            } catch (e) {
+                console.log(e);
+            } finally {
+                setWorkingHoursLoading(false);
+            }
+        };
 
-    getWorkingHours();
-  }, [start_at, hasWorkingHours]);
+        getWorkingHours();
+    }, [start_at, hasWorkingHours]);
 
-  const duration = useMemo(() => convertDurationToTime(timeLoop), [timeLoop]);
+    const duration = useMemo(() => convertDurationToTime(timeLoop), [timeLoop]);
 
-  const timeDuration = useMemo(() => {
-    if (!hasWorkingHours || !workingHours) return { isgreater: false, duration: { hours: 0, minutes: 0, seconds: 0 } };
+    const timeDuration = useMemo(() => {
+        if (!hasWorkingHours || !workingHours)
+            return { isgreater: false, duration: { hours: 0, minutes: 0, seconds: 0 } };
 
-    const { duty_hours, working_days } = workingHours;
-    const averageDutyHours = duty_hours / working_days;
-    const workingTimeHours = Math.floor(averageDutyHours);
-    const workingTimeMinutes = Math.round((averageDutyHours - workingTimeHours) * 60);
+        const { duty_hours, working_days } = workingHours;
+        const averageDutyHours = duty_hours / working_days;
+        const workingTimeHours = Math.floor(averageDutyHours);
+        const workingTimeMinutes = Math.round((averageDutyHours - workingTimeHours) * 60);
 
-    const totalMillisecondsFirstTime = (workingTimeHours * 60 * 60 + workingTimeMinutes * 60) * 1000;
-    const totalMillisecondsSecondTime = (duration.hours * 60 * 60 + duration.minutes * 60 + duration.seconds) * 1000;
+        const totalMillisecondsFirstTime = (workingTimeHours * 60 * 60 + workingTimeMinutes * 60) * 1000;
+        const totalMillisecondsSecondTime =
+            (duration.hours * 60 * 60 + duration.minutes * 60 + duration.seconds) * 1000;
 
-    const _total_duration = Math.abs(totalMillisecondsFirstTime - totalMillisecondsSecondTime);
-    return {
-      isgreater: totalMillisecondsFirstTime > totalMillisecondsSecondTime,
-      duration: convertDurationToTime(_total_duration)
-    };
-  }, [duration, workingHours, hasWorkingHours]);
+        const _total_duration = Math.abs(totalMillisecondsFirstTime - totalMillisecondsSecondTime);
+        return {
+            isgreater: totalMillisecondsFirstTime > totalMillisecondsSecondTime,
+            duration: convertDurationToTime(_total_duration),
+        };
+    }, [duration, workingHours, hasWorkingHours]);
 
-  return (
-    <Stack direction={'row'} alignItems={'center'} spacing={1}>
-      <Typography variant="caption">
-        {timeLoop >= 0
-          ? `${duration.hours.toString().padStart(2, "0")}:${duration.minutes.toString().padStart(2, "0")}:${duration.seconds.toString().padStart(2, "0")}`
-          : `00:00:00`}
-      </Typography>
-      {hasWorkingHours && workingHoursLoading ? (
-        <Skeleton variant="rounded" width={70} height={20} />
-      ) : workingHours && (
-        <Typography variant="caption" color={timeDuration.isgreater ? 'warning.main' : 'success.main'}>
-          {`${timeDuration.isgreater ? '- ' : '+ '}${timeDuration.duration.hours.toString().padStart(2, "0")}:${timeDuration.duration.minutes
-            .toString()
-            .padStart(2, "0")}:${timeDuration.duration.seconds
-              .toString()
-              .padStart(2, "0")}`}
-        </Typography>
-      )}
-    </Stack>
-  );
+    return (
+        <Stack direction={"row"} alignItems={"center"} spacing={1}>
+            <Typography variant="caption">
+                {timeLoop >= 0
+                    ? `${duration.hours.toString().padStart(2, "0")}:${duration.minutes.toString().padStart(2, "0")}:${duration.seconds.toString().padStart(2, "0")}`
+                    : `00:00:00`}
+            </Typography>
+            {hasWorkingHours && workingHoursLoading ? (
+                <Skeleton variant="rounded" width={70} height={20} />
+            ) : (
+                workingHours && (
+                    <Typography variant="caption" color={timeDuration.isgreater ? "warning.main" : "success.main"}>
+                        {`${timeDuration.isgreater ? "- " : "+ "}${timeDuration.duration.hours.toString().padStart(2, "0")}:${timeDuration.duration.minutes
+                            .toString()
+                            .padStart(2, "0")}:${timeDuration.duration.seconds.toString().padStart(2, "0")}`}
+                    </Typography>
+                )
+            )}
+        </Stack>
+    );
 }
 
 export default TimeInterval;

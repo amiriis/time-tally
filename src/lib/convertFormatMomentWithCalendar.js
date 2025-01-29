@@ -5,4 +5,4 @@ export const convertFormatMomentWithCalendar = (year, month, day, seperator, cal
         case "jalali":
             return `j${year}${seperator}j${month}${seperator}j${day}`;
     }
-}
+};

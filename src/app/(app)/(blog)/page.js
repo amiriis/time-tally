@@ -1,14 +1,12 @@
-import FirstPage from '@/components/FirstPage'
-import React from 'react'
+import FirstPage from "@/components/FirstPage";
+import React from "react";
 
 export const metadata = {
-  title: "Welcome",
+    title: "Welcome",
 };
 
 function Page() {
-  return (
-    <FirstPage />
-  )
+    return <FirstPage />;
 }
 
-export default Page
+export default Page;

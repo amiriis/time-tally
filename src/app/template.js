@@ -1,7 +1,5 @@
 import ThemeRegistry from "@/components/ThemeRegisery/ThemeRegistery";
 
 export default function Template({ children }) {
-    return (
-        <ThemeRegistry>{children}</ThemeRegistry>
-    )
+    return <ThemeRegistry>{children}</ThemeRegistry>;
 }

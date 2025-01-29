@@ -19,6 +19,6 @@ const FilterMonth = ({ filterMonth, setFilterMonth }) => {
             </FormControl>
         </Box>
     );
-}
+};
 
 export default FilterMonth;
