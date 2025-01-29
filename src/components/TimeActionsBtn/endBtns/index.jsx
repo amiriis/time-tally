@@ -67,7 +67,7 @@ function EndBtns({ work }) {
                 </Button>
                 <EndToBtn work={work} />
             </ButtonGroup>
-            <TimeInterval start_at={moment(work.time_tracking_started_at.toDate())} hasWorkingHours={true} />
+            <TimeInterval workId={work.id} start_at={moment(work.time_tracking_started_at.toDate())} hasWorkingHours={true} />
         </Stack>
     );
 }
