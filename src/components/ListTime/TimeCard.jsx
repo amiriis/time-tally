@@ -1,18 +1,19 @@
-import { Divider, Stack } from "@mui/material";
+import { Collapse, Divider, Stack } from "@mui/material";
 import TimeInfo from "./TimeInfo";
 import TimesCalculator from "./TimesCalculator";
+import { TransitionGroup } from "react-transition-group";
 
 function TimeCard({ calendar, times, workingHours }) {
     return (
-        <Stack sx={{ my: 1, border: 1, borderRadius: 1, borderColor: "divider" }}>
+        <TransitionGroup component={Stack} sx={{ my: 1, border: 1, borderRadius: 1, borderColor: "divider" }}>
             {times.map((time) => (
-                <Stack key={time.id}>
+                <Collapse key={time.id}>
                     <TimeInfo calendar={calendar} time={time} />
                     <Divider sx={{ borderStyle: "dashed" }} />
-                </Stack>
+                </Collapse>
             ))}
             <TimesCalculator times={times} workingHours={workingHours} />
-        </Stack>
+        </TransitionGroup>
     );
 }
 
