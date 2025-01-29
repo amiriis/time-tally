@@ -36,31 +36,26 @@ function ListTime({ workId, calendar }) {
             return { year, monthNumber };
         };
 
-        const getWorkingHours = async () => {
-            setWorkingHoursLoading(true);
-            try {
-                const { year, monthNumber } = getYearAndMonth(filterMonth);
-                const q = query(
-                    collection(db, "working_hours"),
-                    where("year", "==", year),
-                    where("month", "==", monthNumber)
-                );
+        setWorkingHoursLoading(true);
 
-                const querySnapshot = await getDocs(q);
-                if (!querySnapshot.empty) {
-                    const doc = querySnapshot.docs[0];
-                    setWorkingHours(doc.data());
-                } else {
-                    setWorkingHours(null);
-                }
-            } catch (e) {
-                console.error(e);
-            } finally {
-                setWorkingHoursLoading(false);
+        const { year, monthNumber } = getYearAndMonth(filterMonth);
+        const q = query(
+            collection(db, "working_hours"),
+            where("year", "==", year),
+            where("month", "==", monthNumber)
+        );
+
+        const unsubscribe = onSnapshot(q, (querySnapshot) => {
+            if (!querySnapshot.empty) {
+                const doc = querySnapshot.docs[0];
+                setWorkingHours(doc.data());
+            } else {
+                setWorkingHours(null);
             }
-        };
+            setWorkingHoursLoading(false);
+        });
 
-        getWorkingHours();
+        return () => unsubscribe();
     }, [filterMonth]);
 
     useEffect(() => {
@@ -86,9 +81,9 @@ function ListTime({ workId, calendar }) {
         const q = query(
             collection(db, "times"),
             where("wid", "==", workId),
-            where("created_at", ">=", startOfMonth),
-            where("created_at", "<=", endOfMonth),
-            orderBy("created_at", "desc")
+            where("started_at", ">=", startOfMonth),
+            where("started_at", "<=", endOfMonth),
+            orderBy("started_at", "desc")
         );
 
         const unsubscribe = onSnapshot(q, (querySnapshot) => {
