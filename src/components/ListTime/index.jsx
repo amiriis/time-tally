@@ -1,14 +1,15 @@
 import { db } from "@/lib/firebase";
 import { Box, Collapse, Stack } from "@mui/material";
-import { collection, getDocs, onSnapshot, orderBy, query, where } from "firebase/firestore";
+import { collection, onSnapshot, orderBy, query, where } from "firebase/firestore";
 import moment from "jalali-moment";
 import { useEffect, useState } from "react";
 import { TransitionGroup } from "react-transition-group";
+import LoadingTimes from "../LoadingTimes";
 import NotFoundData from "../NotFoundData";
 import FilterMonth from "./FilterMonth";
 import TimeCard from "./TimeCard";
+import TimeTotalInfo from "./TimesTotalInfo";
 import WorkingHoursInfo from "./WorkingHoursInfo";
-import LoadingTimes from "../LoadingTimes";
 
 function ListTime({ workId, calendar }) {
     const [listTime, setListTime] = useState(null);
@@ -110,8 +111,14 @@ function ListTime({ workId, calendar }) {
 
     return (
         <Stack spacing={1}>
-            <Stack direction={"row"}>
-                <Box sx={{ flex: 2 }}></Box>
+            <Stack direction={"row"} spacing={3}>
+                <Box sx={{ flex: 2 }}>
+                    {workingHours && (
+                        <WorkingHoursInfo
+                            workingHours={workingHours}
+                        />
+                    )}
+                </Box>
                 <FilterMonth filterMonth={filterMonth} setFilterMonth={setFilterMonth} />
             </Stack>
             {isLoading ? (
@@ -120,11 +127,9 @@ function ListTime({ workId, calendar }) {
                 listTime &&
                 workingHours && (
                     <>
-                        <WorkingHoursInfo
+                        <TimeTotalInfo
                             workingHours={workingHours}
-                            listTime={listTime}
-                            workingHoursLoading={workingHoursLoading}
-                        />
+                            listTime={listTime} />
                         {Object.keys(listTime).length ? (
                             <TransitionGroup component={Stack}>
                                 {Object.entries(listTime).map(([day, times]) => (
