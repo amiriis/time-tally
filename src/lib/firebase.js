@@ -6,7 +6,6 @@ import {
   persistentLocalCache,
   persistentMultipleTabManager
 } from "firebase/firestore";
-import { getMessaging } from "firebase/messaging";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_API_KEY,
@@ -29,4 +28,3 @@ initializeFirestore(app, {
   }),
 });
 export const db = getFirestore(app);
-export const messaging = () => getMessaging(app);
