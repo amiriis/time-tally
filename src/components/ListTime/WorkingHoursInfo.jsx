@@ -1,7 +1,6 @@
 'use client'
 import convertDurationToTime from "@/lib/convertDurationToTime";
 import { Chip, Stack } from "@mui/material";
-import { duration } from "jalali-moment";
 import { useMemo } from "react";
 
 const WorkingHoursInfo = ({ workingHours, listTime, workingHoursLoading }) => {
@@ -14,17 +13,17 @@ const WorkingHoursInfo = ({ workingHours, listTime, workingHoursLoading }) => {
     const total = useMemo(() => {
         let _total_duration = 0;
 
-        listTime.forEach((time) => {
+        Object.values(listTime).flat().forEach((time) => {
             _total_duration += time.total_time.duration;
         });
 
-        return { duration: convertDurationToTime(_total_duration), average: convertDurationToTime(_total_duration / listTime.length) };
+        return { duration: convertDurationToTime(_total_duration), average: convertDurationToTime(_total_duration / Object.keys(listTime).length) };
     }, [listTime]);
 
     const timeDuration = useMemo(() => {
         let _total_duration = 0;
         const totalMinutesFirstTime = total.duration.hours * 60 + total.duration.minutes;
-        const totalMinutesSecondTime = (workingTimeHours * 60 + workingTimeMinutes) * listTime.length;
+        const totalMinutesSecondTime = (workingTimeHours * 60 + workingTimeMinutes) * Object.keys(listTime).length;
 
         if (totalMinutesFirstTime > totalMinutesSecondTime) {
             _total_duration = totalMinutesFirstTime - totalMinutesSecondTime
