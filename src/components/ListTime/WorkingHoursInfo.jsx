@@ -1,57 +1,62 @@
-'use client'
+'use client';
 import convertDurationToTime from "@/lib/convertDurationToTime";
 import { Chip, Stack } from "@mui/material";
-import { duration } from "jalali-moment";
 import { useMemo } from "react";
 
 const WorkingHoursInfo = ({ workingHours, listTime, workingHoursLoading }) => {
     const { duty_hours, working_days } = workingHours;
     const averageDutyHours = duty_hours / working_days;
-    const workingTimeHours = Math.floor(averageDutyHours);
-    const workingTimeMinutes = Math.round((averageDutyHours - workingTimeHours) * 60);
-
+    const workingTimeMinutes = Math.round(averageDutyHours * 60);
 
     const total = useMemo(() => {
-        let _total_duration = 0;
-
-        listTime.forEach((time) => {
-            _total_duration += time.total_time.duration;
-        });
-
-        return { duration: convertDurationToTime(_total_duration), average: convertDurationToTime(_total_duration / listTime.length) };
+        const _total_duration = Object.values(listTime).flat().reduce((sum, time) => sum + time.total_time.duration, 0);
+        const daysCount = Object.keys(listTime).length;
+        return {
+            duration: convertDurationToTime(_total_duration),
+            average: convertDurationToTime(_total_duration / daysCount)
+        };
     }, [listTime]);
 
     const timeDuration = useMemo(() => {
-        let _total_duration = 0;
-        const totalMinutesFirstTime = total.duration.hours * 60 + total.duration.minutes;
-        const totalMinutesSecondTime = (workingTimeHours * 60 + workingTimeMinutes) * listTime.length;
+        const totalMinutesLogged = total.duration.hours * 60 + total.duration.minutes;
+        const totalMinutesExpected = workingTimeMinutes * Object.keys(listTime).length;
+        const difference = Math.abs(totalMinutesLogged - totalMinutesExpected);
 
-        if (totalMinutesFirstTime > totalMinutesSecondTime) {
-            _total_duration = totalMinutesFirstTime - totalMinutesSecondTime
-        } else {
-            _total_duration = totalMinutesSecondTime - totalMinutesFirstTime
-        }
-
-        return { isgreater: totalMinutesFirstTime > totalMinutesSecondTime, duration: convertDurationToTime(_total_duration * 60 * 1000) };
-    }, [total.duration, workingTimeHours, workingTimeMinutes, listTime]);
+        return {
+            isGreater: totalMinutesLogged > totalMinutesExpected,
+            duration: convertDurationToTime(difference * 60 * 1000)
+        };
+    }, [total.duration, workingTimeMinutes, listTime]);
 
     return (
-        <Stack direction={'row'} justifyContent={'space-between'}>
+        <Stack direction='row' justifyContent='space-between'>
             <Stack spacing={1}>
                 <Chip color="primary" size="small" label={`Duty month hours: ${workingHoursLoading ? "..." : duty_hours}`} variant="outlined" />
-                <Chip color="primary" size="small" label={`Duty day time: ${workingHoursLoading ? "..." : `${workingTimeHours.toString().padStart(2, "0")}:${workingTimeMinutes
-                    .toString()
-                    .padStart(2, "0")}`}`} variant="outlined" />
+                <Chip
+                    color="primary"
+                    size="small"
+                    label={`Duty day time: ${workingHoursLoading ? "..." : `${String(Math.floor(averageDutyHours)).padStart(2, "0")}:${String(workingTimeMinutes % 60).padStart(2, "0")}`}`}
+                    variant="outlined"
+                />
             </Stack>
             <Stack spacing={1}>
-                <Chip color={timeDuration.isgreater ? "success" : 'warning'} size="small" sx={{ px: 2 }} label={`${workingHoursLoading ? "..." : `${total.duration.hours.toString().padStart(2, "0")}:${total.duration.minutes
-                    .toString()
-                    .padStart(2, "0")}`}`} variant="outlined" />
-                <Chip color={timeDuration.isgreater ? "success" : 'warning'} size="small" sx={{ px: 2 }} label={workingHoursLoading ? "..." : `${timeDuration.isgreater ? '+ ' : '- '} ${timeDuration.duration.hours.toString().padStart(2, "0")}:${timeDuration.duration.minutes
-                    .toString()
-                    .padStart(2, "0")}`} variant="outlined" />
+                <Chip
+                    color={timeDuration.isGreater ? "success" : "warning"}
+                    size="small"
+                    sx={{ px: 2 }}
+                    label={workingHoursLoading ? "..." : `${String(total.duration.hours).padStart(2, "0")}:${String(total.duration.minutes).padStart(2, "0")}`}
+                    variant="outlined"
+                />
+                <Chip
+                    color={timeDuration.isGreater ? "success" : "warning"}
+                    size="small"
+                    sx={{ px: 2 }}
+                    label={workingHoursLoading ? "..." : `${timeDuration.isGreater ? '+ ' : '- '} ${String(timeDuration.duration.hours).padStart(2, "0")}:${String(timeDuration.duration.minutes).padStart(2, "0")}`}
+                    variant="outlined"
+                />
             </Stack>
         </Stack>
     );
-}
-export default WorkingHoursInfo
+};
+
+export default WorkingHoursInfo;

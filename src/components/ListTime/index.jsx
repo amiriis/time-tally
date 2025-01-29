@@ -54,7 +54,15 @@ function ListTime({ work }) {
       querySnapshot.forEach((doc) => {
         _times.push({ id: doc.id, ...doc.data() });
       });
-      setListTime(_times);
+
+      const groupedByDay = _times.reduce((acc, curr) => {
+        const day = moment(curr.started_at.toDate()).format("YYYY-MM-DD");
+        if (!acc[day]) acc[day] = [];
+        acc[day].push(curr);
+        return acc;
+      }, {});
+
+      setListTime(groupedByDay);
     });
 
     return () => {
@@ -112,11 +120,11 @@ function ListTime({ work }) {
       {(listTime && workingHours) && (
         <>
           <WorkingHoursInfo workingHours={workingHours} listTime={listTime} workingHoursLoading={workingHoursLoading} />
-          {listTime.length ? (
+          {Object.keys(listTime).length ? (
             <TransitionGroup component={Stack}>
-              {listTime.map((time) => (
-                <Collapse key={time.id}>
-                  <TimeCard work={work} time={time} workingHours={workingHours} />
+              {Object.entries(listTime).map(([day, times]) => (
+                <Collapse key={day}>
+                  <TimeCard work={work} times={times} workingHours={workingHours} />
                 </Collapse>
               ))}
             </TransitionGroup>
