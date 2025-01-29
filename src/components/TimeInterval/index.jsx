@@ -30,28 +30,23 @@ function TimeInterval({ workId, start_at, stop, hasWorkingHours = false }) {
     useEffect(() => {
         if (!hasWorkingHours) return;
 
-        const getWorkingHours = async () => {
-            setWorkingHoursLoading(true);
-            try {
-                const now = moment(start_at);
-                const q = query(
-                    collection(db, "working_hours"),
-                    where("year", "==", now.jYear()),
-                    where("month", "==", now.jMonth() + 1)
-                );
+        setWorkingHoursLoading(true);
 
-                const querySnapshot = await getDocs(q);
-                if (!querySnapshot.empty) {
-                    setWorkingHours(querySnapshot.docs[0].data());
-                }
-            } catch (e) {
-                console.error(e);
-            } finally {
-                setWorkingHoursLoading(false);
+        const now = moment(start_at);
+        const q = query(
+            collection(db, "working_hours"),
+            where("year", "==", now.jYear()),
+            where("month", "==", now.jMonth() + 1)
+        );
+
+        const unsubscribe = onSnapshot(q, (querySnapshot) => {
+            if (!querySnapshot.empty) {
+                setWorkingHours(querySnapshot.docs[0].data());
             }
-        };
+            setWorkingHoursLoading(false);
+        });
 
-        getWorkingHours();
+        return () => unsubscribe();
     }, [hasWorkingHours]);
 
     useEffect(() => {
@@ -74,7 +69,10 @@ function TimeInterval({ workId, start_at, stop, hasWorkingHours = false }) {
             querySnapshot.forEach((doc) => {
                 _times.push(doc.data().total_time.duration);
             });
-            setTotalTimeOfDay(_times.reduce((acc, num) => acc + num, 0));
+
+            const totalTime = _times.length > 0 ? _times.reduce((acc, num) => acc + num, 0) : 0;
+
+            setTotalTimeOfDay(totalTime);
             setTotalTimeOfDayLoading(false);
         });
 
