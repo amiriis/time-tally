@@ -48,7 +48,7 @@ function ShowWork({ work_id }) {
                     <TimeActionsBtn work={work} />
                 </Stack>
                 <Divider sx={{ my: 2 }} />
-                <ListTime work={work} />
+                <ListTime workId={work.id} calendar={work.settings.calendar} />
             </LocalizationProvider>
         </>
     );

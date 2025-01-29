@@ -10,7 +10,7 @@ import TimeCard from "./TimeCard";
 import WorkingHoursInfo from "./WorkingHoursInfo";
 import LoadingTimes from "../LoadingTimes";
 
-function ListTime({ work }) {
+function ListTime({ workId, calendar }) {
     const [listTime, setListTime] = useState(null);
     const [filterMonth, setFilterMonth] = useState("current");
     const [workingHours, setWorkingHours] = useState(null);
@@ -61,7 +61,7 @@ function ListTime({ work }) {
         };
 
         getWorkingHours();
-    }, [work, filterMonth]);
+    }, [filterMonth]);
 
     useEffect(() => {
         setListTimeLoading(true);
@@ -85,7 +85,7 @@ function ListTime({ work }) {
 
         const q = query(
             collection(db, "times"),
-            where("wid", "==", work.id),
+            where("wid", "==", workId),
             where("created_at", ">=", startOfMonth),
             where("created_at", "<=", endOfMonth),
             orderBy("created_at", "desc")
@@ -111,7 +111,7 @@ function ListTime({ work }) {
         return () => {
             unsubscribe();
         };
-    }, [work, filterMonth]);
+    }, [filterMonth]);
 
     return (
         <Stack spacing={1}>
@@ -134,7 +134,7 @@ function ListTime({ work }) {
                             <TransitionGroup component={Stack}>
                                 {Object.entries(listTime).map(([day, times]) => (
                                     <Collapse key={day}>
-                                        <TimeCard work={work} times={times} workingHours={workingHours} />
+                                        <TimeCard calendar={calendar} times={times} workingHours={workingHours} />
                                     </Collapse>
                                 ))}
                             </TransitionGroup>

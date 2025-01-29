@@ -4,18 +4,27 @@ import { useMemo } from "react";
 
 const TimesCalculator = ({ times, workingHours }) => {
     const { duty_hours, working_days } = workingHours;
-    const averageDutyMinutes = Math.round((duty_hours / working_days) * 60);
 
-    const totalDuration = useMemo(() => times.reduce((sum, time) => sum + time.total_time.duration, 0), [times]);
+    const averageDutySeconds = Math.floor((duty_hours * 3600) / working_days);
+
+    const totalDurationSeconds = useMemo(
+        () => Math.floor(times.reduce((sum, time) => sum + time.total_time.duration, 0) / 1000),
+        [times]
+    );
 
     const timeDifference = useMemo(() => {
-        const totalMinutesLogged = Math.round(totalDuration / 60 / 1000);
-        const difference = Math.abs(totalMinutesLogged - averageDutyMinutes);
+        const differenceSeconds = Math.abs(totalDurationSeconds - averageDutySeconds);
         return {
-            isGreater: totalMinutesLogged > averageDutyMinutes,
-            duration: convertDurationToTime(difference * 60 * 1000),
+            isGreater: totalDurationSeconds > averageDutySeconds,
+            duration: convertDurationToTime(differenceSeconds * 1000),
         };
-    }, [totalDuration, averageDutyMinutes]);
+    }, [totalDurationSeconds, averageDutySeconds]);
+
+    const formattedTime = (seconds) => {
+        const hours = Math.floor(seconds / 3600);
+        const minutes = Math.floor((seconds % 3600) / 60);
+        return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
+    };
 
     return (
         <Stack alignItems="center" sx={{ p: 0.5 }}>
@@ -25,7 +34,7 @@ const TimesCalculator = ({ times, workingHours }) => {
                     {times.map((time, index) => (
                         <Typography variant="caption" key={time.id}>
                             {" "}
-                            {`${String(time.total_time.hours).padStart(2, "0")}:${String(time.total_time.minutes).padStart(2, "0")}`}{" "}
+                            {formattedTime(Math.floor(time.total_time.duration / 1000))}{" "}
                             {index < times.length - 1 && "+"}
                         </Typography>
                     ))}
@@ -35,7 +44,7 @@ const TimesCalculator = ({ times, workingHours }) => {
                     {"-"}
                 </Typography>
                 <Typography variant="caption" textAlign="center">
-                    {`${String(Math.floor(averageDutyMinutes / 60)).padStart(2, "0")}:${String(averageDutyMinutes % 60).padStart(2, "0")}`}
+                    {formattedTime(averageDutySeconds)}
                 </Typography>
                 <Typography variant="caption" textAlign="center" color="primary.main">
                     {"="}
@@ -46,8 +55,9 @@ const TimesCalculator = ({ times, workingHours }) => {
                     color={timeDifference.isGreater ? "success.main" : "error.main"}
                 >
                     {timeDifference.isGreater ? "+" : "-"}
-                    {String(timeDifference.duration.hours).padStart(2, "0")}:
-                    {String(timeDifference.duration.minutes).padStart(2, "0")}
+                    {formattedTime(
+                        timeDifference.duration.hours * 3600 + timeDifference.duration.minutes * 60
+                    )}
                 </Typography>
             </Stack>
         </Stack>

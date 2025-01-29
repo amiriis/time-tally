@@ -5,30 +5,36 @@ import { useMemo } from "react";
 
 const WorkingHoursInfo = ({ workingHours, listTime, workingHoursLoading }) => {
     const { duty_hours, working_days } = workingHours;
-    const averageDutyHours = duty_hours / working_days;
-    const workingTimeMinutes = Math.round(averageDutyHours * 60);
+
+    const averageDutySeconds = (duty_hours * 3600) / working_days;
 
     const total = useMemo(() => {
         const _total_duration = Object.values(listTime)
             .flat()
             .reduce((sum, time) => sum + time.total_time.duration, 0);
+
         const daysCount = Object.keys(listTime).length;
+
         return {
             duration: convertDurationToTime(_total_duration),
             average: convertDurationToTime(_total_duration / daysCount),
+            totalSeconds: _total_duration / 1000,
         };
     }, [listTime]);
 
     const timeDuration = useMemo(() => {
-        const totalMinutesLogged = total.duration.hours * 60 + total.duration.minutes;
-        const totalMinutesExpected = workingTimeMinutes * Object.keys(listTime).length;
-        const difference = Math.abs(totalMinutesLogged - totalMinutesExpected);
+        const totalSecondsLogged = total.totalSeconds;
+        const totalSecondsExpected = averageDutySeconds * Object.keys(listTime).length;
+        const differenceSeconds = Math.abs(totalSecondsLogged - totalSecondsExpected);
 
         return {
-            isGreater: totalMinutesLogged > totalMinutesExpected,
-            duration: convertDurationToTime(difference * 60 * 1000),
+            isGreater: totalSecondsLogged > totalSecondsExpected,
+            duration: convertDurationToTime(differenceSeconds * 1000),
         };
-    }, [total.duration, workingTimeMinutes, listTime]);
+    }, [total.totalSeconds, averageDutySeconds, listTime]);
+
+    const formattedTime = (hours, minutes) =>
+        `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
 
     return (
         <Stack direction="row" justifyContent="space-between">
@@ -42,7 +48,10 @@ const WorkingHoursInfo = ({ workingHours, listTime, workingHoursLoading }) => {
                 <Chip
                     color="primary"
                     size="small"
-                    label={`Duty day time: ${workingHoursLoading ? "..." : `${String(Math.floor(averageDutyHours)).padStart(2, "0")}:${String(workingTimeMinutes % 60).padStart(2, "0")}`}`}
+                    label={`Duty day time: ${workingHoursLoading
+                        ? "..."
+                        : formattedTime(Math.floor(averageDutySeconds / 3600), Math.round((averageDutySeconds % 3600) / 60))
+                        }`}
                     variant="outlined"
                 />
             </Stack>
@@ -54,7 +63,7 @@ const WorkingHoursInfo = ({ workingHours, listTime, workingHoursLoading }) => {
                     label={
                         workingHoursLoading
                             ? "..."
-                            : `${String(total.duration.hours).padStart(2, "0")}:${String(total.duration.minutes).padStart(2, "0")}`
+                            : formattedTime(total.duration.hours, total.duration.minutes)
                     }
                     variant="outlined"
                 />
@@ -65,7 +74,10 @@ const WorkingHoursInfo = ({ workingHours, listTime, workingHoursLoading }) => {
                     label={
                         workingHoursLoading
                             ? "..."
-                            : `${timeDuration.isGreater ? "+ " : "- "} ${String(timeDuration.duration.hours).padStart(2, "0")}:${String(timeDuration.duration.minutes).padStart(2, "0")}`
+                            : `${timeDuration.isGreater ? "+ " : "- "}${formattedTime(
+                                timeDuration.duration.hours,
+                                timeDuration.duration.minutes
+                            )}`
                     }
                     variant="outlined"
                 />
