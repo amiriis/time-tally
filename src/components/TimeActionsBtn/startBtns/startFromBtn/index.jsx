@@ -5,21 +5,17 @@ import EndToForm from "./form";
 import StartFromForm from "./form";
 
 function StartFromBtn({ work }) {
-  const [openDrawer, setOpenDrawer] = useState();
-  return (
-    <>
-      <Button onClick={() => setOpenDrawer(true)}>
-        <TimerIcon />
-      </Button>
-      <Drawer
-        anchor="bottom"
-        open={openDrawer}
-        onClose={() => setOpenDrawer(false)}
-      >
-        <StartFromForm work={work} setOpenDrawer={setOpenDrawer} />
-      </Drawer>
-    </>
-  );
+    const [openDrawer, setOpenDrawer] = useState();
+    return (
+        <>
+            <Button onClick={() => setOpenDrawer(true)}>
+                <TimerIcon />
+            </Button>
+            <Drawer anchor="bottom" open={openDrawer} onClose={() => setOpenDrawer(false)}>
+                <StartFromForm work={work} setOpenDrawer={setOpenDrawer} />
+            </Drawer>
+        </>
+    );
 }
 
 export default StartFromBtn;

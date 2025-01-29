@@ -6,30 +6,26 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 function HeadquarterLayout({ children }) {
-    const { initAuth, user } = useAuth()
-    const router = useRouter()
+    const { initAuth, user } = useAuth();
+    const router = useRouter();
 
     useEffect(() => {
-        if (!initAuth) return
+        if (!initAuth) return;
         if (!user) {
-            router.replace('/login')
-            return
+            router.replace("/login");
+            return;
         }
-        if (user.role !== 'admin') {
-            router.replace('/u')
-            return
+        if (user.role !== "admin") {
+            router.replace("/u");
+            return;
         }
-    }, [initAuth, user])
+    }, [initAuth, user]);
 
-    if (!initAuth) return (<LoadingPage />)
-    if (!user) return (<LoadingPage />)
-    if (user.role !== 'admin') return (<LoadingPage />)
+    if (!initAuth) return <LoadingPage />;
+    if (!user) return <LoadingPage />;
+    if (user.role !== "admin") return <LoadingPage />;
 
-    return (
-        <>
-            {user && children}
-        </>
-    );
+    return <>{user && children}</>;
 }
 
-export default HeadquarterLayout
+export default HeadquarterLayout;

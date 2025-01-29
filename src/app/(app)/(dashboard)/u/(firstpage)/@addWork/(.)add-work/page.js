@@ -1,12 +1,12 @@
-'use client'
-import AddWorkForm from '@/components/AddWork/form'
+"use client";
+import AddWorkForm from "@/components/AddWork/form";
 
 function Page() {
     return (
         <>
             <AddWorkForm />
         </>
-    )
+    );
 }
 
-export default Page
+export default Page;

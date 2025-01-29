@@ -4,29 +4,25 @@ import { useState } from "react";
 import EditTimeForm from "./form";
 
 function EditTime({ work, time, handleCloseEditMenu }) {
-  const [openDrawer, setOpenDrawer] = useState();
-  return (
-    <>
-      <MenuItem
-        onClick={() => {
-          handleCloseEditMenu();
-          setOpenDrawer(true);
-        }}
-      >
-        <EditIcon fontSize="inherit" />
-        <Typography sx={{ pl: 1 }} textAlign="center">
-          Edit
-        </Typography>
-      </MenuItem>
-      <Drawer
-        anchor="bottom"
-        open={openDrawer}
-        onClose={() => setOpenDrawer(false)}
-      >
-        <EditTimeForm work={work} time={time} setOpenDrawer={setOpenDrawer} />
-      </Drawer>
-    </>
-  );
+    const [openDrawer, setOpenDrawer] = useState();
+    return (
+        <>
+            <MenuItem
+                onClick={() => {
+                    handleCloseEditMenu();
+                    setOpenDrawer(true);
+                }}
+            >
+                <EditIcon fontSize="inherit" />
+                <Typography sx={{ pl: 1 }} textAlign="center">
+                    Edit
+                </Typography>
+            </MenuItem>
+            <Drawer anchor="bottom" open={openDrawer} onClose={() => setOpenDrawer(false)}>
+                <EditTimeForm work={work} time={time} setOpenDrawer={setOpenDrawer} />
+            </Drawer>
+        </>
+    );
 }
 
 export default EditTime;

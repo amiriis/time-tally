@@ -6,28 +6,24 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 export default function Layout({ children }) {
-    const { initAuth, user } = useAuth()
-    const router = useRouter()
+    const { initAuth, user } = useAuth();
+    const router = useRouter();
 
     useEffect(() => {
-        if (!initAuth) return
-        if (!user) return
+        if (!initAuth) return;
+        if (!user) return;
         switch (user.role) {
-            case 'user':
-                router.replace('/u')
+            case "user":
+                router.replace("/u");
                 break;
-            case 'admin':
-                router.replace('/headquarter')
+            case "admin":
+                router.replace("/headquarter");
                 break;
         }
-    }, [initAuth, user])
+    }, [initAuth, user]);
 
-    if (!initAuth) return (<LoadingPage />)
-    if (user) return (<LoadingPage />)
+    if (!initAuth) return <LoadingPage />;
+    if (user) return <LoadingPage />;
 
-    return (
-        <>
-            {!user && children}
-        </>
-    );
+    return <>{!user && children}</>;
 }

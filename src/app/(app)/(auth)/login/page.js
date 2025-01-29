@@ -1,14 +1,12 @@
-import LoginPage from '@/components/LoginPage'
-import React from 'react'
+import LoginPage from "@/components/LoginPage";
+import React from "react";
 
 export const metadata = {
-  title: "Login",
+    title: "Login",
 };
 
 function Login() {
-  return (
-    <LoginPage />
-  )
+    return <LoginPage />;
 }
 
-export default Login
+export default Login;

@@ -7,23 +7,23 @@ import { Collapse, Container } from "@mui/material";
 import { TransitionGroup } from "react-transition-group";
 
 export default function Template({ children }) {
-  const { isLocalDb } = useApp();
+    const { isLocalDb } = useApp();
 
-  return (
-    <>
-      <Navbar />
-      <TransitionGroup>
-        {isLocalDb && (
-          <Collapse>
-            <LocalNavbar />
-          </Collapse>
-        )}
-        <Collapse>
-          <Container sx={{ mt: 3 }} maxWidth="xs">
-            <>{children}</>
-          </Container>
-        </Collapse>
-      </TransitionGroup>
-    </>
-  );
+    return (
+        <>
+            <Navbar />
+            <TransitionGroup>
+                {isLocalDb && (
+                    <Collapse>
+                        <LocalNavbar />
+                    </Collapse>
+                )}
+                <Collapse>
+                    <Container sx={{ mt: 3 }} maxWidth="xs">
+                        <>{children}</>
+                    </Container>
+                </Collapse>
+            </TransitionGroup>
+        </>
+    );
 }

@@ -4,21 +4,17 @@ import TimerIcon from "@mui/icons-material/Timer";
 import EndToForm from "./form";
 
 function EndToBtn({ work }) {
-  const [openDrawer, setOpenDrawer] = useState();
-  return (
-    <>
-      <Button onClick={() => setOpenDrawer(true)}>
-        <TimerIcon />
-      </Button>
-      <Drawer
-        anchor="bottom"
-        open={openDrawer}
-        onClose={() => setOpenDrawer(false)}
-      >
-        <EndToForm work={work} setOpenDrawer={setOpenDrawer} />
-      </Drawer>
-    </>
-  );
+    const [openDrawer, setOpenDrawer] = useState();
+    return (
+        <>
+            <Button onClick={() => setOpenDrawer(true)}>
+                <TimerIcon />
+            </Button>
+            <Drawer anchor="bottom" open={openDrawer} onClose={() => setOpenDrawer(false)}>
+                <EndToForm work={work} setOpenDrawer={setOpenDrawer} />
+            </Drawer>
+        </>
+    );
 }
 
 export default EndToBtn;

@@ -5,25 +5,20 @@ import { useAuth } from "@/contexts/auth";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
-
 function DashboardLayout({ children }) {
-    const { initAuth, user } = useAuth()
-    const router = useRouter()
+    const { initAuth, user } = useAuth();
+    const router = useRouter();
 
     useEffect(() => {
-        if (!initAuth) return
-        if (user) return
-        router.replace('/login')
-    }, [initAuth, user])
+        if (!initAuth) return;
+        if (user) return;
+        router.replace("/login");
+    }, [initAuth, user]);
 
-    if (!initAuth) return (<LoadingPage />)
-    if (!user) return (<LoadingPage />)
+    if (!initAuth) return <LoadingPage />;
+    if (!user) return <LoadingPage />;
 
-    return (
-        <>
-            {user && children}
-        </>
-    );
+    return <>{user && children}</>;
 }
 
-export default DashboardLayout
+export default DashboardLayout;
