@@ -50,9 +50,10 @@ const TimesCalculator = ({ times, workingHours }) => {
                     {"="}
                 </Typography>
                 <Typography
+                    variant="body2"
                     textAlign="center"
                     fontWeight="bold"
-                    color={timeDifference.isGreater ? "success.main" : "error.main"}
+                    color={timeDifference.isGreater ? "success.main" : "warning.main"}
                 >
                     {timeDifference.isGreater ? "+" : "-"}
                     {formattedTime(
