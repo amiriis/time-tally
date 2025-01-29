@@ -23,7 +23,7 @@ const TimesCalculator = ({ times, workingHours }) => {
     return (
         <Stack alignItems='center' sx={{ p: 0.5 }}>
             <Stack direction='row' spacing={1} alignItems='center'>
-                <Typography variant="caption" textAlign="center" color="success.main">
+                <Typography variant="caption" textAlign="center">
                     {'('}
                     {times.map((time, index) => (
                         <Typography variant="caption" key={time.id}>
@@ -33,8 +33,8 @@ const TimesCalculator = ({ times, workingHours }) => {
                     ))}
                     {')'}
                 </Typography>
-                <Typography variant="caption" textAlign="center" color="error.main">{'-'}</Typography>
-                <Typography variant="caption" textAlign="center" color="error.main">
+                <Typography variant="caption" textAlign="center">{'-'}</Typography>
+                <Typography variant="caption" textAlign="center">
                     {`${String(Math.floor(averageDutyMinutes / 60)).padStart(2, "0")}:${String(averageDutyMinutes % 60).padStart(2, "0")}`}
                 </Typography>
                 <Typography variant="caption" textAlign="center" color="primary.main">{'='}</Typography>

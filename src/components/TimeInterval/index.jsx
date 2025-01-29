@@ -1,7 +1,7 @@
 "use client";
 import convertDurationToTime from "@/lib/convertDurationToTime";
 import { db } from "@/lib/firebase";
-import { Stack, Typography } from "@mui/material";
+import { Skeleton, Stack, Typography } from "@mui/material";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import moment from "jalali-moment";
 import { useEffect, useMemo, useState } from "react";
@@ -9,6 +9,7 @@ import { useEffect, useMemo, useState } from "react";
 function TimeInterval({ start_at, stop, hasWorkingHours = false }) {
   const [timeLoop, setTimeLoop] = useState(0);
   const [workingHours, setWorkingHours] = useState(null);
+  const [workingHoursLoading, setWorkingHoursLoading] = useState(true);
 
   useEffect(() => {
     if (stop) return;
@@ -26,6 +27,7 @@ function TimeInterval({ start_at, stop, hasWorkingHours = false }) {
     if (!hasWorkingHours) return;
 
     const getWorkingHours = async () => {
+      setWorkingHoursLoading(true);
       try {
         const now = moment(start_at);
         const year = now.jYear();
@@ -45,6 +47,8 @@ function TimeInterval({ start_at, stop, hasWorkingHours = false }) {
         }
       } catch (e) {
         console.log(e);
+      } finally {
+        setWorkingHoursLoading(false);
       }
     };
 
@@ -78,7 +82,9 @@ function TimeInterval({ start_at, stop, hasWorkingHours = false }) {
           ? `${duration.hours.toString().padStart(2, "0")}:${duration.minutes.toString().padStart(2, "0")}:${duration.seconds.toString().padStart(2, "0")}`
           : `00:00:00`}
       </Typography>
-      {hasWorkingHours && workingHours && (
+      {hasWorkingHours && workingHoursLoading ? (
+        <Skeleton variant="rounded" width={70} height={20} />
+      ) : workingHours && (
         <Typography variant="caption" color={timeDuration.isgreater ? 'warning.main' : 'success.main'}>
           {`${timeDuration.isgreater ? '- ' : '+ '}${timeDuration.duration.hours.toString().padStart(2, "0")}:${timeDuration.duration.minutes
             .toString()

@@ -15,23 +15,72 @@ import NotFoundData from "../NotFoundData";
 import FilterMonth from "./FilterMonth";
 import TimeCard from "./TimeCard";
 import WorkingHoursInfo from "./WorkingHoursInfo";
+import LoadingTimes from "../LoadingTimes";
 
 function ListTime({ work }) {
-  const [listTime, setListTime] = useState();
-  const [filterMonth, setFilterMonth] = useState('current');
+  const [listTime, setListTime] = useState(null);
+  const [filterMonth, setFilterMonth] = useState("current");
   const [workingHours, setWorkingHours] = useState(null);
+  const [listTimeLoading, setListTimeLoading] = useState(true);
   const [workingHoursLoading, setWorkingHoursLoading] = useState(true);
 
+  const isLoading = listTimeLoading || workingHoursLoading;
+
   useEffect(() => {
+    const getYearAndMonth = (month) => {
+      const now = moment();
+      let year, monthNumber;
+
+      if (month === "current") {
+        year = now.jYear();
+        monthNumber = now.jMonth() + 1;
+      } else if (month === "last") {
+        const last = now.subtract(1, "jMonth");
+        year = last.jYear();
+        monthNumber = last.jMonth() + 1;
+      }
+
+      return { year, monthNumber };
+    };
+
+    const getWorkingHours = async () => {
+      setWorkingHoursLoading(true);
+      try {
+        const { year, monthNumber } = getYearAndMonth(filterMonth);
+        const q = query(
+          collection(db, "working_hours"),
+          where("year", "==", year),
+          where("month", "==", monthNumber)
+        );
+
+        const querySnapshot = await getDocs(q);
+        if (!querySnapshot.empty) {
+          const doc = querySnapshot.docs[0];
+          setWorkingHours(doc.data());
+        } else {
+          setWorkingHours(null);
+        }
+      } catch (e) {
+        console.error(e);
+      } finally {
+        setWorkingHoursLoading(false);
+      }
+    };
+
+    getWorkingHours();
+  }, [work, filterMonth]);
+
+  useEffect(() => {
+    setListTimeLoading(true);
 
     const getMonthRange = (month) => {
       const now = moment();
       let startOfMonth, endOfMonth;
 
-      if (month === 'current') {
+      if (month === "current") {
         startOfMonth = now.startOf("jMonth").toDate();
         endOfMonth = now.endOf("jMonth").toDate();
-      } else if (month === 'last') {
+      } else if (month === "last") {
         const last = now.subtract(1, "jMonth");
         startOfMonth = last.startOf("jMonth").toDate();
         endOfMonth = last.endOf("jMonth").toDate();
@@ -63,6 +112,7 @@ function ListTime({ work }) {
       }, {});
 
       setListTime(groupedByDay);
+      setListTimeLoading(false);
     });
 
     return () => {
@@ -70,54 +120,12 @@ function ListTime({ work }) {
     };
   }, [work, filterMonth]);
 
-  useEffect(() => {
-    const getYearAndMonth = (month) => {
-      const now = moment();
-      let year, monthNumber;
-
-      if (month === 'current') {
-        year = now.jYear();
-        monthNumber = now.jMonth() + 1;
-      } else if (month === 'last') {
-        const last = now.subtract(1, "jMonth");
-        year = last.jYear();
-        monthNumber = last.jMonth() + 1;
-      }
-
-      return { year, monthNumber };
-    };
-
-    const getWorkingHours = async () => {
-      setWorkingHoursLoading(true);
-      try {
-        const { year, monthNumber } = getYearAndMonth(filterMonth);
-
-
-        const q = query(
-          collection(db, "working_hours"),
-          where("year", "==", year),
-          where("month", "==", monthNumber)
-        );
-
-        const querySnapshot = await getDocs(q);
-
-        if (!querySnapshot.empty) {
-          const doc = querySnapshot.docs[0];
-          setWorkingHours(doc.data());
-          setWorkingHoursLoading(false);
-        }
-      } catch (e) {
-      }
-    }
-
-    getWorkingHours();
-
-  }, [work, filterMonth])
-
   return (
     <Stack spacing={1}>
       <Stack direction={'row'}><Box sx={{ flex: 2 }}></Box><FilterMonth filterMonth={filterMonth} setFilterMonth={setFilterMonth} /></Stack>
-      {(listTime && workingHours) && (
+      {isLoading ? (
+        <LoadingTimes />
+      ) : (listTime && workingHours) && (
         <>
           <WorkingHoursInfo workingHours={workingHours} listTime={listTime} workingHoursLoading={workingHoursLoading} />
           {Object.keys(listTime).length ? (
