@@ -31,7 +31,7 @@ function ShowWork({ work_id }) {
         return () => {
             unsubscribe();
         };
-    }, [work_id, setLocalDb]);
+    }, []);
 
     if (!work) return;
 

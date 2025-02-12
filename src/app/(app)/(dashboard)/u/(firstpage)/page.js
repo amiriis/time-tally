@@ -33,7 +33,7 @@ function Page() {
         return () => {
             unsubscribe();
         };
-    }, [user.uid, setLocalDb]);
+    }, []);
 
     return (
         <>

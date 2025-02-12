@@ -29,22 +29,17 @@ const TimeTotalInfo = ({ workingHours, listTime }) => {
         };
     }, [total.totalSeconds, averageDutySeconds, listTime]);
 
-    const formattedTime = (hours, minutes) =>
-        `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
+    const formattedTime = (hours, minutes) => `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
     return (
         <Stack spacing={1}>
-            <Stack direction={'row'} alignItems={'center'} spacing={1}>
-                <Chip
-                    color="primary"
-                    size="small"
-                    label={`Total time`}
-                    variant="outlined"
-                />
+            <Stack direction={"row"} alignItems={"center"} spacing={1}>
+                <Chip color="primary" size="small" label={`Total time`} variant="outlined" />
                 <Divider sx={{ flex: 1 }} />
-                <Typography color={'primary.main'}>{formattedTime(total.duration.hours, total.duration.minutes)
-                }</Typography>
+                <Typography color={"primary.main"}>
+                    {formattedTime(total.duration.hours, total.duration.minutes)}
+                </Typography>
             </Stack>
-            <Stack direction={'row'} alignItems={'center'} spacing={1}>
+            <Stack direction={"row"} alignItems={"center"} spacing={1}>
                 <Chip
                     color={timeDuration.isGreater ? "success" : "warning"}
                     size="small"
@@ -52,13 +47,15 @@ const TimeTotalInfo = ({ workingHours, listTime }) => {
                     variant="outlined"
                 />
                 <Divider sx={{ flex: 1 }} />
-                <Typography fontWeight={'bold'} color={timeDuration.isGreater ? "success.main" : "warning.main"}>{`${timeDuration.isGreater ? "+" : "-"}${formattedTime(
+                <Typography
+                    fontWeight={"bold"}
+                    color={timeDuration.isGreater ? "success.main" : "warning.main"}
+                >{`${timeDuration.isGreater ? "+" : "-"}${formattedTime(
                     timeDuration.duration.hours,
                     timeDuration.duration.minutes
-                )}`
-                }</Typography>
+                )}`}</Typography>
             </Stack>
         </Stack>
     );
-}
-export default TimeTotalInfo
+};
+export default TimeTotalInfo;

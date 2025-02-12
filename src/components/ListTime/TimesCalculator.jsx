@@ -56,9 +56,7 @@ const TimesCalculator = ({ times, workingHours }) => {
                     color={timeDifference.isGreater ? "success.main" : "warning.main"}
                 >
                     {timeDifference.isGreater ? "+" : "-"}
-                    {formattedTime(
-                        timeDifference.duration.hours * 3600 + timeDifference.duration.minutes * 60
-                    )}
+                    {formattedTime(timeDifference.duration.hours * 3600 + timeDifference.duration.minutes * 60)}
                 </Typography>
             </Stack>
         </Stack>

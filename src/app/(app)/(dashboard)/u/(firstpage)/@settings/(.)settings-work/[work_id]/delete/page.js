@@ -1,11 +1,11 @@
 "use client";
 import DeleteWorkForm from "@/components/DeleteWork/form";
-import MainSetting from "@/components/SettingsWork/main";
 import { db } from "@/lib/firebase";
 import { collection, doc, onSnapshot } from "firebase/firestore";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 
-function Page({ params }) {
+function Page(props) {
+    const params = use(props.params);
     const [work, setWork] = useState();
     const work_id = params.work_id;
 
