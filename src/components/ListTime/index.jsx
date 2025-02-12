@@ -40,11 +40,7 @@ function ListTime({ workId, calendar }) {
         setWorkingHoursLoading(true);
 
         const { year, monthNumber } = getYearAndMonth(filterMonth);
-        const q = query(
-            collection(db, "working_hours"),
-            where("year", "==", year),
-            where("month", "==", monthNumber)
-        );
+        const q = query(collection(db, "working_hours"), where("year", "==", year), where("month", "==", monthNumber));
 
         const unsubscribe = onSnapshot(q, (querySnapshot) => {
             if (!querySnapshot.empty) {
@@ -112,13 +108,7 @@ function ListTime({ workId, calendar }) {
     return (
         <Stack spacing={1}>
             <Stack direction={"row"} spacing={3}>
-                <Box sx={{ flex: 2 }}>
-                    {workingHours && (
-                        <WorkingHoursInfo
-                            workingHours={workingHours}
-                        />
-                    )}
-                </Box>
+                <Box sx={{ flex: 2 }}>{workingHours && <WorkingHoursInfo workingHours={workingHours} />}</Box>
                 <FilterMonth filterMonth={filterMonth} setFilterMonth={setFilterMonth} />
             </Stack>
             {isLoading ? (
@@ -127,9 +117,7 @@ function ListTime({ workId, calendar }) {
                 listTime &&
                 workingHours && (
                     <>
-                        <TimeTotalInfo
-                            workingHours={workingHours}
-                            listTime={listTime} />
+                        <TimeTotalInfo workingHours={workingHours} listTime={listTime} />
                         {Object.keys(listTime).length ? (
                             <TransitionGroup component={Stack}>
                                 {Object.entries(listTime).map(([day, times]) => (

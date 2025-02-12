@@ -85,7 +85,8 @@ function TimeInterval({ workId, start_at, stop, hasWorkingHours = false }) {
 
         const { duty_hours, working_days } = workingHours;
         const dutySeconds = (duty_hours * 3600) / working_days;
-        const currentSeconds = (totalTimeOfDay / 1000) + (duration.hours * 3600 + duration.minutes * 60 + duration.seconds);
+        const currentSeconds =
+            totalTimeOfDay / 1000 + (duration.hours * 3600 + duration.minutes * 60 + duration.seconds);
         const diffSeconds = Math.abs(dutySeconds - currentSeconds);
         return {
             isGreater: dutySeconds > currentSeconds,
@@ -93,17 +94,14 @@ function TimeInterval({ workId, start_at, stop, hasWorkingHours = false }) {
         };
     }, [totalTimeOfDay, duration, workingHours, hasWorkingHours]);
 
-
     const formatTime = ({ hours, minutes, seconds }) =>
         `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
 
     return (
         <Stack direction="row" alignItems="center" spacing={1}>
-            <Typography variant="caption">
-                {formatTime(duration)}
-            </Typography>
-            {hasWorkingHours && (
-                workingHoursLoading || totalTimeOfDayLoading ? (
+            <Typography variant="caption">{formatTime(duration)}</Typography>
+            {hasWorkingHours &&
+                (workingHoursLoading || totalTimeOfDayLoading ? (
                     <Skeleton variant="rounded" width={70} height={20} />
                 ) : (
                     workingHours && (
@@ -111,8 +109,7 @@ function TimeInterval({ workId, start_at, stop, hasWorkingHours = false }) {
                             {`${timeDuration.isGreater ? "- " : "+ "}${formatTime(timeDuration.duration)}`}
                         </Typography>
                     )
-                )
-            )}
+                ))}
         </Stack>
     );
 }

@@ -29,7 +29,7 @@ function Page() {
         return () => {
             unsubscribe();
         };
-    }, [setLocalDb]);
+    }, []);
 
     return (
         <>
