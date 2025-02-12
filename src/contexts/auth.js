@@ -5,12 +5,12 @@ import {
     getRedirectResult,
     onAuthStateChanged,
     signInWithCredential,
-    signInWithRedirect,
-    signOut
+    signInWithPopup,
+    signOut,
 } from "firebase/auth";
 import { addDoc, collection, doc, getDoc, setDoc } from "firebase/firestore";
 import moment from "jalali-moment";
-import { createContext, useCallback, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useState, useEffect, useCallback } from "react";
 
 const AuthContext = createContext();
 
@@ -61,7 +61,7 @@ export const AuthProvider = ({ children }) => {
     const login = useCallback(async (provider) => {
         setLoginIsLoading(true);
         try {
-            await signInWithRedirect(auth, provider);
+            await signInWithPopup(auth, provider);
         } catch (error) {
             await logError(`sign in with ${provider.providerId}`, error);
         } finally {
