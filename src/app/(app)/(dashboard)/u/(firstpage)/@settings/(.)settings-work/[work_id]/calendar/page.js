@@ -2,9 +2,10 @@
 import SettingsWorkForm from "@/components/SettingsWork/form";
 import { db } from "@/lib/firebase";
 import { collection, doc, onSnapshot } from "firebase/firestore";
-import { useEffect, useState } from "react";
+import { useEffect, useState, use } from "react";
 
-function Page({ params }) {
+function Page(props) {
+    const params = use(props.params);
     const [work, setWork] = useState();
     const work_id = params.work_id;
 

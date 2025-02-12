@@ -2,9 +2,10 @@
 import EditWorkForm from "@/components/EditWork/form";
 import { db } from "@/lib/firebase";
 import { collection, doc, onSnapshot } from "firebase/firestore";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, use } from "react";
 
-function Page({ params }) {
+function Page(props) {
+    const params = use(props.params);
     const [work, setWork] = useState();
     const work_id = params.work_id;
 

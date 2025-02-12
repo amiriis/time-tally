@@ -31,7 +31,7 @@ function ListWork() {
         return () => {
             unsubscribe();
         };
-    }, [user.uid, setLocalDb]);
+    }, []);
 
     return (
         <>
