@@ -5,7 +5,7 @@ import {
     getRedirectResult,
     onAuthStateChanged,
     signInWithCredential,
-    // signInWithPopup,
+    signInWithPopup,
     signOut,
 } from "firebase/auth";
 import { addDoc, collection, doc, getDoc, setDoc } from "firebase/firestore";
@@ -61,7 +61,7 @@ export const AuthProvider = ({ children }) => {
     const login = useCallback(async (provider) => {
         setLoginIsLoading(true);
         try {
-            // await signInWithPopup(auth, provider);
+            await signInWithPopup(auth, provider);
         } catch (error) {
             await logError(`sign in with ${provider.providerId}`, error);
         } finally {
