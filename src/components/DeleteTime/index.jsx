@@ -14,7 +14,7 @@ function DeleteTime({ time, handleCloseEditMenu }) {
                 }}
             >
                 <DeleteIcon fontSize="inherit" />
-                <Typography sx={{ pl: 1 }} textAlign="center">
+                <Typography sx={{ pl: 1.5 }} textAlign="center">
                     Delete
                 </Typography>
             </MenuItem>

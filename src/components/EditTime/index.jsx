@@ -14,7 +14,7 @@ function EditTime({ time, handleCloseEditMenu }) {
                 }}
             >
                 <EditIcon fontSize="inherit" />
-                <Typography sx={{ pl: 1 }} textAlign="center">
+                <Typography sx={{ pl: 1.5 }} textAlign="center">
                     Edit
                 </Typography>
             </MenuItem>
