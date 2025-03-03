@@ -6,28 +6,44 @@ const TimeTotalInfo = ({ workingHours, listTime }) => {
     const { duty_hours, working_days } = workingHours;
     const averageDutySeconds = (duty_hours * 3600) / working_days;
     const total = useMemo(() => {
-        const _total_duration = Object.values(listTime)
+        const _total_duration = Object.values(listTime);
+        const _total_without_overtime = _total_duration
             .flat()
-            .reduce((sum, time) => sum + time.total_time.duration, 0);
-
-        const daysCount = Object.keys(listTime).length;
+            .reduce((sum, time) => sum + (!time.isOvertime ? time.total_time.duration : 0), 0);
+        const _total_overtime = _total_duration
+            .flat()
+            .reduce((sum, time) => sum + (time.isOvertime ? time.total_time.duration : 0), 0);
 
         return {
-            duration: convertDurationToTime(_total_duration),
-            average: convertDurationToTime(_total_duration / daysCount),
-            totalSeconds: _total_duration / 1000,
+            duration: convertDurationToTime(_total_without_overtime + _total_overtime),
+            totalWithoutOvertimeSeconds: _total_without_overtime / 1000,
+            totalOvertimeSeconds: _total_overtime / 1000,
         };
     }, [listTime]);
-    const timeDuration = useMemo(() => {
-        const totalSecondsLogged = total.totalSeconds;
-        const totalSecondsExpected = averageDutySeconds * Object.keys(listTime).length;
-        const differenceSeconds = Math.abs(totalSecondsLogged - totalSecondsExpected);
 
+    const timeDuration = useMemo(() => {
+        let differenceSeconds = 0;
+        const totalSecondsExpected =
+            averageDutySeconds *
+            Object.keys(listTime).filter((day) => listTime[day].some((entry) => !entry.hasOwnProperty("isOvertime")))
+                .length;
+        if (total.totalWithoutOvertimeSeconds > 0) {
+            differenceSeconds = total.totalWithoutOvertimeSeconds - totalSecondsExpected;
+        }
+
+        if (total.totalOvertimeSeconds > 0) {
+            differenceSeconds = total.totalOvertimeSeconds + differenceSeconds;
+        }
         return {
-            isGreater: totalSecondsLogged > totalSecondsExpected,
-            duration: convertDurationToTime(differenceSeconds * 1000),
+            isGreater:
+                total.totalWithoutOvertimeSeconds > 0
+                    ? total.totalWithoutOvertimeSeconds +
+                          (total.totalOvertimeSeconds > 0 ? total.totalOvertimeSeconds : 0) >
+                      totalSecondsExpected
+                    : total.totalOvertimeSeconds > 0,
+            duration: convertDurationToTime(Math.abs(differenceSeconds) * 1000),
         };
-    }, [total.totalSeconds, averageDutySeconds, listTime]);
+    }, [total.totalWithoutOvertimeSeconds, total.totalOvertimeSeconds, averageDutySeconds, listTime]);
 
     const formattedTime = (hours, minutes) => `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
     return (
