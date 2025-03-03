@@ -6,9 +6,13 @@ const TimeTotalInfo = ({ workingHours, listTime }) => {
     const { duty_hours, working_days } = workingHours;
     const averageDutySeconds = (duty_hours * 3600) / working_days;
     const total = useMemo(() => {
-        const _total_duration = Object.values(listTime)
-        const _total_without_overtime = _total_duration.flat().reduce((sum, time) => sum + (!time.isOvertime ? time.total_time.duration : 0), 0);
-        const _total_overtime = _total_duration.flat().reduce((sum, time) => sum + (time.isOvertime ? time.total_time.duration : 0), 0);
+        const _total_duration = Object.values(listTime);
+        const _total_without_overtime = _total_duration
+            .flat()
+            .reduce((sum, time) => sum + (!time.isOvertime ? time.total_time.duration : 0), 0);
+        const _total_overtime = _total_duration
+            .flat()
+            .reduce((sum, time) => sum + (time.isOvertime ? time.total_time.duration : 0), 0);
 
         return {
             duration: convertDurationToTime(_total_without_overtime + _total_overtime),
@@ -17,21 +21,26 @@ const TimeTotalInfo = ({ workingHours, listTime }) => {
         };
     }, [listTime]);
 
-
     const timeDuration = useMemo(() => {
         let differenceSeconds = 0;
-        const totalSecondsExpected = averageDutySeconds * Object.keys(listTime).filter(day => listTime[day].some(entry => !entry.hasOwnProperty("isOvertime"))).length;
+        const totalSecondsExpected =
+            averageDutySeconds *
+            Object.keys(listTime).filter((day) => listTime[day].some((entry) => !entry.hasOwnProperty("isOvertime")))
+                .length;
         if (total.totalWithoutOvertimeSeconds > 0) {
-            differenceSeconds = total.totalWithoutOvertimeSeconds - totalSecondsExpected
+            differenceSeconds = total.totalWithoutOvertimeSeconds - totalSecondsExpected;
         }
 
         if (total.totalOvertimeSeconds > 0) {
-            differenceSeconds = total.totalOvertimeSeconds + differenceSeconds
+            differenceSeconds = total.totalOvertimeSeconds + differenceSeconds;
         }
         return {
-            isGreater: total.totalWithoutOvertimeSeconds > 0
-                ? (total.totalWithoutOvertimeSeconds + (total.totalOvertimeSeconds > 0 ? total.totalOvertimeSeconds : 0)) > totalSecondsExpected
-                : total.totalOvertimeSeconds > 0,
+            isGreater:
+                total.totalWithoutOvertimeSeconds > 0
+                    ? total.totalWithoutOvertimeSeconds +
+                          (total.totalOvertimeSeconds > 0 ? total.totalOvertimeSeconds : 0) >
+                      totalSecondsExpected
+                    : total.totalOvertimeSeconds > 0,
             duration: convertDurationToTime(Math.abs(differenceSeconds) * 1000),
         };
     }, [total.totalWithoutOvertimeSeconds, total.totalOvertimeSeconds, averageDutySeconds, listTime]);

@@ -10,13 +10,12 @@ const Overtime = ({ time }) => {
         let _data;
         if (checked) {
             _data = {
-                isOvertime: true
-            }
-        }
-        else {
+                isOvertime: true,
+            };
+        } else {
             _data = {
-                isOvertime: deleteField()
-            }
+                isOvertime: deleteField(),
+            };
         }
 
         try {
@@ -35,15 +34,15 @@ const Overtime = ({ time }) => {
                 created_at: moment().toDate(),
             });
         }
-    }, [checked])
+    }, [checked]);
 
     return (
-        <MenuItem onClick={() => setChecked(c => !c)}>
+        <MenuItem onClick={() => setChecked((c) => !c)}>
             <Checkbox size="small" sx={{ p: 0 }} checked={checked} />
             <Typography sx={{ pl: 1 }} textAlign="center">
                 Overtime
             </Typography>
         </MenuItem>
-    )
-}
-export default Overtime
+    );
+};
+export default Overtime;

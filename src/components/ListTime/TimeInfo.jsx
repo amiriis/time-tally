@@ -37,7 +37,7 @@ const TimeInfo = ({ calendar, time }) => {
                     <Typography variant="caption">{endedAt.format("HH:mm")}</Typography>
                 </Stack>
             </Stack>
-            <TransitionGroup component={Stack} sx={{ flexGrow: 1, width: 70 }} alignItems={'center'}>
+            <TransitionGroup component={Stack} sx={{ flexGrow: 1, width: 70 }} alignItems={"center"}>
                 <Collapse>
                     <Typography textAlign="center" color="primary.main">
                         {`${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`}
@@ -45,7 +45,7 @@ const TimeInfo = ({ calendar, time }) => {
                 </Collapse>
                 {time?.isOvertime && (
                     <Collapse>
-                        <Typography variant="caption" color={'#D4AF37'}>
+                        <Typography variant="caption" color={"#D4AF37"}>
                             Overtime
                         </Typography>
                     </Collapse>

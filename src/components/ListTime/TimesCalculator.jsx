@@ -30,17 +30,19 @@ const TimesCalculator = ({ times, workingHours }) => {
     const timeDifference = useMemo(() => {
         let differenceSeconds = 0;
         if (totalDurationSeconds > 0) {
-            differenceSeconds = totalDurationSeconds - averageDutySeconds
+            differenceSeconds = totalDurationSeconds - averageDutySeconds;
         }
 
         if (totalOvertimeDurationSeconds > 0) {
-            differenceSeconds = totalOvertimeDurationSeconds + differenceSeconds
+            differenceSeconds = totalOvertimeDurationSeconds + differenceSeconds;
         }
 
         return {
-            isGreater: totalDurationSeconds > 0
-                ? (totalDurationSeconds + (totalOvertimeDurationSeconds > 0 ? totalOvertimeDurationSeconds : 0)) > averageDutySeconds
-                : totalOvertimeDurationSeconds > 0,
+            isGreater:
+                totalDurationSeconds > 0
+                    ? totalDurationSeconds + (totalOvertimeDurationSeconds > 0 ? totalOvertimeDurationSeconds : 0) >
+                      averageDutySeconds
+                    : totalOvertimeDurationSeconds > 0,
             duration: convertDurationToTime(Math.abs(differenceSeconds) * 1000),
         };
     }, [totalDurationSeconds, totalOvertimeDurationSeconds, averageDutySeconds]);
@@ -54,36 +56,48 @@ const TimesCalculator = ({ times, workingHours }) => {
     return (
         <Stack alignItems="center" sx={{ p: 0.5 }}>
             <Stack direction="row" alignItems="center">
-                <Typography variant="caption">{overtimes.length > 0 && timeWithoutOvertime.length > 0 && "("}</Typography>
+                <Typography variant="caption">
+                    {overtimes.length > 0 && timeWithoutOvertime.length > 0 && "("}
+                </Typography>
                 {timeWithoutOvertime.length > 0 && (
                     <Typography variant="caption" textAlign="center">
                         {timeWithoutOvertime.length > 1 && "("}
-                        {timeWithoutOvertime.map(time =>
-                            formattedTime(Math.floor(time.total_time.duration / 1000))
-                        ).join(" + ")}
+                        {timeWithoutOvertime
+                            .map((time) => formattedTime(Math.floor(time.total_time.duration / 1000)))
+                            .join(" + ")}
                         {timeWithoutOvertime.length > 1 && ")"}
                     </Typography>
                 )}
                 {timeWithoutOvertime.length > 0 && (
                     <>
-                        <Typography variant="caption" sx={{ mx: 1 }}>-</Typography>
+                        <Typography variant="caption" sx={{ mx: 1 }}>
+                            -
+                        </Typography>
                         <Typography variant="caption">{formattedTime(averageDutySeconds)}</Typography>
                     </>
                 )}
-                <Typography variant="caption">{overtimes.length > 0 && timeWithoutOvertime.length > 0 && ")"}</Typography>
+                <Typography variant="caption">
+                    {overtimes.length > 0 && timeWithoutOvertime.length > 0 && ")"}
+                </Typography>
                 {overtimes.length > 0 && (
                     <>
-                        {timeWithoutOvertime.length > 0 && <Typography variant="caption" sx={{ mx: 1 }}>+</Typography>}
+                        {timeWithoutOvertime.length > 0 && (
+                            <Typography variant="caption" sx={{ mx: 1 }}>
+                                +
+                            </Typography>
+                        )}
                         <Typography variant="caption" textAlign="center">
                             {overtimes.length > 1 && "("}
-                            {overtimes.map(time =>
-                                formattedTime(Math.floor(time.total_time.duration / 1000))
-                            ).join(" + ")}
+                            {overtimes
+                                .map((time) => formattedTime(Math.floor(time.total_time.duration / 1000)))
+                                .join(" + ")}
                             {overtimes.length > 1 && ")"}
                         </Typography>
                     </>
                 )}
-                <Typography variant="caption" color="primary.main" sx={{ mx: 1 }}>=</Typography>
+                <Typography variant="caption" color="primary.main" sx={{ mx: 1 }}>
+                    =
+                </Typography>
                 <Typography
                     variant="body2"
                     fontWeight="bold"
